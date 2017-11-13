@@ -57,6 +57,7 @@ namespace WinForm_ImgProcessHW {
 			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			System::Windows::Forms::DataVisualization::Charting::Series^  series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			System::Windows::Forms::DataVisualization::Charting::Series^  series3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->chart_RGB = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_RGB))->BeginInit();
 			this->SuspendLayout();
@@ -86,9 +87,15 @@ namespace WinForm_ImgProcessHW {
 			series3->Color = System::Drawing::Color::Blue;
 			series3->Legend = L"Legend1";
 			series3->Name = L"B";
+			series4->ChartArea = L"ChartArea1";
+			series4->Color = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
+				static_cast<System::Int32>(static_cast<System::Byte>(64)));
+			series4->Legend = L"Legend1";
+			series4->Name = L"Gray";
 			this->chart_RGB->Series->Add(series1);
 			this->chart_RGB->Series->Add(series2);
 			this->chart_RGB->Series->Add(series3);
+			this->chart_RGB->Series->Add(series4);
 			this->chart_RGB->Size = System::Drawing::Size(909, 542);
 			this->chart_RGB->TabIndex = 0;
 			// 

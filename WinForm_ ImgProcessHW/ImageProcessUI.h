@@ -73,7 +73,7 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
 
-	private:Bitmap ^Img_Source, ^Img_Source2,^Img_Stack;
+	private:Bitmap ^Img_Source, ^Img_Source2,^Img_Stack,^Img_tempMask;
 	private: System::Windows::Forms::TabControl^  Tab_Image1;
 	public:
 
@@ -185,7 +185,7 @@ private: int d_Pen= Pen_None;
 private: System::Windows::Forms::GroupBox^  groupBox7;
 private: System::Windows::Forms::RadioButton^  Btn_Rectangle;
 private: System::Windows::Forms::RadioButton^  Btn_Circle;
-private: System::Windows::Forms::RadioButton^  Btn_Line;
+
 private: System::Windows::Forms::RadioButton^  Btn_None_Draw;
 private: System::Windows::Forms::RadioButton^  Btn_CloudLine;
 
@@ -210,6 +210,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 		/// 設計工具所需的變數。
 		/// </summary>
 		vector<Point>CloudLinePoint;
+private: System::Windows::Forms::Button^  Btn_CreateWndow;
+		 Point LBtnUP;
 
 #pragma region Windows Form Designer generated code
 		ref struct PCXData//http://www.fysnet.net/pcxfile.htm  PCX解封包資料
@@ -330,12 +332,12 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->toolStrip4 = (gcnew System::Windows::Forms::ToolStrip());
 			this->toolStripButton1 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->groupBox6 = (gcnew System::Windows::Forms::GroupBox());
+			this->Btn_CreateWndow = (gcnew System::Windows::Forms::Button());
 			this->numericUpDown_transparent = (gcnew System::Windows::Forms::NumericUpDown());
 			this->groupBox7 = (gcnew System::Windows::Forms::GroupBox());
 			this->Btn_CloudLine = (gcnew System::Windows::Forms::RadioButton());
 			this->Btn_Rectangle = (gcnew System::Windows::Forms::RadioButton());
 			this->Btn_Circle = (gcnew System::Windows::Forms::RadioButton());
-			this->Btn_Line = (gcnew System::Windows::Forms::RadioButton());
 			this->Btn_None_Draw = (gcnew System::Windows::Forms::RadioButton());
 			this->groupBox8 = (gcnew System::Windows::Forms::GroupBox());
 			this->ZoomRate = (gcnew System::Windows::Forms::NumericUpDown());
@@ -1273,7 +1275,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->groupBox5->Controls->Add(this->toolStrip4);
 			this->groupBox5->Location = System::Drawing::Point(675, 33);
 			this->groupBox5->Name = L"groupBox5";
-			this->groupBox5->Size = System::Drawing::Size(136, 128);
+			this->groupBox5->Size = System::Drawing::Size(136, 77);
 			this->groupBox5->TabIndex = 14;
 			this->groupBox5->TabStop = false;
 			this->groupBox5->Text = L"直方圖";
@@ -1285,7 +1287,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->toolStrip4->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip4->Location = System::Drawing::Point(3, 21);
 			this->toolStrip4->Name = L"toolStrip4";
-			this->toolStrip4->Size = System::Drawing::Size(130, 38);
+			this->toolStrip4->Size = System::Drawing::Size(130, 62);
 			this->toolStrip4->TabIndex = 0;
 			this->toolStrip4->Text = L"toolStrip4";
 			// 
@@ -1300,13 +1302,24 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			// 
 			// groupBox6
 			// 
+			this->groupBox6->Controls->Add(this->Btn_CreateWndow);
 			this->groupBox6->Controls->Add(this->numericUpDown_transparent);
 			this->groupBox6->Location = System::Drawing::Point(933, 33);
 			this->groupBox6->Name = L"groupBox6";
-			this->groupBox6->Size = System::Drawing::Size(116, 163);
+			this->groupBox6->Size = System::Drawing::Size(96, 87);
 			this->groupBox6->TabIndex = 15;
 			this->groupBox6->TabStop = false;
 			this->groupBox6->Text = L"透明度";
+			// 
+			// Btn_CreateWndow
+			// 
+			this->Btn_CreateWndow->Location = System::Drawing::Point(6, 56);
+			this->Btn_CreateWndow->Name = L"Btn_CreateWndow";
+			this->Btn_CreateWndow->Size = System::Drawing::Size(90, 23);
+			this->Btn_CreateWndow->TabIndex = 1;
+			this->Btn_CreateWndow->Text = L"生成雲線";
+			this->Btn_CreateWndow->UseVisualStyleBackColor = true;
+			this->Btn_CreateWndow->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_CreateWndow_Click);
 			// 
 			// numericUpDown_transparent
 			// 
@@ -1322,14 +1335,13 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->groupBox7->Controls->Add(this->Btn_CloudLine);
 			this->groupBox7->Controls->Add(this->Btn_Rectangle);
 			this->groupBox7->Controls->Add(this->Btn_Circle);
-			this->groupBox7->Controls->Add(this->Btn_Line);
 			this->groupBox7->Controls->Add(this->Btn_None_Draw);
 			this->groupBox7->Font = (gcnew System::Drawing::Font(L"新細明體", 9));
 			this->groupBox7->Location = System::Drawing::Point(817, 33);
 			this->groupBox7->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->groupBox7->Name = L"groupBox7";
 			this->groupBox7->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->groupBox7->Size = System::Drawing::Size(110, 163);
+			this->groupBox7->Size = System::Drawing::Size(110, 146);
 			this->groupBox7->TabIndex = 16;
 			this->groupBox7->TabStop = false;
 			this->groupBox7->Text = L"繪圖工具";
@@ -1337,7 +1349,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			// Btn_CloudLine
 			// 
 			this->Btn_CloudLine->AutoSize = true;
-			this->Btn_CloudLine->Location = System::Drawing::Point(11, 133);
+			this->Btn_CloudLine->Location = System::Drawing::Point(11, 110);
 			this->Btn_CloudLine->Name = L"Btn_CloudLine";
 			this->Btn_CloudLine->Size = System::Drawing::Size(58, 19);
 			this->Btn_CloudLine->TabIndex = 4;
@@ -1349,7 +1361,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			// Btn_Rectangle
 			// 
 			this->Btn_Rectangle->AutoSize = true;
-			this->Btn_Rectangle->Location = System::Drawing::Point(11, 109);
+			this->Btn_Rectangle->Location = System::Drawing::Point(11, 86);
 			this->Btn_Rectangle->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Btn_Rectangle->Name = L"Btn_Rectangle";
 			this->Btn_Rectangle->Size = System::Drawing::Size(58, 19);
@@ -1361,7 +1373,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			// Btn_Circle
 			// 
 			this->Btn_Circle->AutoSize = true;
-			this->Btn_Circle->Location = System::Drawing::Point(11, 81);
+			this->Btn_Circle->Location = System::Drawing::Point(11, 58);
 			this->Btn_Circle->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Btn_Circle->Name = L"Btn_Circle";
 			this->Btn_Circle->Size = System::Drawing::Size(58, 19);
@@ -1369,18 +1381,6 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->Btn_Circle->Text = L"圓形";
 			this->Btn_Circle->UseVisualStyleBackColor = true;
 			this->Btn_Circle->CheckedChanged += gcnew System::EventHandler(this, &ImageProcessUI::Btn_Circle_CheckedChanged);
-			// 
-			// Btn_Line
-			// 
-			this->Btn_Line->AutoSize = true;
-			this->Btn_Line->Location = System::Drawing::Point(11, 58);
-			this->Btn_Line->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->Btn_Line->Name = L"Btn_Line";
-			this->Btn_Line->Size = System::Drawing::Size(58, 19);
-			this->Btn_Line->TabIndex = 1;
-			this->Btn_Line->Text = L"直線";
-			this->Btn_Line->UseVisualStyleBackColor = true;
-			this->Btn_Line->CheckedChanged += gcnew System::EventHandler(this, &ImageProcessUI::Btn_Line_CheckedChanged);
 			// 
 			// Btn_None_Draw
 			// 
@@ -1425,7 +1425,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 			this->toolStrip5->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip5->Location = System::Drawing::Point(14, 47);
 			this->toolStrip5->Name = L"toolStrip5";
-			this->toolStrip5->Size = System::Drawing::Size(94, 143);
+			this->toolStrip5->Size = System::Drawing::Size(94, 119);
 			this->toolStrip5->TabIndex = 0;
 			this->toolStrip5->Text = L"toolStrip5";
 			// 
@@ -2002,7 +2002,7 @@ public:void Forward_Rotate(Bitmap ^src, Bitmap ^%dst, double theta)
 	double vcos, vsin;
 	int min_x = 1000;
 	int min_y = 1000;
-	if (theta < 0) theta += 360;  //ex:轉-30度跟轉330度是一樣的意思
+	if (theta < 0) theta += 360; 
 	theta *= 0.01745329252; // 轉弳度
 	vsin = sin(theta), vcos = cos(theta);  //找出sin cos值
 	if (Img_Source == nullptr)
@@ -2025,7 +2025,7 @@ public:void Forward_Rotate(Bitmap ^src, Bitmap ^%dst, double theta)
 				if (ny < min_y) min_y = ny;
 			}
 		}
-		min_x = abs(min_x);  //取絕對值求得偏移量，用來將旋轉後的圖修正回座標均大於等於0
+		min_x = abs(min_x);  
 		min_y = abs(min_y);
 		for (int i = 0; i < temp_result->Width; i++) //將矩形的顏色做成與背景同色
 			for (int j = 0; j < temp_result->Height; j++)
@@ -2114,7 +2114,8 @@ private: System::Void Threshold_value_ValueChanged(System::Object^  sender, Syst
 	delete img_processed;
 }
 private: System::Void numericUpDown_transparent_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
-    float percent =(float) Convert::ToInt32(numericUpDown_transparent->Text);
+	
+	float percent =(float) Convert::ToInt32(numericUpDown_transparent->Text);
      percent /= 100;
 	 if (Img_Source != nullptr && Img_Source2 != nullptr)
 	 {
@@ -2146,69 +2147,69 @@ private: System::Void numericUpDown_transparent_ValueChanged(System::Object^  se
 private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	if (e->Button == System::Windows::Forms::MouseButtons::Left)
 	{
-		System::Drawing::Imaging::PixelFormat format = Img_Source->PixelFormat;
 		System::Drawing::Graphics^ Reference_rec;
-		Rectangle cloneRect = Rectangle(0, 0, Img_Source->Width, Img_Source->Height);
-		Bitmap ^temp = Img_Source->Clone(cloneRect, format);
-		Pen^ ReferencePen = gcnew Pen(Color::Red, 2.0F);
+		Pen^ ReferencePen = gcnew Pen(Color::Red, 1.0F);
 		Point LBtnMove = e->Location;
-		int X_size = LBtnMove.X - LBtnDown.X; //X座標相減
-		int Y_size = LBtnMove.Y - LBtnDown.Y; //Y座標相減
+		int X_size = LBtnMove.X - LBtnDown.X; 
+		int Y_size = LBtnMove.Y - LBtnDown.Y; 
+		int center_of_x = (LBtnMove.X + LBtnDown.X) / 2;
+		int center_of_y = (LBtnMove.Y + LBtnDown.Y) / 2; 
+		int a = X_size / 2;
+		int b = Y_size / 2;
+		int start_x, end_x, start_y, end_y;
+		(LBtnDown.X > LBtnMove.X) ? (start_x = LBtnMove.X, end_x = LBtnDown.X) : (start_x = LBtnDown.X, end_x = LBtnMove.X);
+		(LBtnDown.Y > LBtnMove.Y) ? (start_y = LBtnMove.Y, end_y = LBtnDown.Y) : (start_y = LBtnDown.Y, end_y = LBtnMove.Y);
+		if (start_x < 0) start_x = 0; 
+		if (start_y < 0) start_y = 0;
+		Bitmap ^img_processed = gcnew Bitmap(Img_Stack->Width, Img_Stack->Height);  
+	
 		switch (d_Pen)
 		{
-			/*case Pen_None:
-			pictureBox2->Image = img_source;
-			break;*/
-		case Pen_Line:
-			//d_Line(temp, LBtnDown, LBtnUp);
-			pictureBox_Result->Image = Img_Stack;
-			pictureBox_Result->Refresh();
-			Reference_rec = pictureBox_Result->CreateGraphics();
-			Reference_rec->DrawLine(ReferencePen, LBtnDown.X, LBtnDown.Y, LBtnMove.X, LBtnMove.Y);
-			break;
-		case Pen_Circle:  //圓形的X或Y Size為負值依然可以繪圖
-						  //d_Circle(temp, LBtnDown, LBtnUp);
-			pictureBox_Result->Image = Img_Stack;
-			pictureBox_Result->Refresh();
-			Reference_rec = pictureBox_Result->CreateGraphics();
-			if (X_size > 0)  //由左向右畫圓
-			{
-				if (Y_size > 0) //左上向右下畫圓  X_size +  Y_size +
-					Reference_rec->DrawEllipse(ReferencePen, LBtnDown.X, LBtnDown.Y, X_size, Y_size);
-				if (Y_size < 0) //左下向右上畫圓  X_size +  Y_size -
-					Reference_rec->DrawEllipse(ReferencePen, LBtnDown.X, LBtnDown.Y, X_size, Y_size);
-			}
+		case Pen_Circle:
+			//****填滿繪圖範圍***
+			for (int j = 0; j < Img_Stack->Height; j++)
+				for (int i = 0; i < Img_Stack->Width; i++)
+				{
+					//if (i >= img_overlapping->Width || j >= img_overlapping->Height)  //防止超出圖框
+					//break;
+					if ((i > start_x) && (i < end_x) && (j > start_y) && (j < end_y))
+					{
+						float test_in_or_out = (((i - center_of_x)*(i - center_of_x)*1.0) / (a * a)) + (((j - center_of_y)*(j - center_of_y)*1.0) / (b * b));//測試是否在橢圓內
+						if (test_in_or_out < 1)
+						{
+							img_processed->SetPixel(i, j, Img_Source2->GetPixel(i, j));
+						}
+						else
+							img_processed->SetPixel(i, j, Img_Stack->GetPixel(i, j));
+					}
+					else
+						img_processed->SetPixel(i, j, Img_Stack->GetPixel(i, j));
 
-			if (X_size < 0) //右向左畫圓
-			{
-				if (Y_size > 0) //右上向左下畫圓  X_size -  Y_size +
-					Reference_rec->DrawEllipse(ReferencePen, LBtnDown.X, LBtnDown.Y, X_size, Y_size);
-				if (Y_size < 0) //右下向左上畫圓 X_size -  Y_size +
-					Reference_rec->DrawEllipse(ReferencePen, LBtnDown.X, LBtnDown.Y, X_size, Y_size);
-			}
-			break;
-		case Pen_Rect:  //***注意:矩形的Size如為負值則無法繪圖 因此均須取絕對值***
-						//d_Rect(temp, LBtnDown, LBtnMove);
-			pictureBox_Result->Image = Img_Stack;
+				}
+			pictureBox_Result->Image = img_processed;
 			pictureBox_Result->Refresh();
-			Reference_rec = pictureBox_Result->CreateGraphics();
-			if (X_size > 0)  //由左向右畫矩形
-			{
-				if (Y_size > 0) //左上向右下矩形  X_size +  Y_size +
-					Reference_rec->DrawRectangle(ReferencePen, LBtnDown.X, LBtnDown.Y, X_size, Y_size);
-				if (Y_size < 0) //左下向右上矩形  X_size +  Y_size -
-					Reference_rec->DrawRectangle(ReferencePen, LBtnDown.X, LBtnMove.Y, X_size, Math::Abs(Y_size));
-			}
+			delete img_processed;
+			break;
+		case Pen_Rect:
 
-			if (X_size < 0) //右向左矩形
+			for (uint16_t i = 0; i < Img_Stack->Width; i++)
 			{
-				if (Y_size > 0) //右上向左下矩形  X_size -  Y_size +
-					Reference_rec->DrawRectangle(ReferencePen, LBtnMove.X, LBtnDown.Y, Math::Abs(X_size), Y_size);
-				if (Y_size < 0) //右下向左上矩形 X_size -  Y_size +
-					Reference_rec->DrawRectangle(ReferencePen, LBtnMove.X, LBtnMove.Y, Math::Abs(X_size), Math::Abs(Y_size));
+				for (uint16_t  j= 0; j < Img_Stack->Height; j++)
+				{
+					if(start_x <=i && i<= end_x&&start_y <= j && j <= end_y)
+						img_processed->SetPixel(i, j, Img_Source2->GetPixel(i, j));
+					else
+					{
+						img_processed->SetPixel(i, j, Img_Stack->GetPixel(i, j));
+					}
+				}
 			}
+			pictureBox_Result->Image = img_processed;
+			pictureBox_Result->Refresh();
+			delete img_processed;
 			break;
 		case Pen_CloudLine:
+			LBtnUP = LBtnMove;
 			Reference_rec = pictureBox_Result->CreateGraphics();
 			CloudLinePoint.push_back(e->Location);
 			Reference_rec->DrawLine(ReferencePen
@@ -2217,6 +2218,7 @@ private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, Syste
 				, CloudLinePoint[CloudLinePoint.size() - 1].X
 				, CloudLinePoint[CloudLinePoint.size() - 1].Y);
 
+			Wen_line(Img_tempMask,CloudLinePoint[CloudLinePoint.size() - 2], CloudLinePoint[CloudLinePoint.size() - 1]);
 			break;
 		default:
 			break;
@@ -2224,6 +2226,11 @@ private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, Syste
 	}
 }
 private: System::Void pictureBox_Result_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	Img_tempMask = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	for (uint16_t i = 0; i < Img_Source->Width; i++)
+		for (uint16_t j = 0; j < Img_Source->Height; j++)
+			Img_tempMask->SetPixel(i, j, Color::Black);
+	pictureBox_Result->Image = Img_Stack;
 	LBtnDown = e->Location;
 	CloudLinePoint.resize(0);
 	CloudLinePoint.push_back(e->Location);
@@ -2247,7 +2254,7 @@ private: System::Void toolStripButton1_Click(System::Object^  sender, System::Ev
 
 	RGBHistigram ^RGB_His = gcnew RGBHistigram;
 	unsigned char His_Color[256][3] = { { 0 } }; 
-
+	bool f_RGB = false;
 	for (unsigned int i = 0; i < Img_Source->Width; i++)
 	{
 		for (unsigned int j = 0; j < Img_Source->Height; j++)
@@ -2263,12 +2270,19 @@ private: System::Void toolStripButton1_Click(System::Object^  sender, System::Ev
 		}
 	}
 	
+	for (uint16_t i = 0; i < 256; i++)
+		if ((His_Color[i][0] != His_Color[i][1]) || (His_Color[i][0] != His_Color[i][2]) || (His_Color[i][1] != His_Color[i][2]))
+			f_RGB = true;
+	if(f_RGB)
 	for (int i = 0; i < 256; i++) 
 	{
 		RGB_His->chart_RGB->Series["R"]->Points->AddXY(i, His_Color[i][0]);
 		RGB_His->chart_RGB->Series["G"]->Points->AddXY(i, His_Color[i][1]);
 		RGB_His->chart_RGB->Series["B"]->Points->AddXY(i, His_Color[i][2]);
 	}
+	if(f_RGB==false)
+	 for (int i = 0; i < 256; i++)
+		RGB_His->chart_RGB->Series["Gray"]->Points->AddXY(i, His_Color[i][2]);
 	RGB_His->Show(); //秀出統計圖
 }
 private: System::Void toolStripButton2_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -2351,7 +2365,7 @@ public:void ZoomFunction(Bitmap ^src, Bitmap ^%dst, double ZoomRate, int code)  
 						 MessageBox::Show("Please enter integer.");
 					 else
 					 {
-						 double mean = (double)(1 / (ZoomRate*ZoomRate));
+	
 						 for (unsigned int j = 0; j < dst->Height; j++)
 						 {
 							 for (unsigned int i = 0; i < dst->Width; i++)
@@ -2374,9 +2388,9 @@ public:void ZoomFunction(Bitmap ^src, Bitmap ^%dst, double ZoomRate, int code)  
 										 ori_B += src->GetPixel(set_x, set_y).B;
 									 }
 								 }
-								 ori_R = ori_R * mean;
-								 ori_G = ori_G * mean;
-								 ori_B = ori_B * mean;
+								 ori_R = ori_R /Math::Pow(ZoomRate,2);
+								 ori_G = ori_G / Math::Pow(ZoomRate, 2);
+								 ori_B = ori_B / Math::Pow(ZoomRate, 2);
 								 dst->SetPixel(i, j, Color::FromArgb(ori_R, ori_G, ori_B));
 							 }
 						 }
@@ -2423,6 +2437,217 @@ private: System::Void toolStripButton5_Click(System::Object^  sender, System::Ev
 	pictureBox_Result->Image = img_processed;
 	pictureBox_Result->Refresh();
 	delete img_processed; 
+}
+private: System::Void Btn_CreateWndow_Click(System::Object^  sender, System::EventArgs^  e) {
+	if ((Img_Source == nullptr) || (Img_Source2 == nullptr))
+		MessageBox::Show("Input Image");
+	else {
+	Bitmap ^ Img_Mask = gcnew Bitmap(Img_Stack->Width, Img_Stack->Height);
+ 	CreatMask(Img_tempMask, Img_Mask);
+	Bitmap ^ temp2=gcnew Bitmap(Img_Stack->Width, Img_Stack->Height);
+
+	bitwise_and(Img_Mask,Img_Source2, temp2);
+
+
+	Threshold(Img_Mask, Img_Mask,100, THRESH_BINARY_Inv);
+	Bitmap ^ temp3 = gcnew Bitmap(Img_Stack->Width, Img_Stack->Height);
+	bitwise_and(Img_Mask, Img_Stack, temp3);
+	bitwise_or(temp2, temp3, temp3);
+	pictureBox_Result->Image = temp3;
+	pictureBox_Result->Refresh();
+	delete Img_Mask;
+	delete temp2;
+	delete temp3;
+	}
+	//bitwise_and(Img_Mask_Inv,Img_Stack, Img_Mask_Inv);
+	
+}
+private:void bitwise_and(Bitmap ^src1,Bitmap^src2,Bitmap ^%dst)
+{
+	if ((src1->Width != src2->Width) || (src1->Height != src2->Height))
+		MessageBox::Show("Dimansion msut be same!");
+	else
+	{
+		Bitmap ^ temp_result = gcnew Bitmap(src1->Width, src1->Height);
+		for (unsigned int i=0;i<src1->Width;i++)
+			for (unsigned int j = 0; j < src1->Height; j++)
+			{
+				unsigned R =Math::Min(src1->GetPixel(i, j).R, src2->GetPixel(i, j).R);
+				unsigned G= Math::Min(src1->GetPixel(i, j).G, src2->GetPixel(i, j).G);
+				unsigned B = Math::Min(src1->GetPixel(i, j).B, src2->GetPixel(i, j).B);
+				temp_result->SetPixel(i,j,Color::FromArgb(R,G,B));
+			}
+		Rectangle cloneRect = Rectangle(0, 0, src2->Width, src2->Height);
+		System::Drawing::Imaging::PixelFormat format = src2->PixelFormat;
+		dst=temp_result->Clone(cloneRect, format);
+		delete temp_result;
+	}
+	
+}
+private:void bitwise_or(Bitmap ^src1, Bitmap^src2, Bitmap ^%dst)
+{
+	if ((src1->Width != src2->Width) || (src1->Height != src2->Height))
+		MessageBox::Show("Dimansion msut be same!");
+	else
+	{
+		Bitmap ^ temp_result = gcnew Bitmap(src1->Width, src1->Height);
+		for (unsigned int i = 0; i<src1->Width; i++)
+			for (unsigned int j = 0; j < src1->Height; j++)
+			{
+				unsigned R = Math::Max(src1->GetPixel(i, j).R, src2->GetPixel(i, j).R);
+				unsigned G = Math::Max(src1->GetPixel(i, j).G, src2->GetPixel(i, j).G);
+				unsigned B = Math::Max(src1->GetPixel(i, j).B, src2->GetPixel(i, j).B);
+				temp_result->SetPixel(i, j, Color::FromArgb(R, G, B));
+			}
+		Rectangle cloneRect = Rectangle(0, 0, src2->Width, src2->Height);
+		System::Drawing::Imaging::PixelFormat format = src2->PixelFormat;
+		dst = temp_result->Clone(cloneRect, format);
+		delete temp_result;
+	}
+
+}
+private:void DrawLine(Bitmap ^%src, Point P1, Point P2)
+{
+  float x_vector = P1.X - P2.X; //x向量
+  float y_vector = P1.Y - P2.Y; //y向量
+  int Max_X = 0, Min_X = 0, Max_Y = 0, Min_Y = 0
+  (P1.X > P2.X) ? (Min_X = P2.X, Max_X = P1.X) : (Min_X = P1.X, Max_X = P2.X);
+  (P1.Y > P2.Y) ? (Min_Y = P2.Y, Max_Y = P1.Y) : (Min_Y = P1.Y, Max_Y = P2.Y);
+  int constant = (-1 * y_vector * P1.X) + (x_vector * P1.Y); //向量x,y交換便號其中一個 找出線性方程式
+  for (int j = Min_Y; j < Max_Y; j++)
+    for (int i = Min_X; i < Max_X; i++)
+    {
+     float value = -1 * y_vector * i + x_vector * j; //算出常數
+       if (((int)(value) == constant) || ((int)(value + 1) == constant))
+         {
+          src->SetPixel(i, j, Color::White);
+          src->SetPixel(i + 1, j, Color::White);
+	      src->SetPixel(i + 2, j, Color::White);
+         }
+		}
+}
+private:void CreatMask(Bitmap^ src,Bitmap ^%dst)
+{
+	Bitmap ^ temp_result = gcnew Bitmap(src->Width, src->Height);
+	for (uint16_t i = 0; i<temp_result->Width; i++)
+		for (uint16_t j = 0; j < temp_result->Height; j++)
+			temp_result->SetPixel(i, j, Color::Black);
+	for (unsigned int j = 0; j < src->Height; j++)	
+	{
+		vector<Point> Pos;
+		for (unsigned int i = 0; i < src->Width; i++)
+		{
+			if (src->GetPixel(i, j).R > 0)
+				Pos.push_back(Point(i, j));
+		}
+		if (Pos.size() >= 2)
+		{
+			for (unsigned int k = 0; k < Pos.size()-1; k++)
+			{
+				Wen_line(temp_result, Pos[k],Pos[k+1]);
+			}
+		}
+	}
+	Rectangle cloneRect = Rectangle(0, 0, temp_result->Width, temp_result->Height);
+	System::Drawing::Imaging::PixelFormat format = temp_result->PixelFormat;
+	dst = temp_result->Clone(cloneRect, format);
+}
+private:void Wen_line(Bitmap ^%src,Point P1,Point P2)
+{
+	if (P1.X != P2.X) //為直斜線
+	{
+		float X = P2.X - P1.X;
+		float Y = P2.Y - P1.Y;
+		float temp = (Y / X) * 1000;
+		float a = temp*0.001; //斜率
+		float Z = temp*0.001;
+
+		float b = 1.0*(P1.Y - a*P1.X);//截距 因為y = ax+b 所以b = y - ax
+		if (a > 0)
+		{
+			if (P1.X > P2.X)  //右下往左上
+			{
+				for (int i = P2.X; i < P1.X; i++)
+				{
+					for (int j = i*a + b + 0.5; j < (int)((i + 1)*a + b + 0.5); j++)
+					{
+						src->SetPixel(i, j, Color::FromArgb(255, 255,255));
+						if (P1.X == P2.X) break;
+					}
+					if (P1.X == P2.X) break;
+				}
+
+			}
+			else if (P1.X < P2.X)  //左上往右下
+			{
+				for (int i = P1.X; i < P2.X; i++)
+				{
+					for (int j = i*a + b + 0.5; j < (int)((i + 1)*a + b + 0.5); j++)
+					{
+						src->SetPixel(i, j, Color::FromArgb(255,255,255));
+					}
+				}
+			}
+		}
+		if (a < 0)
+		{
+			if (P1.X > P2.X)  //右上往左下
+			{
+				for (int i = P2.X; i < P1.X; i++)
+				{
+
+					for (int j = i*a + b + 0.5; j >= (int)((i + 1)*a + b + 0.5); j--)
+					{
+						src->SetPixel(i, j, Color::FromArgb(255,255,255));
+						//if (P1.X == P2.X) 
+						//Vertical_Line(P1, P2);
+					}
+				}
+			}
+			else if (P1.X < P2.X)  //左下往右上
+			{
+				for (int i = P1.X; i < P2.X; i++)
+				{
+
+					for (int j = i*a + b + 0.5; j >(int)((i + 1)*a + b + 0.5); j--)
+					{
+						int pixel = ((i + 1)*a + b + 0.5);
+						src->SetPixel(i, j, Color::FromArgb(255,255,255));
+						//if (P1.X == P2.X) 
+						//Vertical_Line(P1, P2);
+					}
+				}
+			}
+		}
+	}
+
+	if (P1.X == P2.X)  //垂直線
+	{
+		if (P1.Y < P2.Y)  //P2在下面，表示滑鼠向下移動
+		{
+			for (int j = P1.Y; j < P2.Y; j++)
+				src->SetPixel(P1.X, j, Color::FromArgb(255,255,255));//畫紅線
+		}
+		else if (P1.Y > P2.Y)  //P2在上面，表示滑鼠向上移動
+		{
+			for (int j = P2.Y; j < P1.Y; j++)
+				src->SetPixel(P1.X, j, Color::FromArgb(255,255,255));
+		}
+	}
+	if (P1.Y == P2.Y)  //水平線
+	{
+		if (P1.X > P2.X) //P2在左邊，表示滑鼠向左移動
+		{
+			for (int i = P2.X; i <= P1.X; i++)
+				src->SetPixel(i, P1.Y, Color::FromArgb(255,255,255));
+		}
+		else if (P1.X < P2.X) //P2在右邊，表示滑鼠向右移動
+		{
+			for (int i = P1.X; i <= P2.X; i++)
+				src->SetPixel(i, P1.Y, Color::FromArgb(255,255,255));
+		}
+	}
+
 }
 };
 }
