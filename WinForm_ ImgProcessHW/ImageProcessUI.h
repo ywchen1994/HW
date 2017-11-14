@@ -6,6 +6,7 @@
 #include"vcclr.h"
 #include <cliext/vector>  
 #include"RGBHistigram.h"
+#include"Bouncingball.h"
 namespace WinForm_ImgProcessHW {
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -80,7 +81,7 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::TabPage^  tabPage1;
 	private: System::Windows::Forms::TabPage^  tabPage2;
 	private: System::Windows::Forms::PictureBox^  pictureBox_Source1;
-	private: System::Windows::Forms::BindingSource^  bindingSource1;
+
 
 	private: System::Windows::Forms::PictureBox^  pictureBox_Colomap1;
 
@@ -211,6 +212,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 		/// </summary>
 		vector<Point>CloudLinePoint;
 private: System::Windows::Forms::Button^  Btn_CreateWndow;
+private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 		 Point LBtnUP;
 
 #pragma region Windows Form Designer generated code
@@ -305,7 +307,6 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->label44 = (gcnew System::Windows::Forms::Label());
 			this->label45 = (gcnew System::Windows::Forms::Label());
 			this->pictureBox_Source2 = (gcnew System::Windows::Forms::PictureBox());
-			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
 			this->toolStrip2 = (gcnew System::Windows::Forms::ToolStrip());
 			this->Btn_ToRed = (gcnew System::Windows::Forms::ToolStripButton());
@@ -346,6 +347,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->toolStripButton3 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButton4 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButton5 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButton6 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->menuStrip1->SuspendLayout();
 			this->Tab_Image1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
@@ -354,7 +356,6 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->tabPage2->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Colomap2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Source2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			this->groupBox1->SuspendLayout();
 			this->toolStrip2->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
@@ -1050,7 +1051,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->groupBox1->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->groupBox1->Name = L"groupBox1";
 			this->groupBox1->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->groupBox1->Size = System::Drawing::Size(127, 84);
+			this->groupBox1->Size = System::Drawing::Size(127, 87);
 			this->groupBox1->TabIndex = 9;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"色彩轉換";
@@ -1124,7 +1125,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->groupBox2->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->groupBox2->Name = L"groupBox2";
 			this->groupBox2->Padding = System::Windows::Forms::Padding(3, 2, 3, 2);
-			this->groupBox2->Size = System::Drawing::Size(125, 138);
+			this->groupBox2->Size = System::Drawing::Size(125, 164);
 			this->groupBox2->TabIndex = 10;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = L"鏡射";
@@ -1132,14 +1133,14 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			// toolStrip3
 			// 
 			this->toolStrip3->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->toolStrip3->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->toolStrip3->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->toolStripButton_horizontalFilp,
-					this->Btn_verticalFlip, this->toolStripButton_diagonal
+					this->Btn_verticalFlip, this->toolStripButton_diagonal, this->toolStripButton6
 			});
 			this->toolStrip3->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip3->Location = System::Drawing::Point(3, 20);
 			this->toolStrip3->Name = L"toolStrip3";
-			this->toolStrip3->Size = System::Drawing::Size(119, 92);
+			this->toolStrip3->Size = System::Drawing::Size(119, 143);
 			this->toolStrip3->TabIndex = 0;
 			this->toolStrip3->Text = L"toolStrip3";
 			// 
@@ -1287,7 +1288,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->toolStrip4->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip4->Location = System::Drawing::Point(3, 21);
 			this->toolStrip4->Name = L"toolStrip4";
-			this->toolStrip4->Size = System::Drawing::Size(130, 62);
+			this->toolStrip4->Size = System::Drawing::Size(130, 38);
 			this->toolStrip4->TabIndex = 0;
 			this->toolStrip4->Text = L"toolStrip4";
 			// 
@@ -1306,7 +1307,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->groupBox6->Controls->Add(this->numericUpDown_transparent);
 			this->groupBox6->Location = System::Drawing::Point(933, 33);
 			this->groupBox6->Name = L"groupBox6";
-			this->groupBox6->Size = System::Drawing::Size(96, 87);
+			this->groupBox6->Size = System::Drawing::Size(96, 105);
 			this->groupBox6->TabIndex = 15;
 			this->groupBox6->TabStop = false;
 			this->groupBox6->Text = L"透明度";
@@ -1315,7 +1316,7 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			// 
 			this->Btn_CreateWndow->Location = System::Drawing::Point(6, 56);
 			this->Btn_CreateWndow->Name = L"Btn_CreateWndow";
-			this->Btn_CreateWndow->Size = System::Drawing::Size(90, 23);
+			this->Btn_CreateWndow->Size = System::Drawing::Size(90, 43);
 			this->Btn_CreateWndow->TabIndex = 1;
 			this->Btn_CreateWndow->Text = L"生成雲線";
 			this->Btn_CreateWndow->UseVisualStyleBackColor = true;
@@ -1465,6 +1466,15 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->toolStripButton5->Text = L"平均縮小";
 			this->toolStripButton5->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton5_Click);
 			// 
+			// toolStripButton6
+			// 
+			this->toolStripButton6->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton6.Image")));
+			this->toolStripButton6->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton6->Name = L"toolStripButton6";
+			this->toolStripButton6->Size = System::Drawing::Size(117, 24);
+			this->toolStripButton6->Text = L"彈力球";
+			this->toolStripButton6->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton6_Click);
+			// 
 			// ImageProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
@@ -1496,7 +1506,6 @@ private: System::Windows::Forms::Button^  Btn_CreateWndow;
 			this->tabPage2->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Colomap2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Source2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			this->groupBox1->ResumeLayout(false);
 			this->groupBox1->PerformLayout();
 			this->toolStrip2->ResumeLayout(false);
@@ -2218,7 +2227,7 @@ private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, Syste
 				, CloudLinePoint[CloudLinePoint.size() - 1].X
 				, CloudLinePoint[CloudLinePoint.size() - 1].Y);
 
-			Wen_line(Img_tempMask,CloudLinePoint[CloudLinePoint.size() - 2], CloudLinePoint[CloudLinePoint.size() - 1]);
+			line(Img_tempMask,CloudLinePoint[CloudLinePoint.size() - 2], CloudLinePoint[CloudLinePoint.size() - 1]);
 			break;
 		default:
 			break;
@@ -2544,7 +2553,7 @@ private:void CreatMask(Bitmap^ src,Bitmap ^%dst)
 		{
 			for (unsigned int k = 0; k < Pos.size()-1; k++)
 			{
-				Wen_line(temp_result, Pos[k],Pos[k+1]);
+				line(temp_result, Pos[k],Pos[k+1]);
 			}
 		}
 	}
@@ -2552,7 +2561,7 @@ private:void CreatMask(Bitmap^ src,Bitmap ^%dst)
 	System::Drawing::Imaging::PixelFormat format = temp_result->PixelFormat;
 	dst = temp_result->Clone(cloneRect, format);
 }
-private:void Wen_line(Bitmap ^%src,Point P1,Point P2)
+private:void line(Bitmap ^%src,Point P1,Point P2)
 {
 	if (P1.X != P2.X) //為直斜線
 	{
@@ -2648,6 +2657,10 @@ private:void Wen_line(Bitmap ^%src,Point P1,Point P2)
 		}
 	}
 
+}
+private: System::Void toolStripButton6_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bouncingball ^bouncing_ball = gcnew Bouncingball;
+	bouncing_ball->ShowDialog();
 }
 };
 }

@@ -27,6 +27,9 @@
     <ClCompile Include="RGBHistigram.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="Bouncingball.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadingUI.h">
@@ -41,6 +44,9 @@
     <ClInclude Include="RGBHistigram.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="Bouncingball.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageProcessUI.resx">
@@ -50,6 +56,9 @@
       <Filter>資源檔</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectUI.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RGBHistigram.resx">
       <Filter>資源檔</Filter>
     </EmbeddedResource>
   </ItemGroup>
