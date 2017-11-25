@@ -30,6 +30,15 @@
     <ClCompile Include="Bouncingball.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="BitPlaneUI.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterMarkUI.cpp">
+      <Filter>標頭檔</Filter>
+    </ClCompile>
+    <ClCompile Include="SelfDefineContrast.cpp">
+      <Filter>標頭檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadingUI.h">
@@ -47,6 +56,12 @@
     <ClInclude Include="Bouncingball.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="BitPlaneUI.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="SelfDefineContrast.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageProcessUI.resx">
@@ -59,6 +74,12 @@
       <Filter>資源檔</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="RGBHistigram.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bouncingball.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BitPlaneUI.resx">
       <Filter>資源檔</Filter>
     </EmbeddedResource>
   </ItemGroup>

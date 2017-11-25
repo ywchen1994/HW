@@ -131,13 +131,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BitPlaneUI.cpp" />
     <ClCompile Include="Bouncingball.cpp" />
     <ClCompile Include="ImageProcessUI.cpp" />
     <ClCompile Include="LoadingUI.cpp" />
     <ClCompile Include="RGBHistigram.cpp" />
     <ClCompile Include="SelectUI.cpp" />
+    <ClCompile Include="SelfDefineContrast.cpp" />
+    <ClCompile Include="WaterMarkUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitPlaneUI.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Bouncingball.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -153,8 +159,14 @@
     <ClInclude Include="SelectUI.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="SelfDefineContrast.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BitPlaneUI.resx">
+      <DependentUpon>BitPlaneUI.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Bouncingball.resx">
       <DependentUpon>Bouncingball.h</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectUI.resx">
       <DependentUpon>SelectUI.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelfDefineContrast.resx">
+      <DependentUpon>SelfDefineContrast.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

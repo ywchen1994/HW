@@ -6,7 +6,9 @@
 #include"vcclr.h"
 #include <cliext/vector>  
 #include"RGBHistigram.h"
+#include"BitPlaneUI.h"
 #include"Bouncingball.h"
+typedef unsigned int uint;
 namespace WinForm_ImgProcessHW {
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -171,7 +173,7 @@ private: System::Windows::Forms::NumericUpDown^  Rotation;
 private: System::Windows::Forms::RadioButton^  ChkBox_Inverse_Rotation;
 
 private: System::Windows::Forms::RadioButton^  ChkBox_Forward_Rotation;
-private: System::Windows::Forms::PictureBox^  pictureBox_Result;
+public: System::Windows::Forms::PictureBox^  pictureBox_Result;
 private: System::Windows::Forms::GroupBox^  groupBox4;
 private: System::Windows::Forms::RadioButton^  RadioBtn_Threshold_inv_Binary;
 private: System::Windows::Forms::RadioButton^  RadioBtn_Threshold_Binary;
@@ -213,6 +215,16 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 		vector<Point>CloudLinePoint;
 private: System::Windows::Forms::Button^  Btn_CreateWndow;
 private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
+private: System::Windows::Forms::GroupBox^  groupBox9;
+private: System::Windows::Forms::ToolStrip^  toolStrip6;
+private: System::Windows::Forms::ToolStripButton^  toolStripButton7;
+private: System::Windows::Forms::ToolStripButton^  toolStripButton8;
+private: System::Windows::Forms::Button^  button1;
+private: System::Windows::Forms::Label^  label47;
+private: System::Windows::Forms::GroupBox^  groupBox10;
+private: System::Windows::Forms::ToolStrip^  toolStrip7;
+private: System::Windows::Forms::ToolStripButton^  toolStripButton9;
+private: System::Windows::Forms::ToolStripButton^  toolStripButton10;
 		 Point LBtnUP;
 
 #pragma region Windows Form Designer generated code
@@ -319,6 +331,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->toolStripButton_horizontalFilp = (gcnew System::Windows::Forms::ToolStripButton());
 			this->Btn_verticalFlip = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButton_diagonal = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButton6 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->groupBox3 = (gcnew System::Windows::Forms::GroupBox());
 			this->ChkBox_Inverse_Rotation = (gcnew System::Windows::Forms::RadioButton());
@@ -326,6 +339,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->Rotation = (gcnew System::Windows::Forms::NumericUpDown());
 			this->pictureBox_Result = (gcnew System::Windows::Forms::PictureBox());
 			this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->RadioBtn_Threshold_inv_Binary = (gcnew System::Windows::Forms::RadioButton());
 			this->RadioBtn_Threshold_Binary = (gcnew System::Windows::Forms::RadioButton());
 			this->Threshold_value = (gcnew System::Windows::Forms::NumericUpDown());
@@ -347,7 +361,15 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->toolStripButton3 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButton4 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripButton5 = (gcnew System::Windows::Forms::ToolStripButton());
-			this->toolStripButton6 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->groupBox9 = (gcnew System::Windows::Forms::GroupBox());
+			this->toolStrip6 = (gcnew System::Windows::Forms::ToolStrip());
+			this->toolStripButton7 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButton8 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->label47 = (gcnew System::Windows::Forms::Label());
+			this->groupBox10 = (gcnew System::Windows::Forms::GroupBox());
+			this->toolStrip7 = (gcnew System::Windows::Forms::ToolStrip());
+			this->toolStripButton9 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripButton10 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->menuStrip1->SuspendLayout();
 			this->Tab_Image1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
@@ -374,6 +396,10 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->groupBox8->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ZoomRate))->BeginInit();
 			this->toolStrip5->SuspendLayout();
+			this->groupBox9->SuspendLayout();
+			this->toolStrip6->SuspendLayout();
+			this->groupBox10->SuspendLayout();
+			this->toolStrip7->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
@@ -383,7 +409,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(1902, 27);
+			this->menuStrip1->Size = System::Drawing::Size(1917, 27);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -1140,7 +1166,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->toolStrip3->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip3->Location = System::Drawing::Point(3, 20);
 			this->toolStrip3->Name = L"toolStrip3";
-			this->toolStrip3->Size = System::Drawing::Size(119, 143);
+			this->toolStrip3->Size = System::Drawing::Size(119, 119);
 			this->toolStrip3->TabIndex = 0;
 			this->toolStrip3->Text = L"toolStrip3";
 			// 
@@ -1170,6 +1196,15 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->toolStripButton_diagonal->Size = System::Drawing::Size(117, 24);
 			this->toolStripButton_diagonal->Text = L"對角線鏡射";
 			this->toolStripButton_diagonal->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton_diagonalFlip_Click);
+			// 
+			// toolStripButton6
+			// 
+			this->toolStripButton6->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton6.Image")));
+			this->toolStripButton6->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton6->Name = L"toolStripButton6";
+			this->toolStripButton6->Size = System::Drawing::Size(117, 24);
+			this->toolStripButton6->Text = L"彈力球";
+			this->toolStripButton6->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton6_Click);
 			// 
 			// groupBox3
 			// 
@@ -1218,7 +1253,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			// 
 			// pictureBox_Result
 			// 
-			this->pictureBox_Result->Location = System::Drawing::Point(939, 227);
+			this->pictureBox_Result->Location = System::Drawing::Point(939, 257);
 			this->pictureBox_Result->Name = L"pictureBox_Result";
 			this->pictureBox_Result->Size = System::Drawing::Size(454, 371);
 			this->pictureBox_Result->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
@@ -1229,15 +1264,26 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			// 
 			// groupBox4
 			// 
+			this->groupBox4->Controls->Add(this->button1);
 			this->groupBox4->Controls->Add(this->RadioBtn_Threshold_inv_Binary);
 			this->groupBox4->Controls->Add(this->RadioBtn_Threshold_Binary);
 			this->groupBox4->Controls->Add(this->Threshold_value);
 			this->groupBox4->Location = System::Drawing::Point(471, 33);
 			this->groupBox4->Name = L"groupBox4";
-			this->groupBox4->Size = System::Drawing::Size(198, 77);
+			this->groupBox4->Size = System::Drawing::Size(198, 99);
 			this->groupBox4->TabIndex = 13;
 			this->groupBox4->TabStop = false;
 			this->groupBox4->Text = L"二值化";
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(89, 55);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(103, 31);
+			this->button1->TabIndex = 16;
+			this->button1->Text = L"Otsu";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &ImageProcessUI::button1_Click);
 			// 
 			// RadioBtn_Threshold_inv_Binary
 			// 
@@ -1403,7 +1449,7 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->groupBox8->Controls->Add(this->toolStrip5);
 			this->groupBox8->Location = System::Drawing::Point(1055, 33);
 			this->groupBox8->Name = L"groupBox8";
-			this->groupBox8->Size = System::Drawing::Size(119, 188);
+			this->groupBox8->Size = System::Drawing::Size(119, 183);
 			this->groupBox8->TabIndex = 17;
 			this->groupBox8->TabStop = false;
 			this->groupBox8->Text = L"縮放";
@@ -1466,21 +1512,108 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			this->toolStripButton5->Text = L"平均縮小";
 			this->toolStripButton5->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton5_Click);
 			// 
-			// toolStripButton6
+			// groupBox9
 			// 
-			this->toolStripButton6->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton6.Image")));
-			this->toolStripButton6->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->toolStripButton6->Name = L"toolStripButton6";
-			this->toolStripButton6->Size = System::Drawing::Size(117, 24);
-			this->toolStripButton6->Text = L"彈力球";
-			this->toolStripButton6->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton6_Click);
+			this->groupBox9->Controls->Add(this->toolStrip6);
+			this->groupBox9->Location = System::Drawing::Point(1193, 33);
+			this->groupBox9->Name = L"groupBox9";
+			this->groupBox9->Size = System::Drawing::Size(107, 99);
+			this->groupBox9->TabIndex = 18;
+			this->groupBox9->TabStop = false;
+			this->groupBox9->Text = L"位元平面";
+			// 
+			// toolStrip6
+			// 
+			this->toolStrip6->ImageScalingSize = System::Drawing::Size(20, 20);
+			this->toolStrip6->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->toolStripButton7,
+					this->toolStripButton8
+			});
+			this->toolStrip6->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
+			this->toolStrip6->Location = System::Drawing::Point(3, 21);
+			this->toolStrip6->Name = L"toolStrip6";
+			this->toolStrip6->Size = System::Drawing::Size(101, 65);
+			this->toolStrip6->TabIndex = 0;
+			this->toolStrip6->Text = L"toolStrip6";
+			// 
+			// toolStripButton7
+			// 
+			this->toolStripButton7->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton7.Image")));
+			this->toolStripButton7->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton7->Name = L"toolStripButton7";
+			this->toolStripButton7->Size = System::Drawing::Size(99, 24);
+			this->toolStripButton7->Text = L"位元分割";
+			this->toolStripButton7->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton7_Click);
+			// 
+			// toolStripButton8
+			// 
+			this->toolStripButton8->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton8.Image")));
+			this->toolStripButton8->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton8->Name = L"toolStripButton8";
+			this->toolStripButton8->Size = System::Drawing::Size(99, 24);
+			this->toolStripButton8->Text = L"浮水印";
+			this->toolStripButton8->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton8_Click);
+			// 
+			// label47
+			// 
+			this->label47->AutoSize = true;
+			this->label47->Location = System::Drawing::Point(949, 803);
+			this->label47->Name = L"label47";
+			this->label47->Size = System::Drawing::Size(0, 15);
+			this->label47->TabIndex = 19;
+			// 
+			// groupBox10
+			// 
+			this->groupBox10->Controls->Add(this->toolStrip7);
+			this->groupBox10->Location = System::Drawing::Point(1307, 31);
+			this->groupBox10->Name = L"groupBox10";
+			this->groupBox10->Size = System::Drawing::Size(117, 101);
+			this->groupBox10->TabIndex = 20;
+			this->groupBox10->TabStop = false;
+			this->groupBox10->Text = L"對比";
+			// 
+			// toolStrip7
+			// 
+			this->toolStrip7->ImageScalingSize = System::Drawing::Size(20, 20);
+			this->toolStrip7->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->toolStripButton9,
+					this->toolStripButton10
+			});
+			this->toolStrip7->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
+			this->toolStrip7->Location = System::Drawing::Point(3, 21);
+			this->toolStrip7->Name = L"toolStrip7";
+			this->toolStrip7->Size = System::Drawing::Size(111, 65);
+			this->toolStrip7->TabIndex = 0;
+			this->toolStrip7->Text = L"toolStrip7";
+			// 
+			// toolStripButton9
+			// 
+			this->toolStripButton9->ForeColor = System::Drawing::SystemColors::ActiveCaptionText;
+			this->toolStripButton9->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton9.Image")));
+			this->toolStripButton9->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton9->Name = L"toolStripButton9";
+			this->toolStripButton9->Size = System::Drawing::Size(109, 24);
+			this->toolStripButton9->Text = L"線性對比";
+			this->toolStripButton9->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton9_Click);
+			// 
+			// toolStripButton10
+			// 
+			this->toolStripButton10->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"toolStripButton10.Image")));
+			this->toolStripButton10->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->toolStripButton10->Name = L"toolStripButton10";
+			this->toolStripButton10->Size = System::Drawing::Size(109, 24);
+			this->toolStripButton10->Text = L"自定義對比";
+			this->toolStripButton10->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton10_Click);
 			// 
 			// ImageProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoSize = true;
-			this->ClientSize = System::Drawing::Size(1902, 1033);
+			this->ClientSize = System::Drawing::Size(1917, 1033);
+			this->Controls->Add(this->groupBox10);
+			this->Controls->Add(this->label47);
+			this->Controls->Add(this->groupBox9);
 			this->Controls->Add(this->groupBox8);
 			this->Controls->Add(this->groupBox7);
 			this->Controls->Add(this->groupBox6);
@@ -1536,6 +1669,14 @@ private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ZoomRate))->EndInit();
 			this->toolStrip5->ResumeLayout(false);
 			this->toolStrip5->PerformLayout();
+			this->groupBox9->ResumeLayout(false);
+			this->groupBox9->PerformLayout();
+			this->toolStrip6->ResumeLayout(false);
+			this->toolStrip6->PerformLayout();
+			this->groupBox10->ResumeLayout(false);
+			this->groupBox10->PerformLayout();
+			this->toolStrip7->ResumeLayout(false);
+			this->toolStrip7->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -1843,6 +1984,7 @@ public: void Flip(Bitmap^ src, Bitmap ^%dst, int code)
 }
 public:void Threshold(Bitmap^ src, Bitmap ^%dst, int threshold, int code)
 {
+	if (dst == nullptr)dst = gcnew Bitmap(src->Width, src->Height);
 	for (size_t i = 0; i < src->Width; i++)
 		for (int j = 0; j < src->Height; j++)
 		{
@@ -1858,16 +2000,16 @@ public:void Threshold(Bitmap^ src, Bitmap ^%dst, int threshold, int code)
 			if (src->GetPixel(i, j).R >= threshold)
 			{
 				if (code == THRESH_BINARY)
-					src->SetPixel(i, j, Color::FromArgb(255, 255, 255));
+					dst->SetPixel(i, j, Color::FromArgb(255, 255, 255));
 				if (code == THRESH_BINARY_Inv)
-					src->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+					dst->SetPixel(i, j, Color::FromArgb(0, 0, 0));
 			}
 			else if (src->GetPixel(i, j).R<threshold)
 			{
 				if (code == THRESH_BINARY)
-					src->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+					dst->SetPixel(i, j, Color::FromArgb(0, 0, 0));
 				if (code == THRESH_BINARY_Inv)
-					src->SetPixel(i, j, Color::FromArgb(255, 255, 255));
+					dst->SetPixel(i, j, Color::FromArgb(255, 255, 255));
 			}
 		}
 }
@@ -2170,8 +2312,8 @@ private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, Syste
 		(LBtnDown.Y > LBtnMove.Y) ? (start_y = LBtnMove.Y, end_y = LBtnDown.Y) : (start_y = LBtnDown.Y, end_y = LBtnMove.Y);
 		if (start_x < 0) start_x = 0; 
 		if (start_y < 0) start_y = 0;
+		if(Img_Stack !=nullptr){
 		Bitmap ^img_processed = gcnew Bitmap(Img_Stack->Width, Img_Stack->Height);  
-	
 		switch (d_Pen)
 		{
 		case Pen_Circle:
@@ -2232,6 +2374,7 @@ private: System::Void pictureBox_Result_MouseMove(System::Object^  sender, Syste
 		default:
 			break;
 		}
+	  }
 	}
 }
 private: System::Void pictureBox_Result_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
@@ -2661,6 +2804,275 @@ private:void line(Bitmap ^%src,Point P1,Point P2)
 private: System::Void toolStripButton6_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bouncingball ^bouncing_ball = gcnew Bouncingball;
 	bouncing_ball->ShowDialog();
+}
+private: System::Void toolStripButton7_Click(System::Object^  sender, System::EventArgs^  e) {
+	vector<Bitmap^> Bitchannel; vector<Bitmap^> BitGray;
+	
+	Convert2BitChannel(Img_Source, Bitchannel);
+	BitPlaneUI ^bitUI = gcnew BitPlaneUI();
+	bitUI->pictureBox1->Image = Bitchannel[0];
+	bitUI->pictureBox2->Image = Bitchannel[1];
+	bitUI->pictureBox3->Image = Bitchannel[2];
+	bitUI->pictureBox4->Image = Bitchannel[3];
+	bitUI->pictureBox5->Image = Bitchannel[4];
+	bitUI->pictureBox6->Image = Bitchannel[5];
+	bitUI->pictureBox7->Image = Bitchannel[6];
+	bitUI->pictureBox8->Image = Bitchannel[7];
+	bitUI->label9->Text = "Bit_code";
+	bitUI->Show();
+
+	Convert2GrayChannel(Bitchannel, BitGray);
+	
+	BitPlaneUI ^GrayUI = gcnew BitPlaneUI();
+	GrayUI->pictureBox1->Image = BitGray[0];
+	GrayUI->pictureBox2->Image = BitGray[1];
+	GrayUI->pictureBox3->Image = BitGray[2];
+	GrayUI->pictureBox4->Image = BitGray[3];
+	GrayUI->pictureBox5->Image = BitGray[4];
+	GrayUI->pictureBox6->Image = BitGray[5];
+	GrayUI->pictureBox7->Image = BitGray[6];
+	GrayUI->pictureBox8->Image = BitGray[7];
+	GrayUI->label9->Text = "Gray_code";
+	GrayUI->Show();
+	
+}
+private:void Convert2BitChannel(Bitmap^ src, vector<Bitmap^>%Bitchannel)
+{
+	Bitmap^ Img_gray;
+	ConvertColor(Img_Source, Img_gray, RGB2Gray);
+	for (uint16_t i = 0; i < 8; i++)
+	{
+		Bitmap^	 initial = gcnew Bitmap(Img_gray->Width, Img_gray->Height);
+		Bitchannel.push_back(initial);
+	}
+	for (uint16_t i = 0; i < Img_gray->Width; i++)
+	{
+		for (uint16_t j = 0; j < Img_gray->Height; j++)
+		{
+			unsigned char mask = 0x01;
+			unsigned char Value = Img_gray->GetPixel(i, j).R;
+			for (uint16_t k = 0; k < 8; k++)
+			{
+				if ((Value & mask) > 0)
+					Bitchannel[k]->SetPixel(i, j, Color::FromArgb(255, 255, 255));
+				if ((Value & mask) == 0)
+					Bitchannel[k]->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+				mask = mask << 1;
+			}
+		}
+	}
+}
+private:void Convert2GrayChannel(vector<Bitmap^>%Bitchannel,vector<Bitmap^>%GrayChannel)
+{
+	for (size_t i = 0; i < 8; i++)
+	{
+		Bitmap^	 initial = gcnew Bitmap(Bitchannel[0]->Width, Bitchannel[0]->Height);
+		GrayChannel.push_back(initial);
+	}
+	
+	GrayChannel[7] = Bitchannel[7]->Clone(Rectangle(0, 0, Bitchannel[7]->Width, Bitchannel[7]->Height), Bitchannel[7]->PixelFormat);
+	for (uint16_t i = 0; i<Bitchannel[7]->Width; i++)
+		for (uint16_t j = 0; j < Bitchannel[7]->Height; j++)
+			for (uint16_t k = 0; k < 7; k++)
+			{
+				int XOR = Bitchannel[7 - k]->GetPixel(i, j).R - Bitchannel[6 - k]->GetPixel(i, j).R;
+				if (XOR != 0)
+					GrayChannel[6 - k]->SetPixel(i, j, Color::FromArgb(255, 255, 255));
+				if (XOR == 0)
+					GrayChannel[6 - k]->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+			}
+}
+private: System::Void toolStripButton8_Click(System::Object^  sender, System::EventArgs^  e) {
+	vector<Bitmap^> Bitchannel;
+	Bitmap ^ Img_processed = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	Convert2BitChannel(Img_Source, Bitchannel);
+
+
+	Bitmap ^WaterMark = gcnew Bitmap("WaterMark.bmp");
+	Bitchannel[0] = WaterMark->Clone(Rectangle(0, 0, Bitchannel[7]->Width, Bitchannel[7]->Height), Bitchannel[7]->PixelFormat);
+	for (uint16_t i = 0; i < Img_Source->Width; i++)
+		for (uint16_t j = 0; j < Img_Source->Height; j++)
+		{
+			unsigned char Value = 0x00;
+			unsigned char mask = 0x01;
+			for (uint16_t k = 0; k < 8; k++)
+			{
+				Value += Bitchannel[k]->GetPixel(i, j).R & mask;
+				mask = mask << 1;
+			}
+			Img_processed->SetPixel(i, j, Color::FromArgb(Value, Value, Value));
+		}
+	double SNR_Value = SNR(Img_Source,Img_processed);
+	label47->Text = "SNR: "+SNR_Value.ToString();
+	pictureBox_Result->Image = Img_processed;
+	pictureBox_Result->Refresh();
+	delete Img_processed;
+	
+	BitPlaneUI ^bitUI = gcnew BitPlaneUI();
+	bitUI->pictureBox1->Image = Bitchannel[0];
+	bitUI->pictureBox2->Image = Bitchannel[1];
+	bitUI->pictureBox3->Image = Bitchannel[2];
+	bitUI->pictureBox4->Image = Bitchannel[3];
+	bitUI->pictureBox5->Image = Bitchannel[4];
+	bitUI->pictureBox6->Image = Bitchannel[5];
+	bitUI->pictureBox7->Image = Bitchannel[6];
+	bitUI->pictureBox8->Image = Bitchannel[7];
+	bitUI->label9->Text = "Bit_code";
+	bitUI->Show();
+}
+ private:double SNR(Bitmap ^%Source, Bitmap ^% TestImage)
+{
+	 double SNR_Value = 0;
+	 double SumofSource = 0;
+	 double SumofTest = 0;//Source-Test
+	 for (UInt16 i = 0; i < Source->Width; i++)
+		 for (UInt16 j = 0; j < Source->Width; j++)
+		 {
+			 SumofSource += Source->GetPixel(i, j).R;
+			 SumofTest += Source->GetPixel(i, j).R - TestImage->GetPixel(i, j).R;
+		 }
+	 SNR_Value= Math::Log10(SumofSource/ SumofTest);
+	 return 20 * SNR_Value;
+}
+private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^Img_processed;
+	RGBHistigram ^RGB_His = gcnew RGBHistigram();
+	
+	unsigned char GrayStatisticProbability[256] = { 0 };
+	int threshold_Value = Otus(Img_Source, &GrayStatisticProbability[0]);
+	Threshold(Img_Source, Img_processed, threshold_Value, THRESH_BINARY);
+
+	for(uint16_t i=0;i<256;i++)
+		RGB_His->chart_RGB->Series["Gray"]->Points->AddXY(i, GrayStatisticProbability[i]);
+	Threshold_value->Text = threshold_Value.ToString();
+	RGB_His->chart_RGB->Series["R"]->Points->AddXY(threshold_Value,3000);
+	RGB_His->ShowDialog();
+	pictureBox_Result->Image = Img_processed;
+	pictureBox_Result->Refresh();
+	delete Img_processed;
+}
+private:int Otus(Bitmap ^src,unsigned char GrayStatisticProbability[256])
+{
+	int threshold = 0;
+	Bitmap ^Img_Gray;
+	ConvertColor(src, Img_Gray, RGB2Gray);
+	
+	unsigned int SumtotalGray;
+	unsigned int totalNo= Img_Gray->Width*Img_Gray->Height;
+	for (uint16_t i = 0; i < Img_Gray->Width; i++)
+		for (uint16_t j = 0; j < Img_Gray->Height; j++)
+		{
+			GrayStatisticProbability[Img_Gray->GetPixel(i, j).R] +=1;
+			SumtotalGray += Img_Gray->GetPixel(i, j).R;
+		}
+	delete Img_Gray;
+	double MeanTotal =(double)SumtotalGray/ (double)totalNo;
+	unsigned int weight_Under = 0;
+	unsigned int weight_Above= 0;
+	unsigned int sum_Lower = 0;
+	double varMax = 0;
+
+	for (uint16_t i = 0; i < 256; i++)
+	{
+	 weight_Under += GrayStatisticProbability[i];
+	 sum_Lower += i* GrayStatisticProbability[i];
+	 weight_Above = totalNo - weight_Under;
+	 unsigned int sum_Above = SumtotalGray - sum_Lower;
+
+	 double W1 = (double)weight_Under / (double)totalNo;
+	 double Mean1=0;
+	 if(weight_Under!=0)
+	 Mean1 = (double)sum_Lower / (double)weight_Under;
+
+	 double W2 = (double)weight_Above / (double)totalNo;
+
+	 double Mean2 = 0;
+	 if(weight_Above !=0)Mean2 = (double)sum_Above / (double)weight_Above;
+
+	 double variance_between = W1*pow(Mean1- MeanTotal,2)+W2*pow(Mean2- MeanTotal,2);//w1*var1^2+w2*var2^2
+	 if (varMax<variance_between)
+	 {
+		 varMax = variance_between;
+		 threshold=i;
+	 }
+	}
+	return threshold;
+}
+private:void ImageExtend(Bitmap^src, int NumExtend, Bitmap ^%dst)
+{
+	dst = gcnew Bitmap(src->Width + NumExtend * 2, src->Height + NumExtend * 2);
+	for (uint16_t k = 0; k < NumExtend; k++)
+	{
+		for (uint j = 0; j < src->Height; j++)
+		{
+			dst->SetPixel(NumExtend - k - 1, j + NumExtend,src->GetPixel(src->Width - k - 1,j));
+			dst->SetPixel(dst->Width - (NumExtend - k),j + NumExtend, src->GetPixel(k, j));
+		}
+		for (uint i = 0; i < src->Width; i++)
+		{
+			dst->SetPixel(i + NumExtend,k,src->GetPixel(i, src->Height - (NumExtend - k)));
+			dst->SetPixel(i + NumExtend, dst->Height- (NumExtend - k), src->GetPixel(i, k));
+		}
+		for (uint16_t j = 0; j < NumExtend; j++)//對角擴張
+		{
+			dst->SetPixel(k,j,src->GetPixel(src->Width - (NumExtend - k),src->Height - (NumExtend - j)));//左上
+			dst->SetPixel(j,dst->Height - (NumExtend - k),src->GetPixel(src->Width -(NumExtend - j),k));//左下
+			dst->SetPixel(dst->Width-(NumExtend-j),dst->Height-(NumExtend - k),src->GetPixel(j,k));//右下
+			dst->SetPixel(dst->Width - (NumExtend - k),j,src->GetPixel(k,src->Height-(NumExtend - j)));
+		}
+	}
+	for (uint i = 0; i < src->Width; i++)
+		for (uint j = 0; j < src->Height; j++)
+			dst->SetPixel(i+NumExtend,j+NumExtend,src->GetPixel(i,j));
+}
+private: System::Void toolStripButton9_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^Imgprocessed;
+	LinearContrast(Img_Source, Imgprocessed);
+	pictureBox_Result->Image = Imgprocessed;
+	pictureBox_Result->Refresh();
+	delete Imgprocessed;
+}
+private:void LinearContrast(Bitmap ^src, Bitmap ^%dst)
+{
+	dst = gcnew Bitmap(src->Width, src->Height);
+	unsigned char GrayStatistic[256] = { 0 };
+	for (uint i = 0; i < src->Width; i++)
+		for (uint j = 0; j < src->Height; j++)
+			GrayStatistic[src->GetPixel(i, j).R]++;
+	uint totalNum = src->Width*src->Height;
+	uint Percent_5 = totalNum*0.05;
+	uint LowfivePercentGrayValue = 0;
+	uint TopfivePercentGrayValue = 0;
+	int counter = 0;
+	int counter2 = 0;
+	for (uint i = 0; i <256; i++)
+	{
+		counter += GrayStatistic[i];
+		counter2 += GrayStatistic[255 - i];
+		if ((counter- GrayStatistic[i]<=Percent_5) && (Percent_5<= counter))		  
+			LowfivePercentGrayValue = i;
+		if ((counter2 - GrayStatistic[255 - i] <= Percent_5) && (Percent_5 <= counter2))
+			TopfivePercentGrayValue = 255-i;
+	}
+	for(uint i=0;i<src->Width;i++)
+		for (uint j = 0; j < src->Height; j++)
+		{
+			if ((LowfivePercentGrayValue <= src->GetPixel(i, j).R) && src->GetPixel(i, j).R <= TopfivePercentGrayValue)
+			{
+				int mapped_value = (int)mapping(src->GetPixel(i, j).R, LowfivePercentGrayValue, TopfivePercentGrayValue);
+				dst->SetPixel(i, j, Color::FromArgb(mapped_value, mapped_value, mapped_value));
+			}
+			else if ((src->GetPixel(i, j).R) < LowfivePercentGrayValue)
+				dst->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+			else if ((src->GetPixel(i, j).R) > TopfivePercentGrayValue)
+				dst->SetPixel(i, j, Color::FromArgb(255, 255,255));
+		}
+}
+private:float mapping(int x, int in_min, int in_max)
+{
+	return (float)(x - in_min) *(255.0f)/(float)(in_max - in_min);
+}
+private: System::Void toolStripButton10_Click(System::Object^  sender, System::EventArgs^  e) {
 }
 };
 }
