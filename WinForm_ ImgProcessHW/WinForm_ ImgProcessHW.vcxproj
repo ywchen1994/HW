@@ -89,6 +89,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -133,11 +135,13 @@
   <ItemGroup>
     <ClCompile Include="BitPlaneUI.cpp" />
     <ClCompile Include="Bouncingball.cpp" />
+    <ClCompile Include="Huffman.cpp" />
     <ClCompile Include="ImageProcessUI.cpp" />
     <ClCompile Include="LoadingUI.cpp" />
     <ClCompile Include="RGBHistigram.cpp" />
     <ClCompile Include="SelectUI.cpp" />
     <ClCompile Include="SelfDefineContrast.cpp" />
+    <ClCompile Include="VideoProcessUI.cpp" />
     <ClCompile Include="WaterMarkUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,12 +151,16 @@
     <ClInclude Include="Bouncingball.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Huffman.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ImageProcessUI.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="LoadingUI.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="NodeHeader.h" />
     <ClInclude Include="RGBHistigram.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -162,6 +170,9 @@
     <ClInclude Include="SelfDefineContrast.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="VideoProcessUI.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BitPlaneUI.resx">
@@ -169,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bouncingball.resx">
       <DependentUpon>Bouncingball.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Huffman.resx">
+      <DependentUpon>Huffman.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageProcessUI.resx">
       <DependentUpon>ImageProcessUI.h</DependentUpon>
@@ -184,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelfDefineContrast.resx">
       <DependentUpon>SelfDefineContrast.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VideoProcessUI.resx">
+      <DependentUpon>VideoProcessUI.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

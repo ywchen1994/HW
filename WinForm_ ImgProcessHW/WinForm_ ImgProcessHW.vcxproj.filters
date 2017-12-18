@@ -39,6 +39,12 @@
     <ClCompile Include="SelfDefineContrast.cpp">
       <Filter>標頭檔</Filter>
     </ClCompile>
+    <ClCompile Include="Huffman.cpp">
+      <Filter>標頭檔</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoProcessUI.cpp">
+      <Filter>標頭檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadingUI.h">
@@ -62,6 +68,15 @@
     <ClInclude Include="SelfDefineContrast.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="Huffman.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoProcessUI.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeHeader.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageProcessUI.resx">
@@ -80,6 +95,15 @@
       <Filter>資源檔</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="BitPlaneUI.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelfDefineContrast.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Huffman.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VideoProcessUI.resx">
       <Filter>資源檔</Filter>
     </EmbeddedResource>
   </ItemGroup>
