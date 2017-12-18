@@ -28,6 +28,12 @@ namespace WinForm_ImgProcessHW {
 		short codelength;
 
 	};
+	struct HuffmanPackage
+	{
+		SymAndProbability RawData;
+		std::string Code;
+		UInt16 CodeLength;
+	};
 	
 	/// <summary>
 	/// Huffman 的摘要
@@ -145,7 +151,7 @@ namespace WinForm_ImgProcessHW {
 			tempNode.codelength = 0;
 			R_nodeArray.push_back(tempNode);
 		}
-		delete[]R_code;
+		
 		while (!R_nodeArray.empty())
 		{
 			std::vector<node>::iterator Min_index,R_node_ptr;
@@ -178,10 +184,48 @@ namespace WinForm_ImgProcessHW {
 			tempNode.codelength = 0;
 			R_nodeArray.push_back(tempNode);
 			if (R_nodeArray.size() == 1)break;
-
 		}
-		
+		Huffman_treeCoding(&R_nodeArray[0], "", 0);
+		delete[]R_code;
 
 	}
-	};
+ public: void Huffman_treeCoding(node * temproot, std::string s, short c)
+ {
+	 node * root1 = new node;
+	 root1 = temproot;//頻率最高的pixel值
+	 root1->code = s;//霍夫曼編碼的碼
+	 root1->codelength = c;//碼長
+	 if (root1->leftChild == NULL && root1->rightChild == NULL)//如果編碼左有兩邊的子結點為0
+	 {
+	 const char *code_char = 0;
+	 code_char = root1->code.data();
+	 int count = 0;
+	 for (uint16_t i = 0; i < NoneZeroCounter; i++)
+	 {
+		 if (root1->content== R_code[i].Symbol)
+		 {
+			 count = i;
+			 break;
+		 }
+	 }
+	/* R_content[count] = root1->content;//pixel的值
+	 R_huffman_code[count] = gcnew String(code_char);//霍夫曼編碼的碼
+	 R_code_length_fre[count] = Point(root1->codelength, root1->frequency);
+	 int R_pxiel_totalbits = root1->frequency*root1->codelength;
+	 R_totalbits += R_pxiel_totalbits;
+	 R_totalfre += root1->frequency;*/
+
+	}
+	 else
+	{
+		root1->leftChild->codelength = c + 1;
+		root1->rightChild->codelength += c + 1;
+		Huffman_treeCoding(root1->leftChild, s.append("0"), root1->leftChild->codelength);
+		s.erase(s.end() - 1);
+		Huffman_treeCoding(root1->rightChild, s.append("1"), root1->rightChild->codelength);
+		s.erase(s.end() - 1);
+	 }
+
+}
+};
 }
