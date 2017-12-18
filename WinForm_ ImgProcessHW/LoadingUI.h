@@ -63,9 +63,10 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// progressBar1
 			// 
-			this->progressBar1->Location = System::Drawing::Point(453, 210);
+			this->progressBar1->Location = System::Drawing::Point(352, 170);
+			this->progressBar1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->progressBar1->Name = L"progressBar1";
-			this->progressBar1->Size = System::Drawing::Size(100, 23);
+			this->progressBar1->Size = System::Drawing::Size(75, 18);
 			this->progressBar1->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
 			this->progressBar1->TabIndex = 0;
 			// 
@@ -73,13 +74,14 @@ namespace WinForm_ImgProcessHW {
 			// 
 			this->label1->AutoSize = true;
 			this->label1->BackColor = System::Drawing::Color::Transparent;
-			this->label1->Font = (gcnew System::Drawing::Font(L"CommercialScript BT", 22.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 22.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::Color::Snow;
 			this->label1->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->label1->Location = System::Drawing::Point(428, 153);
+			this->label1->Location = System::Drawing::Point(321, 122);
+			this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(143, 43);
+			this->label1->Size = System::Drawing::Size(123, 36);
 			this->label1->TabIndex = 1;
 			this->label1->Text = L"Loading";
 			// 
@@ -89,15 +91,16 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// LoadingUI
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(622, 433);
+			this->ClientSize = System::Drawing::Size(466, 346);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->progressBar1);
 			this->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->Name = L"LoadingUI";
 			this->Text = L"LoadingUI";
 			this->ResumeLayout(false);

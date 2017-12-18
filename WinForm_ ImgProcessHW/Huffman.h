@@ -1,8 +1,8 @@
 #pragma once
 
-#include<vector>
+#include<cliext\vector>
 #include<string>
-
+#include<vector>
 namespace WinForm_ImgProcessHW {
 
 	using namespace System;
@@ -12,7 +12,7 @@ namespace WinForm_ImgProcessHW {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Collections::Generic;
-	using namespace std;
+	
 	struct SymAndProbability
 	{
 		uint16_t Symbol;
@@ -28,7 +28,7 @@ namespace WinForm_ImgProcessHW {
 		short codelength;
 
 	};
-	std::vector<SymAndProbability> R_code;
+	
 	/// <summary>
 	/// Huffman 的摘要
 	/// </summary>
@@ -63,7 +63,8 @@ namespace WinForm_ImgProcessHW {
 		/// <summary>
 		/// 設計工具所需的變數。
 		/// </summary>
-		
+		SymAndProbability *R_code = new SymAndProbability[256];
+		uint16_t NoneZeroCounter = 0;
 		System::ComponentModel::Container ^components;
 	public:Bitmap ^Img_Source;
 	private:List<String^>^ R_huffman_code;
@@ -108,41 +109,43 @@ namespace WinForm_ImgProcessHW {
 			{
 				R_statistics[Img_Source->GetPixel(i, j).R]++;
 			}
-		uint16_t noneZeroCounter = 0;
-		for (unsigned char i = 0; i < 256; i++)
+		for (unsigned int i = 0; i < 256; i++)
 		{
 			if (R_statistics[i] != 0) {
-				noneZeroCounter++;
-				SymAndProbability temp;
-				temp.Symbol = i;
-				temp.Probability = R_statistics[i];
-				R_code.push_back(temp);
+				R_code[NoneZeroCounter].Symbol = i;
+				R_code[NoneZeroCounter].Probability = R_statistics[i];
+				NoneZeroCounter++;
 			}
 		}
 		SymAndProbability temp;
-		for (uint16_t i = 0; i < noneZeroCounter; i++) {
-			for (uint16_t j = i; j <noneZeroCounter; j++) {
+		for (uint16_t i = 0; i < NoneZeroCounter; i++) {
+			for (uint16_t j = i; j <NoneZeroCounter; j++) {
 				if (R_code[j].Probability > R_code[i].Probability) {
-					temp = R_code[j];
-					R_code[j] = R_code[i];
-					R_code[i] = temp;
+					temp.Probability = R_code[j].Probability;
+					temp.Symbol = R_code[j].Symbol;
+
+					R_code[j].Probability = R_code[i].Probability;
+					R_code[j].Symbol = R_code[i].Symbol;
+
+					R_code[i].Probability = temp.Probability;
+					R_code[i].Symbol = temp.Symbol;
 				}
 			}
 		}
 	}
 	private: System::Void Btn_Encode_Click(System::Object^  sender, System::EventArgs^  e) {
 		std::vector <node> R_nodeArray;
-		for (uint16_t i = 0; i < R_code.size(); i++)
+		for (uint16_t i = 0; i < NoneZeroCounter; i++)
 		{
 			node tempNode;
 			tempNode.content = R_code[i].Symbol;
-			tempNode.content = R_code[i].Probability;
+			tempNode.frequency = R_code[i].Probability;
 			tempNode.rightChild = NULL;
 			tempNode.leftChild = NULL;
 			tempNode.codelength = 0;
 			R_nodeArray.push_back(tempNode);
 		}
-		R_code.clear();
+		delete[]R_code;
 		while (!R_nodeArray.empty())
 		{
 			std::vector<node>::iterator Min_index,R_node_ptr;

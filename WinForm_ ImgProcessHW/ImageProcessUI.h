@@ -3,7 +3,6 @@
 #include <stdio.h >  
 #include <stdlib.h >  
 #include<cmath>
-#include"vcclr.h"
 #include <cliext/vector>  
 #include"RGBHistigram.h"
 #include"BitPlaneUI.h"
