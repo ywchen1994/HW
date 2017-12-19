@@ -63,8 +63,8 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// progressBar1
 			// 
-			this->progressBar1->Location = System::Drawing::Point(352, 170);
-			this->progressBar1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->progressBar1->Location = System::Drawing::Point(363, 291);
+			this->progressBar1->Margin = System::Windows::Forms::Padding(2);
 			this->progressBar1->Name = L"progressBar1";
 			this->progressBar1->Size = System::Drawing::Size(75, 18);
 			this->progressBar1->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
@@ -78,7 +78,7 @@ namespace WinForm_ImgProcessHW {
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::Color::Snow;
 			this->label1->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->label1->Location = System::Drawing::Point(321, 122);
+			this->label1->Location = System::Drawing::Point(332, 243);
 			this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(123, 36);
@@ -100,7 +100,7 @@ namespace WinForm_ImgProcessHW {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->progressBar1);
 			this->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"LoadingUI";
 			this->Text = L"LoadingUI";
 			this->ResumeLayout(false);
