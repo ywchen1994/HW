@@ -3,6 +3,7 @@
 #include<cliext\vector>
 #include<string>
 #include<vector>
+#include<fstream>
 namespace WinForm_ImgProcessHW {
 
 	using namespace System;
@@ -12,7 +13,8 @@ namespace WinForm_ImgProcessHW {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Collections::Generic;
-	
+	using namespace System::Runtime::InteropServices;
+	using namespace std;
 	struct SymAndProbability
 	{
 		uint16_t Symbol;
@@ -27,12 +29,6 @@ namespace WinForm_ImgProcessHW {
 		std::string code;
 		short codelength;
 
-	};
-	struct HuffmanPackage
-	{
-		SymAndProbability RawData;
-		std::string Code;
-		UInt16 CodeLength;
 	};
 	
 	/// <summary>
@@ -58,6 +54,7 @@ namespace WinForm_ImgProcessHW {
 			if (components)
 			{
 				delete components;
+				delete[]R_code;
 			}
 		}
 	private: System::Windows::Forms::Button^  Btn_Encode;
@@ -82,6 +79,7 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Column2;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Column3;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Column4;
+	private: System::Windows::Forms::Button^  Btn_Save;
 	public:Bitmap ^Img_Source;
 	private:
 			
@@ -98,6 +96,7 @@ namespace WinForm_ImgProcessHW {
 			this->Column2 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column4 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Btn_Save = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -144,11 +143,22 @@ namespace WinForm_ImgProcessHW {
 			this->Column4->HeaderText = L"Code Length";
 			this->Column4->Name = L"Column4";
 			// 
+			// Btn_Save
+			// 
+			this->Btn_Save->Location = System::Drawing::Point(165, 11);
+			this->Btn_Save->Name = L"Btn_Save";
+			this->Btn_Save->Size = System::Drawing::Size(75, 23);
+			this->Btn_Save->TabIndex = 3;
+			this->Btn_Save->Text = L"Save";
+			this->Btn_Save->UseVisualStyleBackColor = true;
+			this->Btn_Save->Click += gcnew System::EventHandler(this, &Huffman::Btn_Save_Click);
+			// 
 			// Huffman
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1116, 652);
+			this->Controls->Add(this->Btn_Save);
 			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->Btn_Encode);
 			this->Name = L"Huffman";
@@ -159,7 +169,7 @@ namespace WinForm_ImgProcessHW {
 
 		}
 #pragma endregion
-	private: System::Void Huffman_Load(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void Huffman_Load(System::Object^  sender, System::EventArgs^  e) {
 		uint32_t R_statistics[256] = {0};
 		for(uint16_t j=0;j<Img_Source->Height;j++)
 			for (uint16_t i = 0; i < Img_Source->Width; i++)
@@ -175,26 +185,11 @@ namespace WinForm_ImgProcessHW {
 				R_content.Add(0);
 				R_huffman_code->Add("");
 				R_code_length_fre.Add(Point(0, 0));
-			
 			}
 		}
-		/*SymAndProbability temp;
-		for (uint16_t i = 0; i < NoneZeroCounter; i++) {
-			for (uint16_t j = i; j <NoneZeroCounter; j++) {
-				if (R_code[j].Probability > R_code[i].Probability) {
-					temp.Probability = R_code[j].Probability;
-					temp.Symbol = R_code[j].Symbol;
-
-					R_code[j].Probability = R_code[i].Probability;
-					R_code[j].Symbol = R_code[i].Symbol;
-
-					R_code[i].Probability = temp.Probability;
-					R_code[i].Symbol = temp.Symbol;
-				}
-			}
-		}*/
+		
 	}
-	private: System::Void Btn_Encode_Click(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void Btn_Encode_Click(System::Object^  sender, System::EventArgs^  e) {
 		std::vector <node> R_nodeArray;
 		for (uint16_t i = 0; i < NoneZeroCounter; i++)
 		{
@@ -259,7 +254,7 @@ namespace WinForm_ImgProcessHW {
 
 		dataGridView1->Rows->Add("Red總結 :", "1", "", "平均碼長 = " + Convert::ToString(Math::Round((double)R_totalbits / R_totalfre, 2)), Convert::ToString(R_totalbits));
 		dataGridView1->Refresh();
-		delete[]R_code;
+		
 
 	}
  public: void Huffman_treeCoding(node * temproot, std::string s, short c)
@@ -299,6 +294,21 @@ namespace WinForm_ImgProcessHW {
 		s.erase(s.end() - 1);
 	 }
 
+}
+private: System::Void Btn_Save_Click(System::Object^  sender, System::EventArgs^  e) {
+	SaveFileDialog ^ SaveUI = gcnew SaveFileDialog;
+	SaveUI->CreatePrompt = true;
+	SaveUI->OverwritePrompt = true;
+	SaveUI->FileName = nullptr;
+	SaveUI->Filter = "txt files (*.txt)|*.txt";
+	std::fstream fp;
+	if (SaveUI->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+	 fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(SaveUI->FileName),std::ios::out);
+	 fp<<"Size:(W*H)"<<Img_Source->Width<<" "<< Img_Source->Height<<std::endl;
+	 fp <<"SymbolCategory:"<<" "<< NoneZeroCounter<<endl;
+	}
+	fp.close();
 }
 };
 }
