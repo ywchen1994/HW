@@ -64,7 +64,7 @@ namespace WinForm_ImgProcessHW {
 			this->Btn_Img->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->Btn_Img->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->Btn_Img->Location = System::Drawing::Point(39, 182);
+			this->Btn_Img->Location = System::Drawing::Point(24, 183);
 			this->Btn_Img->Margin = System::Windows::Forms::Padding(2);
 			this->Btn_Img->Name = L"Btn_Img";
 			this->Btn_Img->Size = System::Drawing::Size(139, 52);
@@ -79,7 +79,7 @@ namespace WinForm_ImgProcessHW {
 			this->button1->Font = (gcnew System::Drawing::Font(L"Verdana", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->button1->ForeColor = System::Drawing::SystemColors::ButtonHighlight;
-			this->button1->Location = System::Drawing::Point(350, 181);
+			this->button1->Location = System::Drawing::Point(328, 183);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(139, 52);
 			this->button1->TabIndex = 1;
@@ -108,13 +108,14 @@ namespace WinForm_ImgProcessHW {
 		Hide();
 	    UI->ShowDialog();
 		delete UI;
+		this->Show();
 	}
 	private: System::Void Btn_Vdo_Click(System::Object^  sender, System::EventArgs^  e) {
 		VideoProcessUI ^ UI = gcnew VideoProcessUI;
 		Hide();
 		UI->ShowDialog();
 		delete UI;
-
+		this->Show();
 	}
 	};
 }
