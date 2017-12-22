@@ -1,6 +1,7 @@
 #pragma once
 #include<stdlib.h>
 #include<cliext\vector>
+typedef unsigned int uint;
 namespace WinForm_ImgProcessHW {
 
 	using namespace System;
@@ -9,10 +10,21 @@ namespace WinForm_ImgProcessHW {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace Threading;
 	using namespace std;
 	/// <summary>
 	/// VideoProcessUI 的摘要
 	/// </summary>
+	enum SearchMode
+	{ 
+		BBM,
+
+	};
+	enum CalculateMethod
+	{
+		MAD,
+		MSD
+	};
 	public ref class VideoProcessUI : public System::Windows::Forms::Form
 	{
 	public:
@@ -23,7 +35,6 @@ namespace WinForm_ImgProcessHW {
 			//TODO:  在此加入建構函式程式碼
 			//
 		}
-
 	protected:
 		/// <summary>
 		/// 清除任何使用中的資源。
@@ -40,12 +51,12 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
 	private: System::ComponentModel::IContainer^  components;
-
+			 int MaskSize = 64;
 	private:
 		/// <summary>
 		/// 設計工具所需的變數。
 		/// </summary>
-
+	
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Button^  button5;
@@ -55,46 +66,36 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::Button^  Btn_Play;
 
 	private: System::Windows::Forms::TrackBar^  trackBar1;
-	private: System::Windows::Forms::PictureBox^  pictureBox1;
+	private: System::Windows::Forms::PictureBox^ pictureBox_Reference;
+
 	private: System::Windows::Forms::Timer^  timer1;
 			 unsigned int rate=60;
 			 unsigned int CurrentFrameNo;
-
-
+			 Thread ^thread;
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Label^  label9;
 	private: System::Windows::Forms::Label^  label8;
+	public: System::Windows::Forms::PictureBox^  pictureBox_Current;
+	private:
 
-
-	private: System::Windows::Forms::PictureBox^  pictureBox2;
+	private:
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::ComboBox^  comboBox1;
 	private: System::Windows::Forms::Label^  label11;
 	private: System::Windows::Forms::Label^  label6;
 	private: System::Windows::Forms::Label^  label5;
-	private: System::Windows::Forms::PictureBox^  pictureBox5;
-	private: System::Windows::Forms::PictureBox^  pictureBox4;
+	private: System::Windows::Forms::PictureBox^  pictureBox_Cand;
+
+	private: System::Windows::Forms::PictureBox^  pictureBox_target;
+
 	private: System::Windows::Forms::Label^  label12;
 	private: System::Windows::Forms::ComboBox^  comboBox2;
 	private: System::Windows::Forms::Button^  encode_btn;
 			 cliext::vector<Bitmap^>Video_Bitmap;
-	public: ref class ThreadParameter
-	{
-	private:int _MatchCode;
-			int _SearchCode;
-	public:
-		ThreadParameter(int MatchCode, int SearchCode)
-		{
-			_MatchCode = MatchCode;
-			_SearchCode = SearchCode;
+			 int SearchCode;
+	private: System::Windows::Forms::PictureBox^  pictureBox_MotionVector;
 
-		}
-		void EnCode()
-		{
-			
-
-		}
-	};
+			 int MatchCode;
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// 此為設計工具支援所需的方法 - 請勿使用程式碼編輯器修改
@@ -115,28 +116,30 @@ namespace WinForm_ImgProcessHW {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->Btn_Play = (gcnew System::Windows::Forms::Button());
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
-			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox_Reference = (gcnew System::Windows::Forms::PictureBox());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox_Current = (gcnew System::Windows::Forms::PictureBox());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->pictureBox5 = (gcnew System::Windows::Forms::PictureBox());
-			this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox_Cand = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox_target = (gcnew System::Windows::Forms::PictureBox());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
 			this->encode_btn = (gcnew System::Windows::Forms::Button());
+			this->pictureBox_MotionVector = (gcnew System::Windows::Forms::PictureBox());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Reference))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Current))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Cand))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
@@ -160,7 +163,7 @@ namespace WinForm_ImgProcessHW {
 			// 
 			this->openToolStripMenuItem->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"openToolStripMenuItem.Image")));
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(106, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &VideoProcessUI::openToolStripMenuItem_Click);
 			// 
@@ -249,13 +252,14 @@ namespace WinForm_ImgProcessHW {
 			this->trackBar1->TabIndex = 8;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &VideoProcessUI::trackBar1_Scroll);
 			// 
-			// pictureBox1
+			// pictureBox_Reference
 			// 
-			this->pictureBox1->Location = System::Drawing::Point(12, 61);
-			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(400, 256);
-			this->pictureBox1->TabIndex = 7;
-			this->pictureBox1->TabStop = false;
+			this->pictureBox_Reference->Location = System::Drawing::Point(12, 61);
+			this->pictureBox_Reference->Name = L"pictureBox_Reference";
+			this->pictureBox_Reference->Size = System::Drawing::Size(256, 256);
+			this->pictureBox_Reference->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->pictureBox_Reference->TabIndex = 7;
+			this->pictureBox_Reference->TabStop = false;
 			// 
 			// timer1
 			// 
@@ -266,7 +270,7 @@ namespace WinForm_ImgProcessHW {
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label3->Location = System::Drawing::Point(556, 36);
+			this->label3->Location = System::Drawing::Point(584, 36);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(55, 17);
 			this->label3->TabIndex = 23;
@@ -277,7 +281,7 @@ namespace WinForm_ImgProcessHW {
 			this->label9->AutoSize = true;
 			this->label9->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label9->Location = System::Drawing::Point(920, 334);
+			this->label9->Location = System::Drawing::Point(948, 334);
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(34, 17);
 			this->label9->TabIndex = 20;
@@ -288,19 +292,20 @@ namespace WinForm_ImgProcessHW {
 			this->label8->AutoSize = true;
 			this->label8->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label8->Location = System::Drawing::Point(898, 334);
+			this->label8->Location = System::Drawing::Point(926, 334);
 			this->label8->Name = L"label8";
 			this->label8->Size = System::Drawing::Size(26, 17);
 			this->label8->TabIndex = 19;
 			this->label8->Text = L"---";
 			// 
-			// pictureBox2
+			// pictureBox_Current
 			// 
-			this->pictureBox2->Location = System::Drawing::Point(559, 61);
-			this->pictureBox2->Name = L"pictureBox2";
-			this->pictureBox2->Size = System::Drawing::Size(400, 256);
-			this->pictureBox2->TabIndex = 18;
-			this->pictureBox2->TabStop = false;
+			this->pictureBox_Current->Location = System::Drawing::Point(597, 61);
+			this->pictureBox_Current->Name = L"pictureBox_Current";
+			this->pictureBox_Current->Size = System::Drawing::Size(256, 256);
+			this->pictureBox_Current->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->pictureBox_Current->TabIndex = 18;
+			this->pictureBox_Current->TabStop = false;
 			// 
 			// label4
 			// 
@@ -321,7 +326,7 @@ namespace WinForm_ImgProcessHW {
 				L"0.Mean Absolute Difference(MAD)", L"1.Mean Square Difference(MSD)",
 					L"2.Pel Difference Classification(PDC)"
 			});
-			this->comboBox1->Location = System::Drawing::Point(693, 372);
+			this->comboBox1->Location = System::Drawing::Point(721, 372);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(121, 20);
 			this->comboBox1->TabIndex = 25;
@@ -331,7 +336,7 @@ namespace WinForm_ImgProcessHW {
 			this->label11->AutoSize = true;
 			this->label11->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label11->Location = System::Drawing::Point(566, 375);
+			this->label11->Location = System::Drawing::Point(594, 375);
 			this->label11->Name = L"label11";
 			this->label11->Size = System::Drawing::Size(121, 17);
 			this->label11->TabIndex = 26;
@@ -359,28 +364,29 @@ namespace WinForm_ImgProcessHW {
 			this->label5->TabIndex = 30;
 			this->label5->Text = L"Target block";
 			// 
-			// pictureBox5
+			// pictureBox_Cand
 			// 
-			this->pictureBox5->Location = System::Drawing::Point(446, 241);
-			this->pictureBox5->Name = L"pictureBox5";
-			this->pictureBox5->Size = System::Drawing::Size(64, 64);
-			this->pictureBox5->TabIndex = 27;
-			this->pictureBox5->TabStop = false;
+			this->pictureBox_Cand->Location = System::Drawing::Point(446, 241);
+			this->pictureBox_Cand->Name = L"pictureBox_Cand";
+			this->pictureBox_Cand->Size = System::Drawing::Size(64, 64);
+			this->pictureBox_Cand->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->pictureBox_Cand->TabIndex = 27;
+			this->pictureBox_Cand->TabStop = false;
 			// 
-			// pictureBox4
+			// pictureBox_target
 			// 
-			this->pictureBox4->Location = System::Drawing::Point(446, 122);
-			this->pictureBox4->Name = L"pictureBox4";
-			this->pictureBox4->Size = System::Drawing::Size(64, 64);
-			this->pictureBox4->TabIndex = 28;
-			this->pictureBox4->TabStop = false;
+			this->pictureBox_target->Location = System::Drawing::Point(446, 122);
+			this->pictureBox_target->Name = L"pictureBox_target";
+			this->pictureBox_target->Size = System::Drawing::Size(64, 64);
+			this->pictureBox_target->TabIndex = 28;
+			this->pictureBox_target->TabStop = false;
 			// 
 			// label12
 			// 
 			this->label12->AutoSize = true;
 			this->label12->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label12->Location = System::Drawing::Point(566, 406);
+			this->label12->Location = System::Drawing::Point(594, 406);
 			this->label12->Name = L"label12";
 			this->label12->Size = System::Drawing::Size(103, 17);
 			this->label12->TabIndex = 31;
@@ -393,7 +399,7 @@ namespace WinForm_ImgProcessHW {
 				L"0.Block Based Motion", L"1.Two Dimensional Logarithmic Search (TDL)",
 					L"2.Three Step Search (TSS)", L"3.Orthogonal Search Algorithm (OSA)", L"4.Cross Search Algorithm (CSA)"
 			});
-			this->comboBox2->Location = System::Drawing::Point(693, 402);
+			this->comboBox2->Location = System::Drawing::Point(721, 402);
 			this->comboBox2->Name = L"comboBox2";
 			this->comboBox2->Size = System::Drawing::Size(121, 20);
 			this->comboBox2->TabIndex = 32;
@@ -402,7 +408,7 @@ namespace WinForm_ImgProcessHW {
 			// 
 			this->encode_btn->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->encode_btn->Location = System::Drawing::Point(837, 372);
+			this->encode_btn->Location = System::Drawing::Point(865, 372);
 			this->encode_btn->Name = L"encode_btn";
 			this->encode_btn->Size = System::Drawing::Size(87, 40);
 			this->encode_btn->TabIndex = 33;
@@ -410,25 +416,34 @@ namespace WinForm_ImgProcessHW {
 			this->encode_btn->UseVisualStyleBackColor = true;
 			this->encode_btn->Click += gcnew System::EventHandler(this, &VideoProcessUI::encode_btn_Click);
 			// 
+			// pictureBox_MotionVector
+			// 
+			this->pictureBox_MotionVector->Location = System::Drawing::Point(12, 545);
+			this->pictureBox_MotionVector->Name = L"pictureBox_MotionVector";
+			this->pictureBox_MotionVector->Size = System::Drawing::Size(256, 226);
+			this->pictureBox_MotionVector->TabIndex = 34;
+			this->pictureBox_MotionVector->TabStop = false;
+			// 
 			// VideoProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1104, 621);
+			this->ClientSize = System::Drawing::Size(1104, 840);
+			this->Controls->Add(this->pictureBox_MotionVector);
 			this->Controls->Add(this->encode_btn);
 			this->Controls->Add(this->comboBox2);
 			this->Controls->Add(this->label12);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->label5);
-			this->Controls->Add(this->pictureBox5);
-			this->Controls->Add(this->pictureBox4);
+			this->Controls->Add(this->pictureBox_Cand);
+			this->Controls->Add(this->pictureBox_target);
 			this->Controls->Add(this->label11);
 			this->Controls->Add(this->comboBox1);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label8);
-			this->Controls->Add(this->pictureBox2);
+			this->Controls->Add(this->pictureBox_Current);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button5);
@@ -437,7 +452,7 @@ namespace WinForm_ImgProcessHW {
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->Btn_Play);
 			this->Controls->Add(this->trackBar1);
-			this->Controls->Add(this->pictureBox1);
+			this->Controls->Add(this->pictureBox_Reference);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"VideoProcessUI";
@@ -445,10 +460,11 @@ namespace WinForm_ImgProcessHW {
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox5))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox4))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Reference))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Current))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Cand))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -480,14 +496,14 @@ private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e
 		timer1->Enabled = false;//timer1關閉
 		CurrentFrameNo = 0;//計數歸零
 	}
-	pictureBox1->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
+	pictureBox_Reference->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
 	label1->Text = Convert::ToString(CurrentFrameNo + 1);//顯示目前為第n張圖
 	trackBar1->Value = CurrentFrameNo;//trackBar1的值隨著計算圖像的計數而變動
 	CurrentFrameNo++;//累加計數
 }
 private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
 	CurrentFrameNo = trackBar1->Value;//img_position等於trackBar1目前的值
-	pictureBox1->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
+	pictureBox_Reference->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
 	label1->Text = Convert::ToString(CurrentFrameNo + 1);//顯示目前為第n張圖
 }
 private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -516,15 +532,105 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
 	timer1->Enabled = false;
 	CurrentFrameNo = 0;
-	pictureBox1->Image = Video_Bitmap[CurrentFrameNo];
+	pictureBox_Reference->Image = Video_Bitmap[CurrentFrameNo];
 	label1->Text = Convert::ToString(CurrentFrameNo + 1);
 	trackBar1->Value = CurrentFrameNo;
 }
+delegate void SetPictureDelegate(System::Windows::Forms::PictureBox^ PBox, Bitmap^Image, size_t i, size_t j, bool drawRect);
+public:void ShowImage(System::Windows::Forms::PictureBox^ PBox, Bitmap^b,size_t i,size_t j,bool drawRect)
+{
+		System::Drawing::Graphics^ graphics = PBox->CreateGraphics();
+		System::Drawing::RectangleF rect(0, 0, PBox->Width, PBox->Height);
+		graphics->DrawImage(b, rect);
+		if (drawRect)
+		{
+			Pen^ ReferencePen = gcnew Pen(Color::Red, 2.0F);
+			graphics->DrawRectangle(ReferencePen,i,j, MaskSize, MaskSize);
+		}
+		delete graphics;
+}
+private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
+{
+	uint Sum = 0;
+	switch (MatchCode)
+	{
+	case MAD:
+		for (uint j = 0; j<MaskSize; j++)
+			for (uint i = 0; i < MaskSize; i++)
+			{
+				Sum += abs(src1->GetPixel(i,j).R- src2->GetPixel(i, j).R);
+			}
+		break;
+	case MSD:
+		for (uint j = 0; j<MaskSize; j++)
+			for (uint i = 0; i < MaskSize; i++)
+			{
+				Sum += Math::Pow(src1->GetPixel(i, j).R - src2->GetPixel(i, j).R,2);
+			}
+		break;
+		break;
+	default:
+		break;
+	}
+	return Sum;
+}
+ private:void Encoding()
+{
+	
+  for (unsigned int k = 0; k < Video_Bitmap.size()-1; k++)
+	{
+	  for (unsigned int targ_y_Index = 0; targ_y_Index <Video_Bitmap[0]->Height; targ_y_Index += MaskSize)
+	  {
+		  for (unsigned int targ_x_Index = 0; targ_x_Index <Video_Bitmap[0]->Width ; targ_x_Index += MaskSize)
+		  {
+			  Bitmap^ temp = gcnew Bitmap(MaskSize, MaskSize);
+			  Rectangle cloneRect = Rectangle(targ_x_Index, targ_y_Index, MaskSize, MaskSize);
+			  temp = Video_Bitmap[k+1]->Clone(cloneRect, Video_Bitmap[k + 1]->PixelFormat);
+			  ShowImage(pictureBox_target,temp,targ_x_Index,targ_y_Index,false);
+			  ShowImage(pictureBox_Current, Video_Bitmap[k + 1], targ_x_Index, targ_y_Index,true);
+
+			  uint Score = 4294967295;
+			  Point Minum;
+			  switch (SearchCode)
+			  {
+			  case BBM:
+				  for (unsigned int cand_y_Index = 0; cand_y_Index < Video_Bitmap[0]->Height -(MaskSize -1); cand_y_Index += 1)
+				  {
+					  for (unsigned int cand_x_Index = 0; cand_x_Index < Video_Bitmap[0]->Width-(MaskSize -1); cand_x_Index += 1)
+					  {
+						  Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+						  Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+						  temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+						  ShowImage(pictureBox_Cand,temp2, cand_x_Index, cand_y_Index, false);
+						  ShowImage(pictureBox_Reference,Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+						  uint temp_Score = MatchMethodCaculate(temp, temp2);
+						  if (temp_Score <Score)
+						  {
+							  Score = temp_Score;
+							  Minum = Point(cand_x_Index, cand_y_Index);
+						  }
+						  delete temp2;
+					  }
+				  }
+				  
+				  break;
+			  default:
+				  break;
+			  }
+		  }
+		 
+	  }
+	
+	}
+}
 private: System::Void encode_btn_Click(System::Object^  sender, System::EventArgs^  e) {
 	System::String ^str=comboBox1->Text->Substring(0,1);
-	int MatchCode =  Convert::ToInt16(str);
+	 MatchCode =  Convert::ToInt16(str);
 	str=comboBox2->Text->Substring(0, 1);
-	int SerachCode = Convert::ToInt16(str);
+	SearchCode = Convert::ToInt16(str);
+    thread = gcnew Thread(gcnew ThreadStart(this,&VideoProcessUI::Encoding));
+	thread->Start();
 }
+
 };
 }

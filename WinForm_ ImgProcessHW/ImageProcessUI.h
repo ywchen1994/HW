@@ -257,6 +257,11 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_Cross;
 private: System::Windows::Forms::RadioButton^  RadioBtn_Square;
 private: System::Windows::Forms::RadioButton^  RadioBtn_MinMax;
 private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
+private: System::Windows::Forms::ToolStripMenuItem^  four_connect;
+
+private: System::Windows::Forms::ToolStripMenuItem^  eight_connect;
+private: System::Windows::Forms::Label^  label_ObjectCount;
+
 
 
 		 Point LBtnUP;
@@ -297,6 +302,8 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			this->編碼ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->huffmenToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->connectComponentToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->four_connect = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->eight_connect = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->Tab_Image1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
 			this->Pos_RGBvalue = (gcnew System::Windows::Forms::Label());
@@ -427,12 +434,13 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			this->A = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label49 = (gcnew System::Windows::Forms::Label());
 			this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
+			this->RadioBtn_MinMax = (gcnew System::Windows::Forms::RadioButton());
+			this->RadioBtn_MaxMin = (gcnew System::Windows::Forms::RadioButton());
 			this->RadioBtn_Cross = (gcnew System::Windows::Forms::RadioButton());
 			this->RadioBtn_Square = (gcnew System::Windows::Forms::RadioButton());
 			this->label50 = (gcnew System::Windows::Forms::Label());
 			this->Median_FilterSize = (gcnew System::Windows::Forms::NumericUpDown());
-			this->RadioBtn_MaxMin = (gcnew System::Windows::Forms::RadioButton());
-			this->RadioBtn_MinMax = (gcnew System::Windows::Forms::RadioButton());
+			this->label_ObjectCount = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			this->Tab_Image1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
@@ -543,10 +551,28 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			// 
 			// connectComponentToolStripMenuItem
 			// 
+			this->connectComponentToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->four_connect,
+					this->eight_connect
+			});
 			this->connectComponentToolStripMenuItem->Name = L"connectComponentToolStripMenuItem";
 			this->connectComponentToolStripMenuItem->Size = System::Drawing::Size(137, 20);
 			this->connectComponentToolStripMenuItem->Text = L"Connect Component";
 			this->connectComponentToolStripMenuItem->Click += gcnew System::EventHandler(this, &ImageProcessUI::connectComponentToolStripMenuItem_Click);
+			// 
+			// four_connect
+			// 
+			this->four_connect->Name = L"four_connect";
+			this->four_connect->Size = System::Drawing::Size(156, 26);
+			this->four_connect->Text = L"4連通";
+			// 
+			// eight_connect
+			// 
+			this->eight_connect->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"eight_connect.Image")));
+			this->eight_connect->Name = L"eight_connect";
+			this->eight_connect->Size = System::Drawing::Size(156, 26);
+			this->eight_connect->Text = L"8連通";
+			this->eight_connect->Click += gcnew System::EventHandler(this, &ImageProcessUI::eight_connect_Click);
 			// 
 			// Tab_Image1
 			// 
@@ -1987,6 +2013,28 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			this->groupBox15->TabStop = false;
 			this->groupBox15->Text = L"帶通濾波器";
 			// 
+			// RadioBtn_MinMax
+			// 
+			this->RadioBtn_MinMax->AutoSize = true;
+			this->RadioBtn_MinMax->Location = System::Drawing::Point(13, 105);
+			this->RadioBtn_MinMax->Name = L"RadioBtn_MinMax";
+			this->RadioBtn_MinMax->Size = System::Drawing::Size(67, 16);
+			this->RadioBtn_MinMax->TabIndex = 6;
+			this->RadioBtn_MinMax->TabStop = true;
+			this->RadioBtn_MinMax->Text = L"Min-Max";
+			this->RadioBtn_MinMax->UseVisualStyleBackColor = true;
+			// 
+			// RadioBtn_MaxMin
+			// 
+			this->RadioBtn_MaxMin->AutoSize = true;
+			this->RadioBtn_MaxMin->Location = System::Drawing::Point(13, 84);
+			this->RadioBtn_MaxMin->Name = L"RadioBtn_MaxMin";
+			this->RadioBtn_MaxMin->Size = System::Drawing::Size(67, 16);
+			this->RadioBtn_MaxMin->TabIndex = 5;
+			this->RadioBtn_MaxMin->TabStop = true;
+			this->RadioBtn_MaxMin->Text = L"Max-Min";
+			this->RadioBtn_MaxMin->UseVisualStyleBackColor = true;
+			// 
 			// RadioBtn_Cross
 			// 
 			this->RadioBtn_Cross->AutoSize = true;
@@ -2033,27 +2081,13 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			this->Median_FilterSize->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
 			this->Median_FilterSize->ValueChanged += gcnew System::EventHandler(this, &ImageProcessUI::Median_FilterSize_ValueChanged);
 			// 
-			// RadioBtn_MaxMin
+			// label_ObjectCount
 			// 
-			this->RadioBtn_MaxMin->AutoSize = true;
-			this->RadioBtn_MaxMin->Location = System::Drawing::Point(13, 84);
-			this->RadioBtn_MaxMin->Name = L"RadioBtn_MaxMin";
-			this->RadioBtn_MaxMin->Size = System::Drawing::Size(67, 16);
-			this->RadioBtn_MaxMin->TabIndex = 5;
-			this->RadioBtn_MaxMin->TabStop = true;
-			this->RadioBtn_MaxMin->Text = L"Max-Min";
-			this->RadioBtn_MaxMin->UseVisualStyleBackColor = true;
-			// 
-			// RadioBtn_MinMax
-			// 
-			this->RadioBtn_MinMax->AutoSize = true;
-			this->RadioBtn_MinMax->Location = System::Drawing::Point(13, 105);
-			this->RadioBtn_MinMax->Name = L"RadioBtn_MinMax";
-			this->RadioBtn_MinMax->Size = System::Drawing::Size(67, 16);
-			this->RadioBtn_MinMax->TabIndex = 6;
-			this->RadioBtn_MinMax->TabStop = true;
-			this->RadioBtn_MinMax->Text = L"Min-Max";
-			this->RadioBtn_MinMax->UseVisualStyleBackColor = true;
+			this->label_ObjectCount->AutoSize = true;
+			this->label_ObjectCount->Location = System::Drawing::Point(718, 645);
+			this->label_ObjectCount->Name = L"label_ObjectCount";
+			this->label_ObjectCount->Size = System::Drawing::Size(0, 12);
+			this->label_ObjectCount->TabIndex = 26;
 			// 
 			// ImageProcessUI
 			// 
@@ -2061,6 +2095,7 @@ private: System::Windows::Forms::RadioButton^  RadioBtn_MaxMin;
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoSize = true;
 			this->ClientSize = System::Drawing::Size(1438, 826);
+			this->Controls->Add(this->label_ObjectCount);
 			this->Controls->Add(this->groupBox15);
 			this->Controls->Add(this->groupBox14);
 			this->Controls->Add(this->groupBox13);
@@ -4034,5 +4069,136 @@ private:uint Max_Min(Bitmap ^src)
 	delete []  Data;
 	return Median;
 }
+
+private: System::Void eight_connect_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^img_processed;
+	ConvertColor(Img_Source, img_processed, RGB2Gray);
+	Threshold(img_processed, img_processed, 100, THRESH_BINARY);
+	Connect(img_processed, img_processed);
+	int frequency[100] = { 0 };
+	int label_nun = 0;
+	for (int j = 0; j < img_processed->Height; j++)
+	{
+		for (int i = 0; i < img_processed->Width; i++)
+		{
+			int label = img_processed->GetPixel(i, j).R;
+			if (label != 0)
+				frequency[label] ++;
+		}
+	}
+	for (int i = 0; i < 100; i++)
+	{
+		if (frequency[i] != 0)
+			label_nun++;
+	}
+	pictureBox_Result->Image = img_processed;
+	label_ObjectCount->Text = "總共:"+label_nun.ToString();
+	
+}
+private:void Connect(Bitmap^src, Bitmap ^%dst)																		//八連通
+{
+	dst = gcnew Bitmap(src->Width, src->Height);																	//先生成一張黑圖
+	for (int j = 0; j < src->Height; j++)
+	{
+	  for (int i = 0; i < src->Width; i++)
+	 {
+	 dst->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+	 }
+	}
+	int LableNo = 1;//
+	for (int j = 0; j < src->Height; j++)
+	{
+		for (int i = 0; i< src->Width; i++)
+		{
+		 if ((src->GetPixel(i, j).R > 0) && (dst->GetPixel(i, j).R) == 0)
+			{
+				if ((src->GetPixel(i - 1, j - 1).R == 0) && (src->GetPixel(i, j - 1).R == 0) &&
+					(src->GetPixel(i + 1, j - 1).R == 0) && (src->GetPixel(i - 1, j).R == 0))
+				{
+				 LableNo++;
+				 dst->SetPixel(i, j, Color::FromArgb(LableNo, LableNo, LableNo));
+				}
+		if (((src->GetPixel(i - 1, j - 1).R) + (src->GetPixel(i, j - 1).R) + (src->GetPixel(i + 1, j - 1).R) + (src->GetPixel(i - 1, j).R)) == 255)
+			{
+			 int value = dst->GetPixel(i - 1, j - 1).R + dst->GetPixel(i, j - 1).R + dst->GetPixel(i + 1, j - 1).R + dst->GetPixel(i - 1, j).R;
+			 dst->SetPixel(i, j, Color::FromArgb(value, value, value));
+			}
+		if (((src->GetPixel(i - 1, j - 1).R) + (src->GetPixel(i, j - 1).R) + (src->GetPixel(i + 1, j - 1).R) + (src->GetPixel(i - 1, j).R)) > 255)
+			{
+				int temp[4] = { 0 };
+				int min_Label = 999;
+			    int max_Label = 0;
+				temp[0] = dst->GetPixel(i - 1, j - 1).R;
+				temp[1] = dst->GetPixel(i, j - 1).R;
+				temp[2] = dst->GetPixel(i + 1, j - 1).R;
+				temp[3] = dst->GetPixel(i - 1, j).R;
+				for (int k = 0; k < 4; k++)
+			   {
+				if (temp[k] <= min_Label && (temp[k] != 0))
+				 {
+				  min_Label = temp[k];
+				 }
+				if (temp[k] >= max_Label && (temp[k] != 0))
+				 {
+				  max_Label = temp[k];
+				}
+			}
+			if (dst->GetPixel(i - 1, j - 1).R != 0)
+			 {
+			  dst->SetPixel(i - 1, j - 1, Color::FromArgb(min_Label, min_Label, min_Label));
+			 }
+			if (dst->GetPixel(i, j - 1).R != 0)
+			 {
+			  dst->SetPixel(i, j - 1, Color::FromArgb(min_Label, min_Label, min_Label));
+			 }
+			if (dst->GetPixel(i + 1, j - 1).R != 0)
+			{
+			 dst->SetPixel(i + 1, j - 1, Color::FromArgb(min_Label, min_Label, min_Label));
+			}
+			if (dst->GetPixel(i - 1, j).R != 0)
+		    {
+			 dst->SetPixel(i - 1, j, Color::FromArgb(min_Label, min_Label, min_Label));
+			}
+			 dst->SetPixel(i, j, Color::FromArgb(min_Label, min_Label, min_Label));
+		}
+	}
+  }
+}
+			 for (int j = src->Height - 1; j > 0; j--)
+			 {
+				 for (int i = src->Width - 1; i > 0; i--)
+				 {
+					 if (dst->GetPixel(i, j).R > 0)
+					 {
+						 Bitmap^ temp = gcnew Bitmap(3, 3);
+						 Rectangle cloneRect = Rectangle(i - 1, j - 1, 3, 3);
+						 temp = dst->Clone(cloneRect, dst->PixelFormat);
+
+						 int min_Label = 999;
+						 for (int v = 0; v < 3; v++)
+						 {
+							 for (int u = 0; u < 3; u++)
+							 {
+								 if (temp->GetPixel(u, v).R <= min_Label && temp->GetPixel(u, v).R != 0)
+								 {
+									 min_Label = temp->GetPixel(u, v).R;
+								 }
+							 }
+						 }
+						 delete temp;
+						 for (int v = -1; v < 1; v++)
+						 {
+							 for (int u = -1; u < 1; u++)
+							 {
+								 if (dst->GetPixel(i + u, j + v).R != 0)
+								 {
+									 dst->SetPixel(i + u, j + v, Color::FromArgb(min_Label, min_Label, min_Label));
+								 }
+							 }
+						 }
+					 }
+				 }
+			 }
+		 }
 };
 }

@@ -370,7 +370,7 @@ public: void Huffman_treeCoding(node * temproot, std::string s, short c, HumanPa
 	 root1 = temproot;//頻率最高的pixel值
 	 root1->code = s;//霍夫曼編碼的碼
 	 root1->codelength = c;//碼長
-	 if (root1->leftChild == NULL && root1->rightChild == NULL)//如果編碼左有兩邊的子結點為0
+	 if (root1->leftChild == NULL && root1->rightChild == NULL)//如果編碼左右兩邊的子結點為0
 	 {
 	 int count = 0;
 	 for (uint16_t i = 0; i < NoneZeroCounter; i++)
