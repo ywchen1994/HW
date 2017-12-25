@@ -1,6 +1,8 @@
 #pragma once
 #include<stdlib.h>
 #include<cliext\vector>
+#include<fstream>
+#include<string>
 typedef unsigned int uint;
 namespace WinForm_ImgProcessHW {
 
@@ -10,20 +12,23 @@ namespace WinForm_ImgProcessHW {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Runtime::InteropServices;
 	using namespace Threading;
 	using namespace std;
+	
 	/// <summary>
 	/// VideoProcessUI 的摘要
 	/// </summary>
 	enum SearchMode
 	{ 
-		BBM,
+		BBM,TDL
 
 	};
 	enum CalculateMethod
 	{
 		MAD,
-		MSD
+		MSD,
+		PDC
 	};
 	public ref class VideoProcessUI : public System::Windows::Forms::Form
 	{
@@ -71,6 +76,7 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::Timer^  timer1;
 			 unsigned int rate=60;
 			 unsigned int CurrentFrameNo;
+			 uint PDCthreshold = 0;
 			 Thread ^thread;
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Label^  label9;
@@ -93,7 +99,14 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::Button^  encode_btn;
 			 cliext::vector<Bitmap^>Video_Bitmap;
 			 int SearchCode;
+			 Graphics ^graph_MotionVect;
 	private: System::Windows::Forms::PictureBox^  pictureBox_MotionVector;
+			 System::String^ FileName;
+	private: System::Windows::Forms::Label^  label7;
+	private: System::Windows::Forms::Button^  Btn_Decode;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Label^  tBOX_Threshold;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^  chart_PSNR;
 
 			 int MatchCode;
 #pragma region Windows Form Designer generated code
@@ -105,6 +118,9 @@ namespace WinForm_ImgProcessHW {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(VideoProcessUI::typeid));
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -133,6 +149,11 @@ namespace WinForm_ImgProcessHW {
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
 			this->encode_btn = (gcnew System::Windows::Forms::Button());
 			this->pictureBox_MotionVector = (gcnew System::Windows::Forms::PictureBox());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->Btn_Decode = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->tBOX_Threshold = (gcnew System::Windows::Forms::Label());
+			this->chart_PSNR = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Reference))->BeginInit();
@@ -140,6 +161,7 @@ namespace WinForm_ImgProcessHW {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Cand))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_PSNR))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
@@ -163,7 +185,7 @@ namespace WinForm_ImgProcessHW {
 			// 
 			this->openToolStripMenuItem->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"openToolStripMenuItem.Image")));
 			this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
-			this->openToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->openToolStripMenuItem->Size = System::Drawing::Size(106, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &VideoProcessUI::openToolStripMenuItem_Click);
 			// 
@@ -247,6 +269,7 @@ namespace WinForm_ImgProcessHW {
 			// trackBar1
 			// 
 			this->trackBar1->Location = System::Drawing::Point(2, 334);
+			this->trackBar1->Maximum = 100;
 			this->trackBar1->Name = L"trackBar1";
 			this->trackBar1->Size = System::Drawing::Size(368, 45);
 			this->trackBar1->TabIndex = 8;
@@ -330,6 +353,7 @@ namespace WinForm_ImgProcessHW {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(121, 20);
 			this->comboBox1->TabIndex = 25;
+			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &VideoProcessUI::comboBox1_SelectedIndexChanged);
 			// 
 			// label11
 			// 
@@ -386,7 +410,7 @@ namespace WinForm_ImgProcessHW {
 			this->label12->AutoSize = true;
 			this->label12->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->label12->Location = System::Drawing::Point(594, 406);
+			this->label12->Location = System::Drawing::Point(612, 406);
 			this->label12->Name = L"label12";
 			this->label12->Size = System::Drawing::Size(103, 17);
 			this->label12->TabIndex = 31;
@@ -418,17 +442,81 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// pictureBox_MotionVector
 			// 
-			this->pictureBox_MotionVector->Location = System::Drawing::Point(12, 545);
+			this->pictureBox_MotionVector->Location = System::Drawing::Point(12, 510);
 			this->pictureBox_MotionVector->Name = L"pictureBox_MotionVector";
 			this->pictureBox_MotionVector->Size = System::Drawing::Size(256, 226);
+			this->pictureBox_MotionVector->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox_MotionVector->TabIndex = 34;
 			this->pictureBox_MotionVector->TabStop = false;
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Location = System::Drawing::Point(13, 474);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(70, 12);
+			this->label7->TabIndex = 35;
+			this->label7->Text = L"MotionVector";
+			// 
+			// Btn_Decode
+			// 
+			this->Btn_Decode->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->Btn_Decode->Location = System::Drawing::Point(865, 440);
+			this->Btn_Decode->Name = L"Btn_Decode";
+			this->Btn_Decode->Size = System::Drawing::Size(87, 37);
+			this->Btn_Decode->TabIndex = 36;
+			this->Btn_Decode->Text = L"Decode";
+			this->Btn_Decode->UseVisualStyleBackColor = true;
+			this->Btn_Decode->Click += gcnew System::EventHandler(this, &VideoProcessUI::Btn_Decode_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(721, 428);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(100, 22);
+			this->textBox1->TabIndex = 37;
+			this->textBox1->Text = L"64";
+			this->textBox1->Visible = false;
+			// 
+			// tBOX_Threshold
+			// 
+			this->tBOX_Threshold->AutoSize = true;
+			this->tBOX_Threshold->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9));
+			this->tBOX_Threshold->Location = System::Drawing::Point(616, 434);
+			this->tBOX_Threshold->Name = L"tBOX_Threshold";
+			this->tBOX_Threshold->Size = System::Drawing::Size(99, 16);
+			this->tBOX_Threshold->TabIndex = 38;
+			this->tBOX_Threshold->Text = L"ThresholdValue:";
+			this->tBOX_Threshold->Visible = false;
+			// 
+			// chart_PSNR
+			// 
+			chartArea1->Name = L"ChartArea1";
+			this->chart_PSNR->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart_PSNR->Legends->Add(legend1);
+			this->chart_PSNR->Location = System::Drawing::Point(475, 529);
+			this->chart_PSNR->Name = L"chart_PSNR";
+			series1->ChartArea = L"ChartArea1";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
+			series1->Legend = L"Legend1";
+			series1->Name = L"PSNR";
+			this->chart_PSNR->Series->Add(series1);
+			this->chart_PSNR->Size = System::Drawing::Size(538, 256);
+			this->chart_PSNR->TabIndex = 39;
+			this->chart_PSNR->Text = L"chart1";
 			// 
 			// VideoProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1104, 840);
+			this->Controls->Add(this->chart_PSNR);
+			this->Controls->Add(this->tBOX_Threshold);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->Btn_Decode);
+			this->Controls->Add(this->label7);
 			this->Controls->Add(this->pictureBox_MotionVector);
 			this->Controls->Add(this->encode_btn);
 			this->Controls->Add(this->comboBox2);
@@ -465,12 +553,13 @@ namespace WinForm_ImgProcessHW {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Cand))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_PSNR))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	private: System::Void openToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void openToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
 		openFileDialog1->Multiselect = true;
 		openFileDialog1->FileName = nullptr;
@@ -485,7 +574,7 @@ namespace WinForm_ImgProcessHW {
 		trackBar1->Maximum = Video_Bitmap.size();
 		label2->Text="/"+Video_Bitmap.size().ToString();
 	}
-	private: System::Void Btn_Play_Click(System::Object^  sender, System::EventArgs^  e) {
+private: System::Void Btn_Play_Click(System::Object^  sender, System::EventArgs^  e) {
 		timer1->Enabled = true;//timer1啟動
 		rate = 60;//速率
 		timer1->Interval = rate;//時間間隔秒數(毫秒)
@@ -503,8 +592,11 @@ private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e
 }
 private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
 	CurrentFrameNo = trackBar1->Value;//img_position等於trackBar1目前的值
-	pictureBox_Reference->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
-	label1->Text = Convert::ToString(CurrentFrameNo + 1);//顯示目前為第n張圖
+	if (CurrentFrameNo <= Video_Bitmap.size())
+	{
+		pictureBox_Reference->Image = Video_Bitmap[CurrentFrameNo];//picture顯示video_bitmap隨著trackBar1而變動的圖像
+		label1->Text = Convert::ToString(CurrentFrameNo + 1);//顯示目前為第n張圖
+	}
 }
 private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 	timer1->Enabled = false;
@@ -546,9 +638,17 @@ public:void ShowImage(System::Windows::Forms::PictureBox^ PBox, Bitmap^b,size_t 
 		{
 			Pen^ ReferencePen = gcnew Pen(Color::Red, 2.0F);
 			graphics->DrawRectangle(ReferencePen,i,j, MaskSize, MaskSize);
+			
 		}
+
 		delete graphics;
 }
+delegate void DrawMotionVector(System::Windows::Forms::PictureBox^ PBox,Point P1,Point P2);
+public:void DrawArrow(PictureBox^ PBox, Point P1, Point P2)
+{
+	
+}
+
 private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 {
 	uint Sum = 0;
@@ -568,6 +668,15 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 				Sum += Math::Pow(src1->GetPixel(i, j).R - src2->GetPixel(i, j).R,2);
 			}
 		break;
+	case PDC:
+		for(uint j=0;j<MaskSize;j++)
+			for (uint i = 0; i < MaskSize; i++)
+			{
+				if (abs(src1->GetPixel(i, j).R - src2->GetPixel(i, j).R) <= PDCthreshold)
+				{
+					Sum++;
+				}
+			}
 		break;
 	default:
 		break;
@@ -576,9 +685,13 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 }
  private:void Encoding()
 {
-	
+	 
+	fstream fp;
+	cliext::vector<Point> motionVector;
+	int s = 2;
   for (unsigned int k = 0; k < Video_Bitmap.size()-1; k++)
 	{
+	
 	  for (unsigned int targ_y_Index = 0; targ_y_Index <Video_Bitmap[0]->Height; targ_y_Index += MaskSize)
 	  {
 		  for (unsigned int targ_x_Index = 0; targ_x_Index <Video_Bitmap[0]->Width ; targ_x_Index += MaskSize)
@@ -612,25 +725,199 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 						  delete temp2;
 					  }
 				  }
-				  
+				  motionVector.push_back(Point(Minum.X - targ_x_Index, Minum.Y - targ_y_Index));
 				  break;
+			   case TDL:
+			   {   
+				 Point Center = Point(targ_x_Index, targ_y_Index);
+				 Point candidate_winner;
+				 s = 4;
+			    while (s >= 1)
+			    {
+					Score = 4294967295;
+					for (int i = -1; i < 2; i++)
+					{
+						for (int j = -1; j < 2; j++)
+						{
+							if ((i == 0 && j == 0) || (abs(i)+ abs(j)==1))
+							{
+								int cand_x_Index = Center.X + i*s*MaskSize;
+								int cand_y_Index = Center.Y + j*s*MaskSize;
+								if (0 <= cand_x_Index && cand_x_Index < Video_Bitmap[k]->Width && 0 <= cand_y_Index && cand_y_Index < Video_Bitmap[k]->Height)
+								{
+									Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+									Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+									temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+									ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+									ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+									uint temp_Score = MatchMethodCaculate(temp, temp2);
+									if (temp_Score < Score && (s!= 1))
+									{
+										Score = temp_Score;
+										Minum = Point(cand_x_Index, cand_y_Index);
+									}
+									if ((s ==1) && temp_Score < Score)
+									{
+										Score = temp_Score;
+										candidate_winner = Point(cand_x_Index, cand_y_Index);
+									}
+									delete temp2;
+								}
+							}
+						}
+					}
+					if (Minum.X == targ_x_Index && targ_y_Index == Minum.Y)
+					{
+						s = s / 2;
+					}
+					else
+						Center = Minum;
+			    }
+				
+				motionVector.push_back(Point(candidate_winner.X- targ_x_Index, candidate_winner.Y - targ_y_Index));
+			   break;
+			   }
 			  default:
 				  break;
 			  }
+			  delete temp;
 		  }
 		 
 	  }
-	
 	}
+  fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(FileName),std::ios::app);
+  for (uint i = 0; i < motionVector.size(); i++)
+  {
+	  fp << motionVector[i].X <<" "<<motionVector[i].Y<< endl;
+  }
+  fp.close();
+}
+private:double PSNR(Bitmap ^%Source, Bitmap ^% TestImage)
+{
+	double SNR_Value = 0;
+	double SumofSource = 0;
+	double SumofMSE = 0;//Source-Test
+	for (UInt16 i = 0; i < Source->Width; i++)
+		for (UInt16 j = 0; j < Source->Height; j++)
+		{
+			
+			SumofMSE +=pow(Source->GetPixel(i, j).R-TestImage->GetPixel(i, j).R,2);
+		}
+	SumofMSE =  SumofMSE/(Source->Height* Source->Width);
+	SNR_Value = Math::Log10(255*255 / SumofMSE);
+	return 10 * SNR_Value;
 }
 private: System::Void encode_btn_Click(System::Object^  sender, System::EventArgs^  e) {
 	System::String ^str=comboBox1->Text->Substring(0,1);
-	 MatchCode =  Convert::ToInt16(str);
+	MatchCode =  Convert::ToInt16(str);
+	PDCthreshold = Convert::ToInt16(textBox1->Text);
 	str=comboBox2->Text->Substring(0, 1);
 	SearchCode = Convert::ToInt16(str);
+	SaveFileDialog ^ SaveUI = gcnew SaveFileDialog;
+	SaveUI->OverwritePrompt = true;
+	SaveUI->FileName = nullptr;
+	SaveUI->Filter = "txt files (*.txt)|*.txt";
+	fstream fp;
+	if (SaveUI->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		FileName = SaveUI->FileName;
+		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(SaveUI->FileName), std::ios::out);
+		fp << MaskSize <<" "<<Video_Bitmap.size()<<endl;
+	}
+	fp.close();
     thread = gcnew Thread(gcnew ThreadStart(this,&VideoProcessUI::Encoding));
 	thread->Start();
 }
 
+private: System::Void Btn_Decode_Click(System::Object^  sender, System::EventArgs^  e) {
+	OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
+	openFileDialog1->Multiselect = true;
+	openFileDialog1->FileName = nullptr;
+	cli::array<String^>^ openFileName;
+	cliext::vector<Bitmap^>Video_Bitmap_Decode;
+	if (Video_Bitmap_Decode.size() != 0)Video_Bitmap_Decode.clear();
+	Bitmap ^temp_FirstFrame;
+	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		openFileName = openFileDialog1->FileNames;
+	}
+	fstream fp;
+	if (openFileName[1]->IndexOf("tiff")> 0)
+		temp_FirstFrame = gcnew Bitmap(openFileName[1]);
+	if (openFileName[0]->IndexOf("tiff")> 0)
+		temp_FirstFrame = gcnew Bitmap(openFileName[0]);
+		
+	if (openFileName[1]->IndexOf("txt")> 0)
+		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[1]), std::ios::in);
+	if (openFileName[0]->IndexOf("txt")> 0)
+		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[0]), std::ios::in);
+
+	Bitmap ^First = temp_FirstFrame->Clone(Rectangle(0,0, temp_FirstFrame->Width, temp_FirstFrame->Height), temp_FirstFrame->PixelFormat);
+	Video_Bitmap_Decode.push_back(gcnew Bitmap(First));
+	
+	char line[100];
+	fp.getline(line, sizeof(line));
+	
+	int secondFrameIndex_X = 0, secondFrameIndex_Y=0;
+	cli::array<Char>^sep = gcnew cli::array<Char>{' '};
+	System::String^ str = gcnew String(line);
+	cli::array<String^>^result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+	int blockSize = Convert::ToInt32(result[0]);
+	int FrameNo = Convert::ToInt32(result[1]);
+	label2->Text ="/"+FrameNo.ToString();
+	Bitmap ^Image = gcnew Bitmap(Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
+	while (Video_Bitmap.size()< FrameNo)
+	{
+		
+		fp.getline(line, sizeof(line));		
+		str = gcnew String(line);
+		result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+		int MotionVector_X = Convert::ToInt32(result[0]);
+		int MotionVector_Y = Convert::ToInt32(result[1]);
+		
+		for (int j = 0; j < blockSize; j++)
+			for (int i = 0; i < blockSize; i++)
+			{
+				Color c = First->GetPixel(secondFrameIndex_X +MotionVector_X+i, secondFrameIndex_Y +MotionVector_Y+j);
+				Image->SetPixel(i+ secondFrameIndex_X, j+ secondFrameIndex_Y, c);
+			}
+		secondFrameIndex_X += blockSize;
+		if (secondFrameIndex_X  == Video_Bitmap[0]->Width)
+		{
+			secondFrameIndex_X = 0;
+			secondFrameIndex_Y+= blockSize;
+		}
+		if (secondFrameIndex_Y  == Video_Bitmap[0]->Height)
+		{
+			secondFrameIndex_X = 0;
+			secondFrameIndex_Y = 0;
+			First = gcnew Bitmap(Image);
+			Video_Bitmap.push_back(gcnew Bitmap(First));
+			
+			for (uint i = 0; i < Video_Bitmap[0]->Width; i++)
+				for (uint j = 0; j < Video_Bitmap[0]->Height; j++)
+					First->SetPixel(i,j, Image->GetPixel(i,j));
+		}
+	}
+	for (uint i = 0; i < Video_Bitmap.size(); i++)
+	{
+	}
+	fp.close();
+	pictureBox_MotionVector->Size.Width = Video_Bitmap[1]->Width;
+	pictureBox_MotionVector->Size.Height = Video_Bitmap[1]->Height;
+	pictureBox_MotionVector->Image= Video_Bitmap[1];
+}
+private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+	System::String ^str = comboBox1->Text->Substring(0, 1);
+	MatchCode = Convert::ToInt16(str);
+	if (MatchCode==2)
+	{
+		textBox1->Visible=true;
+		tBOX_Threshold->Visible = true;
+	}
+	else {
+		textBox1->Visible = false;
+		tBOX_Threshold->Visible = false;
+	}
+}
 };
 }

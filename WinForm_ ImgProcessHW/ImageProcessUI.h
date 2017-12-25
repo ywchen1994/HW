@@ -565,6 +565,7 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			this->four_connect->Name = L"four_connect";
 			this->four_connect->Size = System::Drawing::Size(156, 26);
 			this->four_connect->Text = L"4連通";
+			this->four_connect->Click += gcnew System::EventHandler(this, &ImageProcessUI::four_connect_Click);
 			// 
 			// eight_connect
 			// 
@@ -2194,7 +2195,7 @@ private: System::Void openToolStripMenuItem_Click(System::Object^  sender, Syste
 		OpenFileDialog^ opnFileDlg = gcnew OpenFileDialog;
 		opnFileDlg->Multiselect = true;
 		if (opnFileDlg->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			if (opnFileDlg->FileName->IndexOf("jpeg") > 0 | opnFileDlg->FileName->IndexOf("jpg") > 0)
+			if (opnFileDlg->FileName->IndexOf("jpeg") > 0 || opnFileDlg->FileName->IndexOf("jpg") > 0 || opnFileDlg->FileName->IndexOf("bmp"))
 			{
 				Img_Source = gcnew Bitmap(opnFileDlg->FileName);
 				pictureBox_Source1->Image = Img_Source;
@@ -4076,7 +4077,7 @@ private: System::Void eight_connect_Click(System::Object^  sender, System::Event
 	Threshold(img_processed, img_processed, 100, THRESH_BINARY);
 	Connect(img_processed, img_processed);
 	int frequency[100] = { 0 };
-	int label_nun = 0;
+	int label_num = 0;
 	for (int j = 0; j < img_processed->Height; j++)
 	{
 		for (int i = 0; i < img_processed->Width; i++)
@@ -4089,13 +4090,13 @@ private: System::Void eight_connect_Click(System::Object^  sender, System::Event
 	for (int i = 0; i < 100; i++)
 	{
 		if (frequency[i] != 0)
-			label_nun++;
+			label_num++;
 	}
 	pictureBox_Result->Image = img_processed;
-	label_ObjectCount->Text = "總共:"+label_nun.ToString();
+	label_ObjectCount->Text = "總共:"+label_num.ToString();
 	
 }
-private:void Connect(Bitmap^src, Bitmap ^%dst)																		//八連通
+private:void Connect(Bitmap^src, Bitmap ^%dst) 																		//八連通
 {
 	dst = gcnew Bitmap(src->Width, src->Height);																	//先生成一張黑圖
 	for (int j = 0; j < src->Height; j++)
@@ -4199,6 +4200,114 @@ private:void Connect(Bitmap^src, Bitmap ^%dst)																		//八連通
 					 }
 				 }
 			 }
+		 }
+private: System::Void four_connect_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^img_processed;
+	ConvertColor(Img_Source, img_processed, RGB2Gray);
+	Threshold(img_processed, img_processed, 100, THRESH_BINARY);
+	Connect2(img_processed, img_processed);
+	int frequency[200] = { 0 };
+	int label_nun = 0;
+	for (int j = 0; j < img_processed->Height; j++)																													//判斷不同種類出現的數目
+	{
+		for (int i = 0; i < img_processed->Width; i++)
+		{
+			int label = img_processed->GetPixel(i, j).R;
+			if (label != 0)
+				frequency[label] ++;
+		}
+	}
+	for (int i = 0; i < 200; i++)
+	{
+		if (frequency[i] != 0)
+			label_nun++;
+	}
+	pictureBox_Result->Image = img_processed;
+	label_ObjectCount->Text = label_nun.ToString();
+}
+private:void Connect2(Bitmap^src, Bitmap ^%dst)																			//四連通
+ {
+	dst = gcnew Bitmap(src->Width, src->Height);																		//先生成一張被標籤黑圖
+	 for (int j = 0; j < src->Height; j++)
+		{
+			 for (int i = 0; i < src->Width; i++)
+				 {
+					 dst->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+				 }
+			 }
+			 int LableNo = 50;																									//定義灰階直
+			 for (int j = 0; j < src->Height; j++)
+			 {
+				 for (int i = 0; i< src->Width; i++)
+				 {
+					 if ((src->GetPixel(i, j).R > 0) && (dst->GetPixel(i, j).R) == 0)
+					 {
+						 if ((src->GetPixel(i, j - 1).R == 0) && (src->GetPixel(i - 1, j).R == 0))								//若中心點P上側的點R與左側的點T相同為零
+						 {
+							 LableNo++;
+							 dst->SetPixel(i, j, Color::FromArgb(LableNo, LableNo, LableNo));									//給P點一個新標籤
+						 }
+						 if ((src->GetPixel(i, j - 1).R == 255) && (src->GetPixel(i - 1, j).R == 0))								//若R點為255且T點為0，P點的直等於R點值
+						 {
+							 int value = dst->GetPixel(i, j - 1).R;
+							 dst->SetPixel(i, j, Color::FromArgb(value, value, value));
+						 }
+						 if ((src->GetPixel(i, j - 1).R == 0) && (src->GetPixel(i - 1, j).R == 255))								//若R點為0且T點為255，P點的直等於T點值
+						 {
+							 int value = dst->GetPixel(i - 1, j).R;
+							 dst->SetPixel(i, j, Color::FromArgb(value, value, value));
+						 }
+						 if ((src->GetPixel(i, j - 1).R == 255) && (src->GetPixel(i - 1, j).R == 255) && (dst->GetPixel(i, j - 1).R == dst->GetPixel(i - 1, j).R))					//若R點為255且T點為255，且R點的直等於T點值標籤直，P點的直等於T點值或R點值
+						 {
+							 int value = dst->GetPixel(i - 1, j).R;
+							 dst->SetPixel(i, j, Color::FromArgb(value, value, value));
+						 }
+						 if ((src->GetPixel(i, j - 1).R == 255) && (src->GetPixel(i - 1, j).R == 255) && (dst->GetPixel(i, j - 1).R != dst->GetPixel(i - 1, j).R))				//若R點為0且T點為255，且R點的直不等於T點值標籤直，把P點的標籤設跟R的標籤一樣，並註解把T的標籤設跟R的標籤一樣。
+						 {
+							 int value1 = dst->GetPixel(i, j - 1).R;
+							 dst->SetPixel(i - 1, j, Color::FromArgb(value1, value1, value1));
+							 dst->SetPixel(i, j, Color::FromArgb(value1, value1, value1));
+
+						 }
+					 }
+				 }
+			 }
+			 for (int j = src->Height - 1; j > 0; j--)																															//做第二次遮罩判斷
+			 {
+				 for (int i = src->Width - 1; i > 0; i--)
+				 {
+					 if (dst->GetPixel(i, j).R > 0)
+					 {
+						 Bitmap^ temp = gcnew Bitmap(3, 3);
+						 Rectangle cloneRect = Rectangle(i - 1, j - 1, 3, 3);
+						 temp = dst->Clone(cloneRect, dst->PixelFormat);
+
+						 int min_Label = 999;
+						 for (int v = 0; v < 3; v++)
+						 {
+							 for (int u = 0; u < 3; u++)
+							 {
+								 if (temp->GetPixel(u, v).R <= min_Label && temp->GetPixel(u, v).R != 0)
+								 {
+									 min_Label = temp->GetPixel(u, v).R;
+								 }
+							 }
+						 }
+						 delete temp;
+						 for (int v = -1; v < 1; v++)
+						 {
+							 for (int u = -1; u < 1; u++)
+							 {
+								 if (dst->GetPixel(i + u, j + v).R != 0)
+								 {
+									 dst->SetPixel(i + u, j + v, Color::FromArgb(min_Label, min_Label, min_Label));
+								 }
+							 }
+						 }
+					 }
+				 }
+			 }
+
 		 }
 };
 }
