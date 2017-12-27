@@ -262,4 +262,16 @@
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>136, 17</value>
   </metadata>
+  <data name="BtnDecode_Play.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJ
+        TUUH4QcEBzQop15kSAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAD5SURBVDhP
+        ndKxSkJhGIfxz1zEQXDpBpwddMmlRVwSnURtaGsXvInGuggH3bqEQHERFRGcmgS1wSloiATt+cs5oOd8
+        Hc/pgR/I8X1fRTQXajr+VR4HrJzXkXuFDrSc15HKYg8dSGDtPAvVNdxPF9WGnuk9XyX0MMEn3MXTA0m8
+        YQvNjNFFEWYB79Ipb2nc4AnaNQ3sYFsWW/o99Lto91gNPwhzIIcNtHNWBd8IOqD/wwc0a62DoAOP0Myf
+        jRB0oADNWIvhC94DD7iCSkEzmvWVgXe5jwHmqEItoVlft3AXp7iDWxkzDPEOzfqK4xl12L6int3jBZol
+        Y34Bs2daGn28OV4AAAAASUVORK5CYII=
+</value>
+  </data>
 </root>
