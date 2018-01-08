@@ -3976,6 +3976,23 @@ private: System::Void Median_FilterSize_ValueChanged(System::Object^  sender, Sy
 				Img_Filtered->SetPixel(i, j, filiter_color);
 			}
 	}
+	if (RadioBtn_MinMax->Checked)
+	{
+		for (uint j = 0; j < Img_Source->Height; j++)
+		{
+			for (uint i = 0; i < Img_Source->Width; i++)
+			{
+				Bitmap ^temp = gcnew Bitmap(mask_size, mask_size);
+				Rectangle mask = Rectangle(i, j, mask_size, mask_size);
+				temp = Img_Extended->Clone(mask, Img_Extended->PixelFormat);
+				int mask_value = Min_Max(temp);
+				delete temp;
+				Color filiter_color;
+				filiter_color = Color::FromArgb(mask_value, mask_value, mask_value);
+				Img_Filtered->SetPixel(i, j, filiter_color);
+			}
+		}
+	}
 	pictureBox_Result->Image = Img_Filtered;
 	pictureBox_Result->Refresh();
 	delete Img_Filtered;
@@ -4070,7 +4087,36 @@ private:uint Max_Min(Bitmap ^src)
 	delete []  Data;
 	return Median;
 }
-
+private:uint Min_Max(Bitmap ^src)
+{
+	uint Center_Index = src->Height / 2;
+	int data_index = 0;
+	uint *Data = new uint[src->Height * 2 - 1];
+	for (uint j = 0; j < src->Height; j++)
+	{
+		Data[data_index] = src->GetPixel(Center_Index, j).R;
+		data_index++;
+	}
+	for (uint i = 0; i < src->Height; i++)
+	{
+		if (Center_Index == i)continue;
+		Data[data_index] = src->GetPixel(i, Center_Index).R;
+		data_index++;
+	}
+	uint temp;
+	for (uint i = 0; i < src->Height * 2 - 1; i++) {
+		for (uint j = i; j < src->Height * 2 - 1; j++) {
+			if (Data[j] > Data[i]) {
+				temp = Data[j];
+				Data[j] = Data[i];
+				Data[i] = temp;
+			}
+		}
+	}
+	uint Median = Data[data_index - 2];//
+	delete[]  Data;
+	return Median;
+}
 private: System::Void eight_connect_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bitmap ^img_processed;
 	ConvertColor(Img_Source, img_processed, RGB2Gray);
@@ -4096,9 +4142,9 @@ private: System::Void eight_connect_Click(System::Object^  sender, System::Event
 	label_ObjectCount->Text = "總共:"+label_num.ToString();
 	
 }
-private:void Connect(Bitmap^src, Bitmap ^%dst) 																		//八連通
+private:void Connect(Bitmap^src, Bitmap ^%dst) 																		
 {
-	dst = gcnew Bitmap(src->Width, src->Height);																	//先生成一張黑圖
+	dst = gcnew Bitmap(src->Width, src->Height);																	
 	for (int j = 0; j < src->Height; j++)
 	{
 	  for (int i = 0; i < src->Width; i++)
@@ -4225,9 +4271,9 @@ private: System::Void four_connect_Click(System::Object^  sender, System::EventA
 	pictureBox_Result->Image = img_processed;
 	label_ObjectCount->Text = label_nun.ToString();
 }
-private:void Connect2(Bitmap^src, Bitmap ^%dst)																			//四連通
+private:void Connect2(Bitmap^src, Bitmap ^%dst)																			
  {
-	dst = gcnew Bitmap(src->Width, src->Height);																		//先生成一張被標籤黑圖
+	dst = gcnew Bitmap(src->Width, src->Height);																		
 	 for (int j = 0; j < src->Height; j++)
 		{
 			 for (int i = 0; i < src->Width; i++)

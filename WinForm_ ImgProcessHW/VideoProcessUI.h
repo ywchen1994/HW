@@ -1,4 +1,6 @@
 #pragma once
+#define _USE_MATH_DEFINES
+#include"math.h"
 #include<stdlib.h>
 #include<cliext\vector>
 #include<fstream>
@@ -19,10 +21,26 @@ namespace WinForm_ImgProcessHW {
 	/// <summary>
 	/// VideoProcessUI 的摘要
 	/// </summary>
+	enum Direction
+	{
+		left,
+		right,
+		left_and_right,
+		up,
+		down,
+		up_and_down,
+		cross,
+		square
+	};
 	enum SearchMode
 	{ 
-		BBM,TDL
-
+		BBM
+		,TDL
+		,TSS
+		, OSA
+		,OTS
+		,CSA
+		
 	};
 	enum CalculateMethod
 	{
@@ -111,6 +129,7 @@ namespace WinForm_ImgProcessHW {
 			 cliext::vector<Bitmap^>Video_Bitmap_Decode;
 	private: System::Windows::Forms::TextBox^  textBox2;
 	private: System::Windows::Forms::Label^  label10;
+	private: System::Windows::Forms::Button^  Btn_Th_Pause;
 			 int MatchCode;
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -121,9 +140,9 @@ namespace WinForm_ImgProcessHW {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(VideoProcessUI::typeid));
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -159,6 +178,7 @@ namespace WinForm_ImgProcessHW {
 			this->BtnDecode_Play = (gcnew System::Windows::Forms::Button());
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->Btn_Th_Pause = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Reference))->BeginInit();
@@ -413,9 +433,9 @@ namespace WinForm_ImgProcessHW {
 			// comboBox2
 			// 
 			this->comboBox2->FormattingEnabled = true;
-			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
+			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(6) {
 				L"0.Block Based Motion", L"1.Two Dimensional Logarithmic Search (TDL)",
-					L"2.Three Step Search (TSS)", L"3.Orthogonal Search Algorithm (OSA)", L"4.Cross Search Algorithm (CSA)"
+					L"2.Three Step Search (TSS)", L"3.Orthogonal Search Algorithm (OSA)", L"4.One at a Time Search(OTS)", L"5.Cross Search Algorithm (CSA)"
 			});
 			this->comboBox2->Location = System::Drawing::Point(721, 402);
 			this->comboBox2->Name = L"comboBox2";
@@ -487,22 +507,22 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// chart_PSNR
 			// 
-			chartArea1->AxisX->Interval = 1;
-			chartArea1->AxisX->Minimum = 0;
-			chartArea1->AxisY->Maximum = 1000;
-			chartArea1->AxisY->Minimum = 0;
-			chartArea1->Name = L"ChartArea1";
-			this->chart_PSNR->ChartAreas->Add(chartArea1);
-			legend1->Name = L"Legend1";
-			this->chart_PSNR->Legends->Add(legend1);
-			this->chart_PSNR->Location = System::Drawing::Point(475, 529);
+			chartArea2->AxisX->Interval = 1;
+			chartArea2->AxisX->Minimum = 0;
+			chartArea2->AxisY->Maximum = 150;
+			chartArea2->AxisY->Minimum = 0;
+			chartArea2->Name = L"ChartArea1";
+			this->chart_PSNR->ChartAreas->Add(chartArea2);
+			legend2->Name = L"Legend1";
+			this->chart_PSNR->Legends->Add(legend2);
+			this->chart_PSNR->Location = System::Drawing::Point(597, 510);
 			this->chart_PSNR->Name = L"chart_PSNR";
-			series1->ChartArea = L"ChartArea1";
-			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
-			series1->Legend = L"Legend1";
-			series1->Name = L"PSNR_S";
-			this->chart_PSNR->Series->Add(series1);
-			this->chart_PSNR->Size = System::Drawing::Size(538, 256);
+			series2->ChartArea = L"ChartArea1";
+			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
+			series2->Legend = L"Legend1";
+			series2->Name = L"PSNR_S";
+			this->chart_PSNR->Series->Add(series2);
+			this->chart_PSNR->Size = System::Drawing::Size(364, 226);
 			this->chart_PSNR->TabIndex = 39;
 			this->chart_PSNR->Text = L"chart1";
 			// 
@@ -534,11 +554,24 @@ namespace WinForm_ImgProcessHW {
 			this->label10->TabIndex = 42;
 			this->label10->Text = L"BlockSize";
 			// 
+			// Btn_Th_Pause
+			// 
+			this->Btn_Th_Pause->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(136)));
+			this->Btn_Th_Pause->Location = System::Drawing::Point(970, 372);
+			this->Btn_Th_Pause->Name = L"Btn_Th_Pause";
+			this->Btn_Th_Pause->Size = System::Drawing::Size(83, 40);
+			this->Btn_Th_Pause->TabIndex = 43;
+			this->Btn_Th_Pause->Text = L"Pause";
+			this->Btn_Th_Pause->UseVisualStyleBackColor = true;
+			this->Btn_Th_Pause->Click += gcnew System::EventHandler(this, &VideoProcessUI::Btn_Th_Pause_Click);
+			// 
 			// VideoProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1104, 840);
+			this->Controls->Add(this->Btn_Th_Pause);
 			this->Controls->Add(this->label10);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->BtnDecode_Play);
@@ -641,6 +674,22 @@ void SetLabelText(System::String^ str)
 		this->label8->Refresh();
 	}
 }
+delegate void SetChartPoint(Point P);
+void SetChartPoint_f(Point P)
+{
+	if (this->chart_PSNR->InvokeRequired)
+	{
+		SetChartPoint ^d = gcnew SetChartPoint(this, &VideoProcessUI::SetChartPoint_f);
+		this->Invoke(d, gcnew cli::array<Object^> {P});
+		
+	}
+	else
+	{
+		chart_PSNR->Series["PSNR_S"]->Points->AddXY(P.X,P.Y);
+	
+		this->chart_PSNR->Refresh();
+	}
+}
 private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 	timer1->Enabled = false;
 }
@@ -687,11 +736,32 @@ public:void ShowImage(System::Windows::Forms::PictureBox^ PBox, Bitmap^b,size_t 
 		delete graphics;
 }
 delegate void DrawMotionVector(System::Windows::Forms::PictureBox^ PBox,Point P1,Point P2);
-public:void DrawArrow(PictureBox^ PBox, Point P1, Point P2)
+public:void DrawArrow(Bitmap ^Img, Point P1, Point P2)
 {
+	if (P1.X == P2.X && P1.Y == P2.Y)
+		Img->SetPixel(P1.X, P1.Y, Color::FromArgb(0, 255, 0));
+	else
+	{
+	   Point arrow;  
+	   double angle = atan2((double)(P1.Y - P2.Y), (double)(P1.X - P2.X));
+	   DrawLine(Img, P1,P2);
+	   arrow.X = P2.X + 2*cos(angle +M_PI * 30 / 180);
+	   arrow.Y = P2.Y + 2*sin(angle + M_PI * 30 / 180);
+	   DrawLine(Img, P2, arrow);
+	   arrow.X = P2.X + 2*cos(angle - M_PI * 30 / 180);
+	   arrow.Y = P2.Y +2*sin(angle - M_PI * 30 / 180);
+	   DrawLine(Img, P2, arrow);
+	
+	}
+	ShowImage(pictureBox_MotionVector, Img,0,0,0);
 	
 }
-
+public:void SetZero(Bitmap ^%src)
+{
+	for (uint i = 0; i < src->Width; i++)
+		for (uint j = 0; j < src->Height; j++)
+			src->SetPixel(i, j, Color::FromArgb(0, 0, 0));
+}
 private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 {
 	uint Sum = 0;
@@ -732,11 +802,14 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 	 
 	fstream fp;
 	cliext::vector<Point> motionVector;
-	
+  Bitmap ^Img_Decode = gcnew Bitmap(Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
+
+  Bitmap ^Image_Arrow = gcnew Bitmap(Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
   for (unsigned int k = 0; k < Video_Bitmap.size()-1; k++)
 	{
+	  SetZero(Img_Decode);
 	  SetLabelText((k+1).ToString()+"/"+Video_Bitmap.size().ToString());
-	  
+	  SetZero(Image_Arrow);
 	  for (unsigned int targ_y_Index = 0; targ_y_Index <Video_Bitmap[0]->Height; targ_y_Index += MaskSize)
 	  {
 		  for (unsigned int targ_x_Index = 0; targ_x_Index <Video_Bitmap[0]->Width ; targ_x_Index += MaskSize)
@@ -770,7 +843,11 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 						  delete temp2;
 					  }
 				  }
+				  for (uint j = 0; j < MaskSize; j++)
+					  for (uint i = 0; i < MaskSize; i++)
+						  Img_Decode->SetPixel(targ_x_Index+i, targ_y_Index+j, Video_Bitmap[k]->GetPixel(Minum.X+i, Minum.Y+j));
 				  motionVector.push_back(Point(Minum.X - targ_x_Index, Minum.Y - targ_y_Index));
+				  DrawArrow(Image_Arrow, Point(targ_x_Index, targ_y_Index), Minum);
 				  break;
 			   case TDL:
 			   {   
@@ -820,15 +897,539 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 			    }
 				
 				motionVector.push_back(Point(candidate_winner.X- targ_x_Index, candidate_winner.Y - targ_y_Index));
+				for (uint j = 0; j < MaskSize; j++)
+					for (uint i = 0; i < MaskSize; i++)
+						Img_Decode->SetPixel(targ_x_Index + i, targ_y_Index + j, Video_Bitmap[k]->GetPixel(candidate_winner.X + i, candidate_winner.Y + j));
+				DrawArrow(Image_Arrow, Point(targ_x_Index, targ_y_Index), candidate_winner);
 			   break;
 			   }
+			   case TSS:
+			   {
+				  
+				   Point Center = Point(targ_x_Index, targ_y_Index);
+				   Point matching_point; 
+				   int s = 3; 
+				   while (s >= 1)
+				   {
+					   Score = 4294967295;
+					   for (int i = -1; i < 2; i++)
+					   {
+						   for (int j = -1; j < 2; j++)
+						   {
+							   int cand_x_Index = Center.X + i*s*MaskSize;
+							   int cand_y_Index = Center.Y + j*s*MaskSize;
+							   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+								   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+							   {
+								   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+								   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+								   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+								   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+								   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+								   uint temp_Score = MatchMethodCaculate(temp, temp2);
+								   if (temp_Score < Score && (s != 1))
+								   {
+									   Score = temp_Score;
+									   Minum = Point(cand_x_Index, cand_y_Index);
+								   }
+								   if ((s == 1) && temp_Score < Score)
+								   {
+									   Score = temp_Score;
+									   matching_point = Point(cand_x_Index, cand_y_Index);
+								   }
+								   delete temp2;
+							   }
+						   }
+					   }
+					   s--;
+				   }
+				   for (uint j = 0; j < MaskSize; j++)
+					   for (uint i = 0; i < MaskSize; i++)
+						   Img_Decode->SetPixel(targ_x_Index + i, targ_y_Index + j, Video_Bitmap[k]->GetPixel(matching_point.X + i, matching_point.Y + j));
+				   motionVector.push_back(Point(matching_point.X - targ_x_Index, matching_point.Y - targ_y_Index));
+				   DrawArrow(Image_Arrow, Point(targ_x_Index, targ_y_Index), matching_point);
+			   }
+			   break;
+			   case OSA://Orthogonal Search Algorithm (OSA)
+			   {
+				   /*
+				   會以target block左上角那點為中心在四周八個方位尋找出candidate block
+				   一開始先以target block做為中心 找出左右s=4(s自訂)的candidate block做比較
+				   找出最小值並以該block做中心再次尋找上下距離s的candidate block後找到最小值並以該block做為中心
+				   (以上兩步驟即是以相同距離的水平與垂直距離各尋找一次最小值)，之後s砍半再次尋找水平與垂直找出最小的block
+				   依照此方法直到s小於自訂值，則可找到對應的block
+				   */
+				   Point Center = Point(targ_x_Index, targ_y_Index);
+				   Point matching_point;
+				   int s = 4;//自訂s
+				   while (s >= 1)
+				   {
+					   for (int i = -1; i < 2; i++) //第一次搜尋水平方向
+					   {
+						   int cand_x_Index = Center.X + i*s*MaskSize;  //水平x座標會變
+						   int cand_y_Index = Center.Y;                 //水平y座標不會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score && (s != 1))
+							   {
+								   Score = temp_Score;
+								   Minum = Point(cand_x_Index, cand_y_Index);
+								   Center = Point(cand_x_Index, cand_y_Index); //水平最小的當中心點
+							   }
+							   delete temp2;
+						   }
+
+					   }
+					   for (int j = -1; j < 2; j++)//第二次搜尋垂直方向
+					   {
+						   int cand_x_Index = Center.X;//垂直x座標不會變
+						   int cand_y_Index = Center.Y + j*s*MaskSize; //垂直y會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score && (s != 1))
+							   {
+								   Score = temp_Score;
+								   Minum = Point(cand_x_Index, cand_y_Index);
+								   Center = Point(cand_x_Index, cand_y_Index); //垂直最小的當中心點
+							   }
+							   if ((s == 1) && temp_Score <= Score) //求得最後的matching point
+							   {
+								   Score = temp_Score;
+								   matching_point = Point(cand_x_Index, cand_y_Index);
+							   }
+							   delete temp2;
+						   }
+					   }
+					   s /= 2;
+				   }
+				   motionVector.push_back(Point(matching_point.X - targ_x_Index, matching_point.Y - targ_y_Index));
+				   DrawArrow(Image_Arrow, Point(targ_x_Index, targ_y_Index), matching_point);
+				   for (uint j = 0; j < MaskSize; j++)
+					   for (uint i = 0; i < MaskSize; i++)
+						   Img_Decode->SetPixel(targ_x_Index + i, targ_y_Index + j, Video_Bitmap[k]->GetPixel(matching_point.X + i, matching_point.Y + j));
+			   }
+			   break;
+			   case OTS:
+			   {
+				   /*
+				   會以target block左上角那點為中心
+				   一開始先往左右找出最小值(如果一開始自己就是最小 則結束尋找)
+				   往最小的方向繼續移動，發現下個方向比較大則往上下移動找出更小的方向
+				   就像是一直往前，遇到前面比較大就往兩旁(上下或左右)散開找更小的直到找不到更小的
+				   */
+				   Point Center = Point(targ_x_Index, targ_y_Index); //以target block左上角的點作為中心點              
+				   Point matching_point; //最後找到的那個點
+				   bool find_myself = false; //確認是否搜尋到的最小值為自己
+				   int direction; //搜尋方向
+				   int s; //用來制定搜尋方向  上或左 s = -1  下或右 s = 1
+				   for (int i = -1; i < 2; i++) //先找出水平方向最小的
+				   {
+					   int cand_x_Index = Center.X + i*MaskSize;  //水平x座標會變
+					   int cand_y_Index = Center.Y;                 //水平y座標不會變
+					   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+						   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+					   {
+						   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+						   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+						   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+						   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+						   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+						   uint temp_Score = MatchMethodCaculate(temp, temp2);
+						   if (temp_Score <= Score)
+						   {
+							   Score = temp_Score;
+							   if (i == -1)   direction = left;//左邊最小(往左搜尋)
+							   else if (i == 0) find_myself = true; //起始點剛好最小，結束
+							   else if (i == 1) direction = right; //右邊最小(往右搜尋)
+							   Minum = Point(cand_x_Index, cand_y_Index); //存取最小值
+						   }
+						   delete temp2;
+					   }
+				   }
+				   Center = Minum; //將最小值變成中心
+				   while (!find_myself) //是否找到最小的為自己
+				   {
+					   switch (direction)  //搜尋方向
+					   {
+					   case left:
+					   {
+						   s = -1;
+						   int cand_x_Index = Center.X + s*MaskSize;    //水平x座標會變  
+						   int cand_y_Index = Center.Y;                 //水平y座標不會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score)  //下一個搜尋的block更小或相等
+							   {
+								   Score = temp_Score;
+								   Center = Point(cand_x_Index, cand_y_Index); //中心轉移到最小值
+							   }
+
+							   else   //下個搜尋block沒有比較小，則改變搜尋方向
+								   direction = up_and_down;
+							   delete temp2;
+						   }
+						   else //超出圖外 則要改變尋找方向
+							   direction = up_and_down;
+					   }
+					   break;
+					   case right:
+					   {
+						   s = 1;
+						   int cand_x_Index = Center.X + s*MaskSize;    //水平x座標會變  
+						   int cand_y_Index = Center.Y;                 //水平y座標不會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score)  //下一個搜尋的block更小或相等
+							   {
+								   Score = temp_Score;
+								   Center = Point(cand_x_Index, cand_y_Index); //中心轉移到最小值
+							   }
+
+							   else   //下個搜尋block沒有比較小，則改變搜尋方向
+								   direction = up_and_down;
+							   delete temp2;
+						   }
+						   else //超出圖外 則要改變尋找方向
+							   direction = up_and_down;
+					   }
+					   break;
+					   case left_and_right:
+					   {
+						   int Score;
+						   //先檢查右邊block
+						   s = 1;
+						   int right_score; //計算右側block差值
+						   int cand_x_Index = Center.X + s*MaskSize;  //水平x座標會變
+						   int cand_y_Index = Center.Y;                 //水平y座標不會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   right_score = MatchMethodCaculate(temp, temp2);
+							   delete temp2;
+						   }
+						   else
+							   right_score = 999999;
+						   //檢查左邊block
+						   s = -1;
+						   int left_score; //計算左側block差值
+						   cand_x_Index = Center.X + s*MaskSize;  //水平x座標會變
+						   cand_y_Index = Center.Y;                 //水平y座標不會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   left_score = MatchMethodCaculate(temp, temp2);
+							   delete temp2;
+						   }
+						   else
+							   left_score = 999999;
+
+						   //判斷移動方向
+						   if (Score >= right_score)  //右邊較小
+						   {
+							   Score = right_score;
+							   direction = right;
+							   Center.X += MaskSize; //X向右
+						   }
+						   else if (Score >= left_score)//左邊較小
+						   {
+							   Score = left_score;
+							   direction = left;
+							   Center.X -= MaskSize; //X向左
+						   }
+						   else//本身較小，即找到最小block
+							   find_myself = true;
+					   }
+					   break;
+					   case up:
+					   {
+						   s = -1;
+						   int cand_x_Index = Center.X;  //垂直x座標不會變
+						   int cand_y_Index = Center.Y + s*MaskSize;    //垂直y座標會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score)  //下一個搜尋的block更小或相等
+							   {
+								   Score = temp_Score;
+								   Center = Point(cand_x_Index, cand_y_Index);//中心轉移到最小值
+							   }
+							   else   //下個搜尋block沒有比較小，則改變搜尋方向
+								   direction = left_and_right;
+							   delete temp2;
+						   }
+						   else //超出圖外 則要改變尋找方向
+							   direction = left_and_right;
+					   }
+					   break;
+					   case down:
+					   {
+						   s = 1;
+						   int cand_x_Index = Center.X;  //垂直x座標不會變
+						   int cand_y_Index = Center.Y + s*MaskSize;    //垂直y座標會變
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   uint temp_Score = MatchMethodCaculate(temp, temp2);
+							   if (temp_Score <= Score)  //下一個搜尋的block更小或相等
+							   {
+								   Score = temp_Score;
+								   Center = Point(cand_x_Index, cand_y_Index);//中心轉移到最小值
+							   }
+							   else   //下個搜尋block沒有比較小，則改變搜尋方向
+								   direction = left_and_right;
+							   delete temp2;
+						   }
+						   else //超出圖外 則要改變尋找方向
+							   direction = left_and_right;
+					   }
+					   break;
+					   case up_and_down:
+					   {
+						   //先檢查下面block
+						   s = 1;
+						   int down_score; //計算下側block差值
+						   int cand_x_Index = Center.X;
+						   int cand_y_Index = Center.Y + s*MaskSize;
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   down_score = MatchMethodCaculate(temp, temp2);
+							   delete temp2;
+						   }
+						   else
+							   down_score = 999999;
+						   //檢查上面邊block
+						   s = -1;
+						   int up_score; //計算上側block差值
+						   cand_x_Index = Center.X;
+						   cand_y_Index = Center.Y + s*MaskSize;
+						   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+							   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height)) //檢查下一個block是否在圖內
+						   {
+							   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+							   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+							   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+							   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+							   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+							   up_score = MatchMethodCaculate(temp, temp2);
+							   delete temp2;
+						   }
+						   else
+							   up_score = 999999;
+						   //判斷移動方向
+						   if (Score >= down_score)  //下面較小
+						   {
+							   Score = down_score;
+							   direction = down;
+							   Center.Y += MaskSize; //Y向下
+						   }
+						   else if (Score >= up_score)//上面較小
+						   {
+							   Score = down_score;
+							   direction = up;
+							   Center.Y -= MaskSize; //Y向上
+						   }
+						   else//本身較小，即找到最小block
+							   find_myself = true;
+					   }
+					   break;
+
+					   default:
+						   break;
+					   }
+				   }
+				   motionVector.push_back(Point(Center.X - targ_x_Index, Center.Y - targ_y_Index));
+				   DrawArrow(Image_Arrow, Point(targ_x_Index,targ_y_Index), Center);
+				   for (uint j = 0; j < MaskSize; j++)
+					   for (uint i = 0; i < MaskSize; i++)
+						   Img_Decode->SetPixel(targ_x_Index + i, targ_y_Index + j, Video_Bitmap[k]->GetPixel(Center.X + i, Center.Y + j));
+			   }
+			   break;
+			   case CSA: //Cross Search Algorithm (CSA)
+			   {
+				   /*
+				   會以target block左上角那點為中心在斜方方位尋找出candidate block
+				   自訂距離s，並進行斜方搜尋，每次找到新的最小值就將s減半，直到找到最小的
+				   要預判下次是否為最小，如果下次會找到最小值，則該次須得知本身位置
+				   如果為左上或右下，則最後一次搜尋為叉叉形狀
+				   如果為右上或左下，則最後一次搜尋為十字形狀
+				   */
+				   Point Center = Point(targ_x_Index, targ_y_Index); //以target block左上角的點作為中心點
+				   int direction;//最後一次的搜尋方向
+				   int s = 4; //TDL所使用的距離倍數 (自訂) 
+				   while (s > 1)
+				   {
+					   Score = 4294967295;
+					   for (int i = -1; i < 2; i++)
+					   {
+						   for (int j = -1; j < 2; j++)
+						   {
+							   if (abs(i) + abs(j) == 2 || (i == 0 && j == 0)) //斜方向絕對值相加為2  & 原點
+							   {
+								   int cand_x_Index = Center.X + i*s*MaskSize;
+								   int cand_y_Index = Center.Y + j*s*MaskSize;
+								   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+									   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+								   {
+									   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+									   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+									   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+									   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+									   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+									   uint temp_Score = MatchMethodCaculate(temp, temp2);
+									   if (temp_Score < Score && (s != 1))
+									   {
+										   Score = temp_Score;
+										   Minum = Point(cand_x_Index, cand_y_Index);
+										   if (i - j == 0) direction = cross; //左上或右下 則最後一次搜尋交叉的block
+										   if (abs(i - j) == 2) direction = square;//右上或左下 則最後一次搜尋為十字的block
+									   }
+									   delete temp2;
+								   }
+							   }
+						   }
+					   }
+					   Center = Minum; //將中心移到最小點
+					   s = s / 2;
+				   }
+				   switch (direction)
+				   {
+				   case cross: //叉叉
+				   {
+					   for (int i = -1; i < 2; i++)
+					   {
+						   for (int j = -1; j < 2; j++)
+						   {
+							   if (abs(i) + abs(j) == 2 || (i == 0 && j == 0)) //斜方向絕對值相加為2 & 原點
+							   {
+								   int cand_x_Index = Center.X + i*s*MaskSize;
+								   int cand_y_Index = Center.Y + j*s*MaskSize;
+								   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+									   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+								   {
+									   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+									   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+									   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+									   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+									   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+									   uint temp_Score = MatchMethodCaculate(temp, temp2);
+									   if (temp_Score < Score)
+									   {
+										   Score = temp_Score;
+										   Center = Point(cand_x_Index, cand_y_Index);
+									   }
+									   delete temp2;
+								   }
+							   }
+						   }
+					   }
+				   }
+				   break;
+				   case square: //十字
+				   {
+					   for (int i = -1; i < 2; i++)
+					   {
+						   for (int j = -1; j < 2; j++)
+						   {
+							   if (abs(i) + abs(j) == 1 || (i == 0 && j == 0)) //十字方向絕對值相加為1 & 原點
+							   {
+								   int cand_x_Index = Center.X + i*s*MaskSize;
+								   int cand_y_Index = Center.Y + j*s*MaskSize;
+								   if ((0 <= cand_x_Index) && (cand_x_Index < Video_Bitmap[k]->Width) &&
+									   (0 <= cand_y_Index) && (cand_y_Index < Video_Bitmap[k]->Height))
+								   {
+									   Bitmap^ temp2 = gcnew Bitmap(MaskSize, MaskSize);
+									   Rectangle cloneRect2 = Rectangle(cand_x_Index, cand_y_Index, MaskSize, MaskSize);
+									   temp2 = Video_Bitmap[k]->Clone(cloneRect2, Video_Bitmap[k]->PixelFormat);
+									   ShowImage(pictureBox_Cand, temp2, cand_x_Index, cand_y_Index, false);
+									   ShowImage(pictureBox_Reference, Video_Bitmap[k], cand_x_Index, cand_y_Index, true);
+									   uint temp_Score = MatchMethodCaculate(temp, temp2);
+									   if (temp_Score < Score && (s != 1))
+									   {
+										   Score = temp_Score;
+										   Center = Point(cand_x_Index, cand_y_Index);
+									   }
+									   delete temp2;
+								   }
+							   }
+						   }
+					   }
+				   }
+				   break;
+				   default:
+					   break;
+				   }
+				   motionVector.push_back(Point(Center.X - targ_x_Index, Center.Y - targ_y_Index));
+				   DrawArrow(Image_Arrow, Point(targ_x_Index, targ_y_Index), Center);
+				   for (uint j = 0; j < MaskSize; j++)
+					   for (uint i = 0; i < MaskSize; i++)
+						   Img_Decode->SetPixel(targ_x_Index + i, targ_y_Index + j, Video_Bitmap[k]->GetPixel(Center.X + i, Center.Y + j));
+			   }
+			   break;
 			  default:
 				  break;
 			  }
+			 
 			  delete temp;
 		  }
 		 
 	  }
+	  double PSNR = C_PSNR(Video_Bitmap[k],Img_Decode);
+	  SetChartPoint_f(Point(k, PSNR));
 	}
   fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(FileName),std::ios::app);
   for (uint i = 0; i < motionVector.size(); i++)
@@ -874,7 +1475,29 @@ private: System::Void encode_btn_Click(System::Object^  sender, System::EventArg
     thread = gcnew Thread(gcnew ThreadStart(this,&VideoProcessUI::Encoding));
 	thread->Start();
 }
-
+private:void DrawLine(Bitmap ^%src, Point P1, Point P2)
+{
+	if (P1.X != P2.X)
+	{
+		double m = (double)(P1.Y - P2.Y) / (double)(P1.X - P2.X);
+		double b = P1.Y - m*P1.X;
+		if (P1.X < P2.X)
+			for (uint i = P1.X; i <= P2.X; i++)
+				src->SetPixel(i, (int)(m*i) + (int)b, Color::FromArgb(255, 0, 0));
+		if (P1.X > P2.X)
+			for (uint i = P2.X; i <= P1.X; i++)
+				src->SetPixel(i, (int)(m*i) + (int)b, Color::FromArgb(255, 0, 0));
+	}
+	else
+	{
+		if (P1.Y > P2.Y)
+			for (uint i = P2.Y; i <= P1.Y; i++)
+				src->SetPixel(P1.X,i, Color::FromArgb(255, 0, 0));
+		if (P1.Y < P2.Y)
+			for (uint i = P1.Y; i <= P2.Y; i++)
+				src->SetPixel(P1.X, i, Color::FromArgb(255, 0, 0));
+	}
+}
 private: System::Void Btn_Decode_Click(System::Object^  sender, System::EventArgs^  e) {
 	OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
 	openFileDialog1->Multiselect = true;
@@ -886,72 +1509,75 @@ private: System::Void Btn_Decode_Click(System::Object^  sender, System::EventArg
 	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		openFileName = openFileDialog1->FileNames;
 	}
-	fstream fp;
-	if (openFileName[1]->IndexOf("tiff")> 0)
-		temp_FirstFrame = gcnew Bitmap(openFileName[1]);
-	if (openFileName[0]->IndexOf("tiff")> 0)
-		temp_FirstFrame = gcnew Bitmap(openFileName[0]);
-		
-	if (openFileName[1]->IndexOf("txt")> 0)
-		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[1]), std::ios::in);
-	if (openFileName[0]->IndexOf("txt")> 0)
-		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[0]), std::ios::in);
-
-	Bitmap ^First = temp_FirstFrame->Clone(Rectangle(0,0, temp_FirstFrame->Width, temp_FirstFrame->Height), temp_FirstFrame->PixelFormat);
-	Video_Bitmap_Decode.push_back(gcnew Bitmap(First));
-	
-	char line[100];
-	fp.getline(line, sizeof(line));
-	
-	int secondFrameIndex_X = 0, secondFrameIndex_Y=0;
-	cli::array<Char>^sep = gcnew cli::array<Char>{' '};
-	System::String^ str = gcnew String(line);
-	cli::array<String^>^result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
-	int blockSize = Convert::ToInt32(result[0]);
-	int FrameNo = Convert::ToInt32(result[1]);
-	label2->Text ="/"+FrameNo.ToString();
-	Bitmap ^Image = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
-	while (Video_Bitmap_Decode.size()< FrameNo)
+	if (openFileName != nullptr)
 	{
-		
-		fp.getline(line, sizeof(line));		
-		str = gcnew String(line);
-		result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
-		int MotionVector_X = Convert::ToInt32(result[0]);
-		int MotionVector_Y = Convert::ToInt32(result[1]);
-		
-		for (int j = 0; j < blockSize; j++)
-			for (int i = 0; i < blockSize; i++)
+		fstream fp;
+		if (openFileName[1]->IndexOf("tiff") > 0)
+			temp_FirstFrame = gcnew Bitmap(openFileName[1]);
+		if (openFileName[0]->IndexOf("tiff") > 0)
+			temp_FirstFrame = gcnew Bitmap(openFileName[0]);
+
+		if (openFileName[1]->IndexOf("txt") > 0)
+			fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[1]), std::ios::in);
+		if (openFileName[0]->IndexOf("txt") > 0)
+			fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[0]), std::ios::in);
+
+		Bitmap ^First = temp_FirstFrame->Clone(Rectangle(0, 0, temp_FirstFrame->Width, temp_FirstFrame->Height), temp_FirstFrame->PixelFormat);
+		Video_Bitmap_Decode.push_back(gcnew Bitmap(First));
+
+		char line[100];
+		fp.getline(line, sizeof(line));
+
+		int secondFrameIndex_X = 0, secondFrameIndex_Y = 0;
+		cli::array<Char>^sep = gcnew cli::array<Char>{' '};
+		System::String^ str = gcnew String(line);
+		cli::array<String^>^result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+		int blockSize = Convert::ToInt32(result[0]);
+		int FrameNo = Convert::ToInt32(result[1]);
+		label2->Text = "/" + FrameNo.ToString();
+		Bitmap ^Image = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
+		Bitmap ^Image_Arrow = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
+		SetZero(Image_Arrow);
+		while (Video_Bitmap_Decode.size() < FrameNo)
+		{
+
+			fp.getline(line, sizeof(line));
+			str = gcnew String(line);
+			result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+			int MotionVector_X = Convert::ToInt32(result[0]);
+			int MotionVector_Y = Convert::ToInt32(result[1]);
+			DrawArrow(Image_Arrow, Point(secondFrameIndex_X, secondFrameIndex_Y), Point(secondFrameIndex_X + MotionVector_X, secondFrameIndex_Y + MotionVector_Y));
+			for (int j = 0; j < blockSize; j++)
+				for (int i = 0; i < blockSize; i++)
+				{
+					Color c = First->GetPixel(secondFrameIndex_X + MotionVector_X + i, secondFrameIndex_Y + MotionVector_Y + j);
+					Image->SetPixel(i + secondFrameIndex_X, j + secondFrameIndex_Y, c);
+				}
+			secondFrameIndex_X += blockSize;
+			if (secondFrameIndex_X == Video_Bitmap_Decode[0]->Width)
 			{
-				Color c = First->GetPixel(secondFrameIndex_X +MotionVector_X+i, secondFrameIndex_Y +MotionVector_Y+j);
-				Image->SetPixel(i+ secondFrameIndex_X, j+ secondFrameIndex_Y, c);
+				secondFrameIndex_X = 0;
+				secondFrameIndex_Y += blockSize;
 			}
-		secondFrameIndex_X += blockSize;
-		if (secondFrameIndex_X  == Video_Bitmap_Decode[0]->Width)
-		{
-			secondFrameIndex_X = 0;
-			secondFrameIndex_Y+= blockSize;
+			if (secondFrameIndex_Y == Video_Bitmap_Decode[0]->Height)
+			{
+				secondFrameIndex_X = 0;
+				secondFrameIndex_Y = 0;
+				Video_Bitmap_Decode.push_back(gcnew Bitmap(Image));
+				SetZero(Image_Arrow);
+			}
 		}
-		if (secondFrameIndex_Y  == Video_Bitmap_Decode[0]->Height)
-		{
-			secondFrameIndex_X = 0;
-			secondFrameIndex_Y = 0;
-		
-			Video_Bitmap_Decode.push_back(gcnew Bitmap(Image));
-		
-		}
-	}
 
-	for (uint i = 0; i < Video_Bitmap_Decode.size(); i++)
-	{
-		double value = C_PSNR(Video_Bitmap[i],Video_Bitmap_Decode[i]);
-		chart_PSNR->Series["PSNR_S"]->Points->AddXY(i,(int)value);
+		/*for (uint i = 0; i < Video_Bitmap_Decode.size(); i++)
+		{
+			double value = C_PSNR(Video_Bitmap[i], Video_Bitmap_Decode[i]);
+			chart_PSNR->Series["PSNR_S"]->Points->AddXY(i, (int)value);
+		}*/
+		fp.close();
+		BtnDecode_Play->Visible = true;
+		pictureBox_MotionVector->Size.Width = Video_Bitmap[1]->Width;
+		pictureBox_MotionVector->Size.Height = Video_Bitmap[1]->Height;
 	}
-	fp.close();
-	BtnDecode_Play->Visible = true;
-	pictureBox_MotionVector->Size.Width = Video_Bitmap[1]->Width;
-	pictureBox_MotionVector->Size.Height = Video_Bitmap[1]->Height;
-	pictureBox_MotionVector->Image= Video_Bitmap[1];
 }
 private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	System::String ^str = comboBox1->Text->Substring(0, 1);
@@ -972,10 +1598,16 @@ private: System::Void BtnDecode_Play_Click(System::Object^  sender, System::Even
 	{
 		label1->Text = (i+1).ToString();
 		label1->Refresh();
-		pictureBox_Reference->Image = Video_Bitmap_Decode[i];
+		pictureBox_Current->Image = Video_Bitmap_Decode[i];
+		pictureBox_Current->Refresh();
+		pictureBox_Reference->Image = Video_Bitmap[i];
 		pictureBox_Reference->Refresh();
 		_sleep(50);
 	}
+}
+
+private: System::Void Btn_Th_Pause_Click(System::Object^  sender, System::EventArgs^  e) {
+	thread->Suspend();
 }
 };
 }
