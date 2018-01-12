@@ -261,6 +261,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  four_connect;
 
 private: System::Windows::Forms::ToolStripMenuItem^  eight_connect;
 private: System::Windows::Forms::Label^  label_ObjectCount;
+private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
+
 
 
 
@@ -417,6 +419,7 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			this->groupBox11 = (gcnew System::Windows::Forms::GroupBox());
 			this->toolStrip8 = (gcnew System::Windows::Forms::ToolStrip());
 			this->toolStripButton11 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->Btn_HistrogramSpecification = (gcnew System::Windows::Forms::ToolStripButton());
 			this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
 			this->label48 = (gcnew System::Windows::Forms::Label());
 			this->LowPassSize = (gcnew System::Windows::Forms::NumericUpDown());
@@ -563,7 +566,7 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			// four_connect
 			// 
 			this->four_connect->Name = L"four_connect";
-			this->four_connect->Size = System::Drawing::Size(156, 26);
+			this->four_connect->Size = System::Drawing::Size(105, 22);
 			this->four_connect->Text = L"4連通";
 			this->four_connect->Click += gcnew System::EventHandler(this, &ImageProcessUI::four_connect_Click);
 			// 
@@ -571,7 +574,7 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			// 
 			this->eight_connect->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"eight_connect.Image")));
 			this->eight_connect->Name = L"eight_connect";
-			this->eight_connect->Size = System::Drawing::Size(156, 26);
+			this->eight_connect->Size = System::Drawing::Size(105, 22);
 			this->eight_connect->Text = L"8連通";
 			this->eight_connect->Click += gcnew System::EventHandler(this, &ImageProcessUI::eight_connect_Click);
 			// 
@@ -1808,7 +1811,7 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			this->groupBox11->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox11->Name = L"groupBox11";
 			this->groupBox11->Padding = System::Windows::Forms::Padding(2);
-			this->groupBox11->Size = System::Drawing::Size(94, 80);
+			this->groupBox11->Size = System::Drawing::Size(94, 81);
 			this->groupBox11->TabIndex = 21;
 			this->groupBox11->TabStop = false;
 			this->groupBox11->Text = L"直方圖等化";
@@ -1816,11 +1819,14 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			// toolStrip8
 			// 
 			this->toolStrip8->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->toolStrip8->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripButton11 });
+			this->toolStrip8->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->toolStripButton11,
+					this->Btn_HistrogramSpecification
+			});
 			this->toolStrip8->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip8->Location = System::Drawing::Point(2, 17);
 			this->toolStrip8->Name = L"toolStrip8";
-			this->toolStrip8->Size = System::Drawing::Size(90, 38);
+			this->toolStrip8->Size = System::Drawing::Size(90, 84);
 			this->toolStrip8->TabIndex = 0;
 			this->toolStrip8->Text = L"toolStrip8";
 			// 
@@ -1832,6 +1838,15 @@ private: System::Windows::Forms::Label^  label_ObjectCount;
 			this->toolStripButton11->Size = System::Drawing::Size(88, 24);
 			this->toolStripButton11->Text = L"直方圖等化";
 			this->toolStripButton11->Click += gcnew System::EventHandler(this, &ImageProcessUI::toolStripButton11_Click);
+			// 
+			// Btn_HistrogramSpecification
+			// 
+			this->Btn_HistrogramSpecification->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"Btn_HistrogramSpecification.Image")));
+			this->Btn_HistrogramSpecification->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->Btn_HistrogramSpecification->Name = L"Btn_HistrogramSpecification";
+			this->Btn_HistrogramSpecification->Size = System::Drawing::Size(88, 24);
+			this->Btn_HistrogramSpecification->Text = L"特規化";
+			this->Btn_HistrogramSpecification->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_HistrogramSpecification_Click);
 			// 
 			// groupBox12
 			// 
@@ -2195,13 +2210,20 @@ private: System::Void openToolStripMenuItem_Click(System::Object^  sender, Syste
 		OpenFileDialog^ opnFileDlg = gcnew OpenFileDialog;
 		opnFileDlg->Multiselect = true;
 		if (opnFileDlg->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			if (opnFileDlg->FileName->IndexOf("jpeg") > 0 || opnFileDlg->FileName->IndexOf("jpg") > 0 || opnFileDlg->FileName->IndexOf("bmp"))
+
+
+			cli::array<Char>^dot = gcnew cli::array<Char>{'.'};
+		
+			cli::array<String^>^result = opnFileDlg->FileName->Split(dot, StringSplitOptions::RemoveEmptyEntries);
+
+
+			if ((result[1]=="jpeg") || (result[1] == "jpg") || (result[1] == "bmp"))
 			{
 				Img_Source = gcnew Bitmap(opnFileDlg->FileName);
 				pictureBox_Source1->Image = Img_Source;
 				//pictureBox2->Image = Img_Source;
 			}
-			if (opnFileDlg->FileName->IndexOf("pcx") > 0)
+			if (result[1]=="pcx")
 			{
 				PCXData data;
 				LoadPCXFile(opnFileDlg->FileName, data);
@@ -4355,5 +4377,57 @@ private:void Connect2(Bitmap^src, Bitmap ^%dst)
 			 }
 
 		 }
+private:void HistorgramSpeciffication()
+{
+	uint16_t Statistic_src1[256] = { 0 }, Statistic_src2[256] = { 0 };
+	for (uint16_t i = 0; i < Img_Source->Width; i++)
+		for (uint16_t j = 0; j < Img_Source->Height; j++)
+		{
+			Statistic_src1[Img_Source->GetPixel(i, j).R]++;
+		}
+	for (uint16_t i = 0; i < Img_Source2->Width; i++)
+		for (uint16_t j = 0; j < Img_Source2->Height; j++)
+		{
+			Statistic_src2[Img_Source2->GetPixel(i, j).R]++;
+		}
+	uint32_t sum1 = 0, sum2 = 0;
+	uint32_t sumtemp1[256] = { 0 }, sumtemp2[256] = { 0 };
+
+	for (uint16_t k = 0; k < 256; k++)
+	{
+		sum1 += Statistic_src1[k];
+		float temp = 255 * (float)sum1 / (float)(Img_Source->Width* Img_Source->Height);
+		sumtemp1[k] = temp + 0.5;
+
+		sum2 += Statistic_src2[k];
+		temp = 255 * (float)sum2 / (float)(Img_Source2->Width* Img_Source2->Height);
+		sumtemp2[k] = temp + 0.5;
+	}
+
+
+	int histMap_[256] = { 0 };
+
+	for (int i = 0; i < 256; i++)
+		histMap_[(int)sumtemp2[i]] = i;
+	double dstMap[256];
+	for (int i = 0; i < 256; i++) {
+		dstMap[i] = histMap_[(int)sumtemp1[i]];
+	}
+	Bitmap ^dst = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	for (uint16_t i = 0; i < 256; i++)
+		if (dstMap[i] == 0)
+			dstMap[i] = dstMap[i - 1];
+	for (uint16_t i = 0; i < Img_Source->Width; i++)
+		for (uint16_t j = 0; j < Img_Source->Height; j++)
+		{
+		 int value=(int)dstMap[Img_Source->GetPixel(i,j).R];
+	     dst->SetPixel(i, j,Color::FromArgb(value, value, value));
+        }
+	
+
+}
+private: System::Void Btn_HistrogramSpecification_Click(System::Object^  sender, System::EventArgs^  e) {
+
+}
 };
 }

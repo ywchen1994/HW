@@ -1279,7 +1279,7 @@ private:uint MatchMethodCaculate(Bitmap^ %src1,Bitmap ^%src2)
 						   }
 						   else if (Score >= up_score)//上面較小
 						   {
-							   Score = down_score;
+							   Score = up_score;
 							   direction = up;
 							   Center.Y -= MaskSize; //Y向上
 						   }
