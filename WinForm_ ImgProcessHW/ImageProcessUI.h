@@ -3783,6 +3783,19 @@ private: System::Void LowPassSIze_ValueChanged(System::Object^  sender, System::
 
 	if (cBox_Outlier->Checked)
 	{
+		for(uint j = 0; j < Img_Source->Height; j++)
+			for (uint i = 0; i < Img_Source->Width; i++)
+			{
+				Bitmap^ temp = gcnew Bitmap(Size, Size);
+				Rectangle cloneRect = Rectangle(i, j, Size, Size);
+				temp = Img_Extended->Clone(cloneRect, Img_Extended->PixelFormat);
+				double average=Sum_of_Image(temp)-Img_Source->GetPixel(i,j).R;
+				average = average / 8;
+				if (Img_Source->GetPixel(i, j).R >= average)
+					Img_Filtered->SetPixel(i, j, Color::FromArgb(average, average, average));
+				else
+					Img_Filtered->SetPixel(i, j,Img_Source->GetPixel(i, j));
+			}
 	}
 	double SNR_Value = SNR(Img_Source, Img_Filtered);
 	label47->Text = "SNR: " + Math::Round(SNR_Value,2).ToString();
