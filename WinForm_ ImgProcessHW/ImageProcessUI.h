@@ -9,6 +9,8 @@
 #include"Bouncingball.h"
 #include"SelfDefineContrast.h"
 #include"Huffman.h"
+#include"SpecificationUI.h"
+#include <time.h>
 typedef unsigned int uint;
 typedef unsigned char uchar;
 namespace WinForm_ImgProcessHW {
@@ -215,6 +217,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 		/// 設計工具所需的變數。
 		/// </summary>
 		cliext::vector<Point>CloudLinePoint;
+		Point LBtnUP;
 private: System::Windows::Forms::Button^  Btn_CreateWndow;
 private: System::Windows::Forms::ToolStripButton^  toolStripButton6;
 private: System::Windows::Forms::GroupBox^  groupBox9;
@@ -262,11 +265,14 @@ private: System::Windows::Forms::ToolStripMenuItem^  four_connect;
 private: System::Windows::Forms::ToolStripMenuItem^  eight_connect;
 private: System::Windows::Forms::Label^  label_ObjectCount;
 private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
+private: System::Windows::Forms::Button^  Btn_absDiff;
+private: System::Windows::Forms::ToolStrip^  toolStrip10;
+private: System::Windows::Forms::ToolStripButton^  Btn_RGB_Inv;
+private: System::Windows::Forms::CheckBox^  cBox_Outlier;
 
+private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 
-
-
-		 Point LBtnUP;
+		 
 
 #pragma region Windows Form Designer generated code
 		ref struct PCXData//http://www.fysnet.net/pcxfile.htm  PCX解封包資料
@@ -366,6 +372,9 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			this->label45 = (gcnew System::Windows::Forms::Label());
 			this->pictureBox_Source2 = (gcnew System::Windows::Forms::PictureBox());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->toolStrip10 = (gcnew System::Windows::Forms::ToolStrip());
+			this->Btn_RGB_Inv = (gcnew System::Windows::Forms::ToolStripButton());
+			this->Btn_Gray_Inv = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStrip2 = (gcnew System::Windows::Forms::ToolStrip());
 			this->Btn_ToRed = (gcnew System::Windows::Forms::ToolStripButton());
 			this->Btn_ToGreen = (gcnew System::Windows::Forms::ToolStripButton());
@@ -444,6 +453,8 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			this->label50 = (gcnew System::Windows::Forms::Label());
 			this->Median_FilterSize = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label_ObjectCount = (gcnew System::Windows::Forms::Label());
+			this->Btn_absDiff = (gcnew System::Windows::Forms::Button());
+			this->cBox_Outlier = (gcnew System::Windows::Forms::CheckBox());
 			this->menuStrip1->SuspendLayout();
 			this->Tab_Image1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
@@ -453,6 +464,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Colomap2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Source2))->BeginInit();
 			this->groupBox1->SuspendLayout();
+			this->toolStrip10->SuspendLayout();
 			this->toolStrip2->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -1246,16 +1258,47 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			// groupBox1
 			// 
 			this->groupBox1->BackColor = System::Drawing::Color::Transparent;
+			this->groupBox1->Controls->Add(this->toolStrip10);
 			this->groupBox1->Controls->Add(this->toolStrip2);
 			this->groupBox1->Controls->Add(this->toolStrip1);
 			this->groupBox1->Location = System::Drawing::Point(16, 26);
 			this->groupBox1->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox1->Name = L"groupBox1";
 			this->groupBox1->Padding = System::Windows::Forms::Padding(2);
-			this->groupBox1->Size = System::Drawing::Size(95, 70);
+			this->groupBox1->Size = System::Drawing::Size(95, 131);
 			this->groupBox1->TabIndex = 9;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"色彩轉換";
+			// 
+			// toolStrip10
+			// 
+			this->toolStrip10->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->Btn_RGB_Inv, this->Btn_Gray_Inv });
+			this->toolStrip10->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
+			this->toolStrip10->Location = System::Drawing::Point(2, 69);
+			this->toolStrip10->Name = L"toolStrip10";
+			this->toolStrip10->Size = System::Drawing::Size(91, 55);
+			this->toolStrip10->TabIndex = 2;
+			this->toolStrip10->Text = L"toolStrip10";
+			// 
+			// Btn_RGB_Inv
+			// 
+			this->Btn_RGB_Inv->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->Btn_RGB_Inv->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"Btn_RGB_Inv.Image")));
+			this->Btn_RGB_Inv->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->Btn_RGB_Inv->Name = L"Btn_RGB_Inv";
+			this->Btn_RGB_Inv->Size = System::Drawing::Size(89, 19);
+			this->Btn_RGB_Inv->Text = L"RGB負片";
+			this->Btn_RGB_Inv->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_RGB_Inv_Click);
+			// 
+			// Btn_Gray_Inv
+			// 
+			this->Btn_Gray_Inv->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+			this->Btn_Gray_Inv->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"Btn_Gray_Inv.Image")));
+			this->Btn_Gray_Inv->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->Btn_Gray_Inv->Name = L"Btn_Gray_Inv";
+			this->Btn_Gray_Inv->Size = System::Drawing::Size(89, 19);
+			this->Btn_Gray_Inv->Text = L"Gray_負片";
+			this->Btn_Gray_Inv->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_Gray_Inv_Click);
 			// 
 			// toolStrip2
 			// 
@@ -1753,7 +1796,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			// label47
 			// 
 			this->label47->AutoSize = true;
-			this->label47->Location = System::Drawing::Point(712, 642);
+			this->label47->Location = System::Drawing::Point(797, 657);
 			this->label47->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label47->Name = L"label47";
 			this->label47->Size = System::Drawing::Size(0, 12);
@@ -1826,7 +1869,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			this->toolStrip8->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip8->Location = System::Drawing::Point(2, 17);
 			this->toolStrip8->Name = L"toolStrip8";
-			this->toolStrip8->Size = System::Drawing::Size(90, 84);
+			this->toolStrip8->Size = System::Drawing::Size(90, 65);
 			this->toolStrip8->TabIndex = 0;
 			this->toolStrip8->Text = L"toolStrip8";
 			// 
@@ -1850,13 +1893,14 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			// 
 			// groupBox12
 			// 
+			this->groupBox12->Controls->Add(this->cBox_Outlier);
 			this->groupBox12->Controls->Add(this->label48);
 			this->groupBox12->Controls->Add(this->LowPassSize);
 			this->groupBox12->Location = System::Drawing::Point(1167, 26);
 			this->groupBox12->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox12->Name = L"groupBox12";
 			this->groupBox12->Padding = System::Windows::Forms::Padding(2);
-			this->groupBox12->Size = System::Drawing::Size(123, 51);
+			this->groupBox12->Size = System::Drawing::Size(123, 69);
 			this->groupBox12->TabIndex = 22;
 			this->groupBox12->TabStop = false;
 			this->groupBox12->Text = L"低通濾波器";
@@ -1990,7 +2034,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			// 
 			this->groupBox14->Controls->Add(this->A);
 			this->groupBox14->Controls->Add(this->label49);
-			this->groupBox14->Location = System::Drawing::Point(1167, 87);
+			this->groupBox14->Location = System::Drawing::Point(1167, 145);
 			this->groupBox14->Name = L"groupBox14";
 			this->groupBox14->Size = System::Drawing::Size(130, 56);
 			this->groupBox14->TabIndex = 24;
@@ -2100,10 +2144,30 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			// label_ObjectCount
 			// 
 			this->label_ObjectCount->AutoSize = true;
-			this->label_ObjectCount->Location = System::Drawing::Point(718, 645);
+			this->label_ObjectCount->Location = System::Drawing::Point(803, 660);
 			this->label_ObjectCount->Name = L"label_ObjectCount";
 			this->label_ObjectCount->Size = System::Drawing::Size(0, 12);
 			this->label_ObjectCount->TabIndex = 26;
+			// 
+			// Btn_absDiff
+			// 
+			this->Btn_absDiff->Location = System::Drawing::Point(226, 118);
+			this->Btn_absDiff->Name = L"Btn_absDiff";
+			this->Btn_absDiff->Size = System::Drawing::Size(75, 23);
+			this->Btn_absDiff->TabIndex = 27;
+			this->Btn_absDiff->Text = L"影像相減";
+			this->Btn_absDiff->UseVisualStyleBackColor = true;
+			this->Btn_absDiff->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_absDiff_Click);
+			// 
+			// cBox_Outlier
+			// 
+			this->cBox_Outlier->AutoSize = true;
+			this->cBox_Outlier->Location = System::Drawing::Point(13, 47);
+			this->cBox_Outlier->Name = L"cBox_Outlier";
+			this->cBox_Outlier->Size = System::Drawing::Size(56, 16);
+			this->cBox_Outlier->TabIndex = 2;
+			this->cBox_Outlier->Text = L"Outlier";
+			this->cBox_Outlier->UseVisualStyleBackColor = true;
 			// 
 			// ImageProcessUI
 			// 
@@ -2111,6 +2175,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoSize = true;
 			this->ClientSize = System::Drawing::Size(1438, 826);
+			this->Controls->Add(this->Btn_absDiff);
 			this->Controls->Add(this->label_ObjectCount);
 			this->Controls->Add(this->groupBox15);
 			this->Controls->Add(this->groupBox14);
@@ -2148,6 +2213,8 @@ private: System::Windows::Forms::ToolStripButton^  Btn_HistrogramSpecification;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Source2))->EndInit();
 			this->groupBox1->ResumeLayout(false);
 			this->groupBox1->PerformLayout();
+			this->toolStrip10->ResumeLayout(false);
+			this->toolStrip10->PerformLayout();
 			this->toolStrip2->ResumeLayout(false);
 			this->toolStrip2->PerformLayout();
 			this->toolStrip1->ResumeLayout(false);
@@ -3434,6 +3501,7 @@ private: System::Void toolStripButton8_Click(System::Object^  sender, System::Ev
 		}
 	double SNR_Value = SNR(Img_Source,Img_processed);
 	label47->Text = "SNR: "+SNR_Value.ToString();
+	label47->Refresh();
 	pictureBox_Result->Image = Img_processed;
 	pictureBox_Result->Refresh();
 	delete Img_processed;
@@ -3450,20 +3518,51 @@ private: System::Void toolStripButton8_Click(System::Object^  sender, System::Ev
 	bitUI->label9->Text = "Bit_code";
 	bitUI->Show();
 }
- private:double SNR(Bitmap ^%Source, Bitmap ^% TestImage)
-{
-	 double SNR_Value = 0;
-	 double SumofSource = 0;
-	 double SumofTest = 0;//Source-Test
-	 for (UInt16 i = 0; i < Source->Width; i++)
-		 for (UInt16 j = 0; j < Source->Width; j++)
-		 {
-			 SumofSource += Source->GetPixel(i, j).R;
-			 SumofTest += Source->GetPixel(i, j).R - TestImage->GetPixel(i, j).R;
-		 }
-	 SNR_Value= Math::Log10(SumofSource/ SumofTest);
-	 return 20 * SNR_Value;
+int colorToInt(Color color) {
+return (color.R + color.G + color.B) / 3;
 }
+private:double SNR(Bitmap^ oriImg, Bitmap^ noiseImg) {
+	int n = oriImg->Height * oriImg->Width;
+// compute mean of signal
+			 double sumU = 0.0;
+			 for (int y = 0; y != oriImg->Height; ++y) {
+				 for (int x = 0; x != oriImg->Width; ++x) {
+					 sumU += (double)colorToInt(oriImg->GetPixel(x, y));
+				 }
+			 }
+			 double u = (double)sumU / n;
+
+			 // compute variance of signal
+			 double diffVS = 0.0, sumVS = 0.0;
+			 for (int y = 0; y != oriImg->Height; ++y) {
+				 for (int x = 0; x != oriImg->Width; ++x) {
+					 diffVS = (double)colorToInt(oriImg->GetPixel(x, y)) - u;
+					 sumVS += diffVS * diffVS;
+				 }
+			 }
+			 double VS = (double)sumVS / n;
+
+			 // compute mean of noise
+			 double sumN = 0.0;
+			 for (int y = 0; y != noiseImg->Height; ++y) {
+				 for (int x = 0; x != noiseImg->Width; ++x) {
+					 sumN += (colorToInt(noiseImg->GetPixel(x, y)) - colorToInt(oriImg->GetPixel(x, y)));
+				 }
+			 }
+			 double un = (double)sumN / n;
+
+			 // compute variance of noise
+			 double diffVN = 0.0, sumVN = 0.0;
+			 for (int y = 0; y != noiseImg->Height; ++y) {
+				 for (int x = 0; x != noiseImg->Width; ++x) {
+					 diffVN = (double)colorToInt(noiseImg->GetPixel(x, y)) - colorToInt(oriImg->GetPixel(x, y)) - un;
+					 sumVN += diffVN * diffVN;
+				 }
+			 }
+			 double VN = (double)sumVN / n;
+
+			 return 20 * log10(sqrt(VS) / sqrt(VN));
+ }
 private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bitmap ^Img_processed;
 	RGBHistigram ^RGB_His = gcnew RGBHistigram();
@@ -3658,23 +3757,40 @@ private:int Sum_of_Image(Bitmap^% src)
 }
 private: System::Void LowPassSIze_ValueChanged(System::Object^  sender, System::EventArgs^  e) {
 	int Size = Convert::ToInt32(LowPassSize->Text);
+	Size = Size+2;
 	Bitmap ^ Img_Extended;
 	Bitmap ^Img_Filtered = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
-	ImageExtend(Img_Source,(Size-1)/2, Img_Extended);
-	for(uint j=0;j<Img_Source->Height;j++)
-		for (uint i = 0; i < Img_Source->Width; i++)
-		{
-			Bitmap^ temp = gcnew Bitmap(Size, Size);
-			Rectangle cloneRect = Rectangle(i, j, Size, Size);
-			temp=Img_Extended->Clone(cloneRect, Img_Extended->PixelFormat);
-			double sum=(double)Sum_of_Image(temp);delete temp;
-			sum /= pow(Size,2);
-			Img_Filtered->SetPixel(i,j,Color::FromArgb(sum, sum, sum));
-		}
-	delete Img_Extended;
+	Bitmap ^Img_AddNoise;
+	Noise(Img_Source, Img_AddNoise);
+
+	pictureBox_Source2->Image = Img_AddNoise;
+	pictureBox_Source2->Refresh();
+
+	ImageExtend(Img_AddNoise,(Size-1)/2, Img_Extended);
+	if (!cBox_Outlier->Checked)
+	{
+		for (uint j = 0; j < Img_Source->Height; j++)
+			for (uint i = 0; i < Img_Source->Width; i++)
+			{
+				Bitmap^ temp = gcnew Bitmap(Size, Size);
+				Rectangle cloneRect = Rectangle(i, j, Size, Size);
+				temp = Img_Extended->Clone(cloneRect, Img_Extended->PixelFormat);
+				double sum = (double)Sum_of_Image(temp); delete temp;
+				sum /= pow(Size, 2);
+				Img_Filtered->SetPixel(i, j, Color::FromArgb(sum, sum, sum));
+			}
+	}
+
+	if (cBox_Outlier->Checked)
+	{
+	}
+	double SNR_Value = SNR(Img_Source, Img_Filtered);
+	label47->Text = "SNR: " + Math::Round(SNR_Value,2).ToString();
+	label47->Refresh();
 	pictureBox_Result->Image = Img_Filtered;
 	pictureBox_Result->Refresh();
-	delete Img_Filtered;
+	
+	
 }
 private:int CalculatorCoeffwithROI(Bitmap ^%src, int *coefficient)
 {
@@ -3706,11 +3822,11 @@ private: System::Void toolStripButton12_Click(System::Object^  sender, System::E
 		}
 	Bitmap ^HE;
 	HistogramEqualize(Img_Filtered, HE);
-	delete Img_Extended;
+	
 	pictureBox_Result->Image = HE;
 	pictureBox_Result->Refresh();
-	delete Img_Filtered;
-	delete HE;
+
+	GC::Collect();
 }
 private: System::Void toolStripButton13_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bitmap ^ Img_Extended;
@@ -3948,7 +4064,11 @@ private: System::Void Median_FilterSize_ValueChanged(System::Object^  sender, Sy
 	Bitmap ^Img_Extended;
 	int mask_size=Convert::ToInt32(Median_FilterSize->Text);
 	mask_size += 2;
-	ImageExtend(Img_Source, (mask_size - 1) / 2, Img_Extended);
+	Bitmap^ Img_AddNoise;
+	Noise(Img_Source,Img_AddNoise);
+	pictureBox_Source2->Image = Img_AddNoise;
+	pictureBox_Source2->Refresh();
+	ImageExtend(Img_AddNoise, (mask_size - 1) / 2, Img_Extended);
 	Bitmap ^Img_Filtered = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
 	if (RadioBtn_Square->Checked)
 		{
@@ -4015,9 +4135,13 @@ private: System::Void Median_FilterSize_ValueChanged(System::Object^  sender, Sy
 			}
 		}
 	}
+	double SNR_Value = SNR(Img_Source, Img_Filtered);
+	SNR_Value = Math::Round(SNR_Value, 2);
+	label47->Text = "SNR: "+Math::Round(SNR_Value, 2).ToString();
+
 	pictureBox_Result->Image = Img_Filtered;
 	pictureBox_Result->Refresh();
-	delete Img_Filtered;
+	GC::Collect();
 }
 private:int GetMedian_Square(Bitmap^src)
 {
@@ -4379,6 +4503,9 @@ private:void Connect2(Bitmap^src, Bitmap ^%dst)
 		 }
 private:void HistorgramSpeciffication()
 {
+	SpecificationUI ^UI = gcnew SpecificationUI;
+	UI->pictureBox1->Image = Img_Source;
+	UI->pictureBox2->Image = Img_Source2;
 	uint16_t Statistic_src1[256] = { 0 }, Statistic_src2[256] = { 0 };
 	for (uint16_t i = 0; i < Img_Source->Width; i++)
 		for (uint16_t j = 0; j < Img_Source->Height; j++)
@@ -4395,10 +4522,13 @@ private:void HistorgramSpeciffication()
 
 	for (uint16_t k = 0; k < 256; k++)
 	{
+		UI->chart1->Series["Series1"]->Points->AddXY(k, Statistic_src1[k]);
 		sum1 += Statistic_src1[k];
 		float temp = 255 * (float)sum1 / (float)(Img_Source->Width* Img_Source->Height);
 		sumtemp1[k] = temp + 0.5;
 
+
+		UI->chart2->Series["Series1"]->Points->AddXY(k, Statistic_src2[k]);
 		sum2 += Statistic_src2[k];
 		temp = 255 * (float)sum2 / (float)(Img_Source2->Width* Img_Source2->Height);
 		sumtemp2[k] = temp + 0.5;
@@ -4417,17 +4547,69 @@ private:void HistorgramSpeciffication()
 	for (uint16_t i = 0; i < 256; i++)
 		if (dstMap[i] == 0)
 			dstMap[i] = dstMap[i - 1];
+	uint result[256] = { 0 };
 	for (uint16_t i = 0; i < Img_Source->Width; i++)
 		for (uint16_t j = 0; j < Img_Source->Height; j++)
 		{
 		 int value=(int)dstMap[Img_Source->GetPixel(i,j).R];
 	     dst->SetPixel(i, j,Color::FromArgb(value, value, value));
+		 result[value]++;
         }
-	
-
+	for(uint i=0;i<256;i++)
+		UI->chart3->Series["Series1"]->Points->AddXY(i, result[i]);
+	UI->pictureBox3->Image = dst;
+	UI->ShowDialog();
 }
 private: System::Void Btn_HistrogramSpecification_Click(System::Object^  sender, System::EventArgs^  e) {
+	HistorgramSpeciffication();
+}
+private: System::Void Btn_absDiff_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^Img_Processed = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	for(uint i=0;i<Img_Source->Width;i++)
+		for (uint j = 0; j < Img_Source->Height; j++)
+		{
+			int value = abs(Img_Source->GetPixel(i, j).R - Img_Source2->GetPixel(i, j).R);
+			Img_Processed->SetPixel(i,j,Color::FromArgb(value, value, value));
+		}
+	pictureBox_Result->Image = Img_Processed;
+}
+private: System::Void Btn_RGB_Inv_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^Img_Processed = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	for (uint i = 0; i < Img_Source->Width; i++)
+		for (uint j = 0; j < Img_Source->Height; j++)
+		{
+			int R = Img_Source->GetPixel(i, j).R;
+			int G = Img_Source->GetPixel(i, j).G;
+			int B = Img_Source->GetPixel(i, j).B;
+			Img_Processed->SetPixel(i, j, Color::FromArgb(255-R,255-G,255-B));
+		}
+	pictureBox_Result->Image = Img_Processed;
+}
+private: System::Void Btn_Gray_Inv_Click(System::Object^  sender, System::EventArgs^  e) {
+	Bitmap ^Img_Processed = gcnew Bitmap(Img_Source->Width, Img_Source->Height);
+	for (uint i = 0; i < Img_Source->Width; i++)
+		for (uint j = 0; j < Img_Source->Height; j++)
+		{
+			int R = Img_Source->GetPixel(i, j).R;
+			Img_Processed->SetPixel(i, j, Color::FromArgb(255 - R, 255 - R, 255 - R));
+		}
+	pictureBox_Result->Image = Img_Processed;
+}
+private:void Noise(Bitmap ^%src, Bitmap ^%dst)     //撒雜點
+{
+	dst = gcnew Bitmap(src->Width, src->Height);
+	const int RadomNum = 6500;
+	int x_index[RadomNum]; int y_index[RadomNum];
+	Rectangle cloneRect = Rectangle(0, 0, src->Width, src->Height);
+	dst = src->Clone(cloneRect, src->PixelFormat);
 
+	time_t t;
+	srand((unsigned)time(&t));
+	for (int k = 0; k<RadomNum; ++k)
+	{	
+		dst->SetPixel(rand() % src->Width,rand()%src->Height,Color::FromArgb(255,255,255));
+	}
+	
 }
 };
 }

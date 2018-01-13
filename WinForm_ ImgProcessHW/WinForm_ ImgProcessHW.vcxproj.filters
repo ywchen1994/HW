@@ -45,6 +45,9 @@
     <ClCompile Include="VideoProcessUI.cpp">
       <Filter>標頭檔</Filter>
     </ClCompile>
+    <ClCompile Include="SpecificationUI.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadingUI.h">
@@ -72,6 +75,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="VideoProcessUI.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecificationUI.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

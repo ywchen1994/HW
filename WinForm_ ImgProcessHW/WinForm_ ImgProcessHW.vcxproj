@@ -143,6 +143,7 @@
     <ClCompile Include="RGBHistigram.cpp" />
     <ClCompile Include="SelectUI.cpp" />
     <ClCompile Include="SelfDefineContrast.cpp" />
+    <ClCompile Include="SpecificationUI.cpp" />
     <ClCompile Include="VideoProcessUI.cpp" />
     <ClCompile Include="WaterMarkUI.cpp" />
   </ItemGroup>
@@ -169,6 +170,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="SelfDefineContrast.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="SpecificationUI.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="VideoProcessUI.h">
@@ -200,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelfDefineContrast.resx">
       <DependentUpon>SelfDefineContrast.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpecificationUI.resx">
+      <DependentUpon>SpecificationUI.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoProcessUI.resx">
       <DependentUpon>VideoProcessUI.h</DependentUpon>
