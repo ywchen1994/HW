@@ -114,7 +114,6 @@ namespace WinForm_ImgProcessHW {
 			this->chart2->Location = System::Drawing::Point(424, 362);
 			this->chart2->Name = L"chart2";
 			series1->ChartArea = L"ChartArea1";
-			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series1->Legend = L"Legend1";
 			series1->Name = L"Series1";
 			this->chart2->Series->Add(series1);
@@ -134,7 +133,6 @@ namespace WinForm_ImgProcessHW {
 			this->chart1->Location = System::Drawing::Point(424, 31);
 			this->chart1->Name = L"chart1";
 			series2->ChartArea = L"ChartArea1";
-			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series2->Legend = L"Legend1";
 			series2->Name = L"Series1";
 			this->chart1->Series->Add(series2);
@@ -154,7 +152,6 @@ namespace WinForm_ImgProcessHW {
 			this->chart3->Location = System::Drawing::Point(859, 31);
 			this->chart3->Name = L"chart3";
 			series3->ChartArea = L"ChartArea1";
-			series3->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series3->Legend = L"Legend1";
 			series3->Name = L"Series1";
 			this->chart3->Series->Add(series3);

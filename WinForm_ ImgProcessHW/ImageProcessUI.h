@@ -430,6 +430,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->toolStripButton11 = (gcnew System::Windows::Forms::ToolStripButton());
 			this->Btn_HistrogramSpecification = (gcnew System::Windows::Forms::ToolStripButton());
 			this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
+			this->cBox_Outlier = (gcnew System::Windows::Forms::CheckBox());
 			this->label48 = (gcnew System::Windows::Forms::Label());
 			this->LowPassSize = (gcnew System::Windows::Forms::NumericUpDown());
 			this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
@@ -454,7 +455,6 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->Median_FilterSize = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label_ObjectCount = (gcnew System::Windows::Forms::Label());
 			this->Btn_absDiff = (gcnew System::Windows::Forms::Button());
-			this->cBox_Outlier = (gcnew System::Windows::Forms::CheckBox());
 			this->menuStrip1->SuspendLayout();
 			this->Tab_Image1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
@@ -1685,7 +1685,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->groupBox8->Margin = System::Windows::Forms::Padding(2);
 			this->groupBox8->Name = L"groupBox8";
 			this->groupBox8->Padding = System::Windows::Forms::Padding(2);
-			this->groupBox8->Size = System::Drawing::Size(89, 146);
+			this->groupBox8->Size = System::Drawing::Size(89, 162);
 			this->groupBox8->TabIndex = 17;
 			this->groupBox8->TabStop = false;
 			this->groupBox8->Text = L"縮放";
@@ -1709,7 +1709,7 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->toolStrip5->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::VerticalStackWithOverflow;
 			this->toolStrip5->Location = System::Drawing::Point(10, 38);
 			this->toolStrip5->Name = L"toolStrip5";
-			this->toolStrip5->Size = System::Drawing::Size(80, 119);
+			this->toolStrip5->Size = System::Drawing::Size(80, 138);
 			this->toolStrip5->TabIndex = 0;
 			this->toolStrip5->Text = L"toolStrip5";
 			// 
@@ -1796,11 +1796,12 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			// label47
 			// 
 			this->label47->AutoSize = true;
-			this->label47->Location = System::Drawing::Point(797, 657);
+			this->label47->Location = System::Drawing::Point(742, 657);
 			this->label47->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->label47->Name = L"label47";
-			this->label47->Size = System::Drawing::Size(0, 12);
+			this->label47->Size = System::Drawing::Size(11, 12);
 			this->label47->TabIndex = 19;
+			this->label47->Text = L"1";
 			// 
 			// groupBox10
 			// 
@@ -1904,6 +1905,16 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->groupBox12->TabIndex = 22;
 			this->groupBox12->TabStop = false;
 			this->groupBox12->Text = L"低通濾波器";
+			// 
+			// cBox_Outlier
+			// 
+			this->cBox_Outlier->AutoSize = true;
+			this->cBox_Outlier->Location = System::Drawing::Point(13, 47);
+			this->cBox_Outlier->Name = L"cBox_Outlier";
+			this->cBox_Outlier->Size = System::Drawing::Size(56, 16);
+			this->cBox_Outlier->TabIndex = 2;
+			this->cBox_Outlier->Text = L"Outlier";
+			this->cBox_Outlier->UseVisualStyleBackColor = true;
 			// 
 			// label48
 			// 
@@ -2144,10 +2155,11 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			// label_ObjectCount
 			// 
 			this->label_ObjectCount->AutoSize = true;
-			this->label_ObjectCount->Location = System::Drawing::Point(803, 660);
+			this->label_ObjectCount->Location = System::Drawing::Point(949, 657);
 			this->label_ObjectCount->Name = L"label_ObjectCount";
-			this->label_ObjectCount->Size = System::Drawing::Size(0, 12);
+			this->label_ObjectCount->Size = System::Drawing::Size(11, 12);
 			this->label_ObjectCount->TabIndex = 26;
+			this->label_ObjectCount->Text = L"1";
 			// 
 			// Btn_absDiff
 			// 
@@ -2158,16 +2170,6 @@ private: System::Windows::Forms::ToolStripButton^  Btn_Gray_Inv;
 			this->Btn_absDiff->Text = L"影像相減";
 			this->Btn_absDiff->UseVisualStyleBackColor = true;
 			this->Btn_absDiff->Click += gcnew System::EventHandler(this, &ImageProcessUI::Btn_absDiff_Click);
-			// 
-			// cBox_Outlier
-			// 
-			this->cBox_Outlier->AutoSize = true;
-			this->cBox_Outlier->Location = System::Drawing::Point(13, 47);
-			this->cBox_Outlier->Name = L"cBox_Outlier";
-			this->cBox_Outlier->Size = System::Drawing::Size(56, 16);
-			this->cBox_Outlier->TabIndex = 2;
-			this->cBox_Outlier->Text = L"Outlier";
-			this->cBox_Outlier->UseVisualStyleBackColor = true;
 			// 
 			// ImageProcessUI
 			// 
@@ -3072,41 +3074,39 @@ public:void ZoomFunction(Bitmap ^src, Bitmap ^%dst, double ZoomRate, int code)  
 			  float real_Y = j / ZoomRate;
 			  int set_X = (int)real_X; //pixel位置為整數
 			  int set_Y = (int)real_Y;
-								 float difference_X = real_X - set_X;  //實際pixel位置與放大倍數間的誤差
-								 float difference_Y = real_Y - set_Y;
-								 if (difference_X < 0)
-								 {
-									 difference_X = 1 + difference_X;
-									 set_X = set_X - 1;
-								 }
+			  float difference_X = real_X - set_X;  //實際pixel位置與放大倍數間的誤差
+		      float difference_Y = real_Y - set_Y;
+			  if (difference_X < 0)
+			  {
+				difference_X = 1 + difference_X;
+				set_X = set_X - 1;
+			  }
+			  if (difference_Y < 0)
+			  {
+			    difference_Y = 1 + difference_Y;
+				set_Y = set_Y - 1;
+			  }
+			  if (set_X >= src->Width - 1)//檢查是否有超過原圖的寬(插值會以靠近的那個pixel作為該點的值，所以可能超出範圍)
+			  {
+				 difference_X = 1;
+			     set_X = set_X - 1;
+			  }
+			  if (set_Y >= src->Height - 1)//檢查是否有超過原圖的高
+			  {
+				difference_Y = 1;
+				set_Y = set_Y - 1;
+			   }
+			  int R = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).R + src->GetPixel(set_X, set_Y).R) + difference_X * (src->GetPixel(set_X + 1, set_Y).R + src->GetPixel(set_X, set_Y + 1).R));
+			  int G = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).G + src->GetPixel(set_X, set_Y).G) + difference_X * (src->GetPixel(set_X + 1, set_Y).G + src->GetPixel(set_X, set_Y + 1).G));
+			  int B = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).B + src->GetPixel(set_X, set_Y).B) + difference_X * (src->GetPixel(set_X + 1, set_Y).B + src->GetPixel(set_X, set_Y + 1).B));
 
-								 if (difference_Y < 0)
-								 {
-									 difference_Y = 1 + difference_Y;
-									 set_Y = set_Y - 1;
-								 }
-
-								 if (set_X >= src->Width - 1)//檢查是否有超過原圖的寬(插值會以靠近的那個pixel作為該點的值，所以可能超出範圍)
-								 {
-									 difference_X = 1;
-									 set_X = set_X - 1;
-								 }
-								 if (set_Y >= src->Height - 1)//檢查是否有超過原圖的高
-								 {
-									 difference_Y = 1;
-									 set_Y = set_Y - 1;
-								 }
-								 int R = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).R + src->GetPixel(set_X, set_Y).R) + difference_X * (src->GetPixel(set_X + 1, set_Y).R + src->GetPixel(set_X, set_Y + 1).R));
-								 int G = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).G + src->GetPixel(set_X, set_Y).G) + difference_X * (src->GetPixel(set_X + 1, set_Y).G + src->GetPixel(set_X, set_Y + 1).G));
-								 int B = 0.5*((1 - difference_X) * (src->GetPixel(set_X, set_Y).B + src->GetPixel(set_X, set_Y).B) + difference_X * (src->GetPixel(set_X + 1, set_Y).B + src->GetPixel(set_X, set_Y + 1).B));
-
-								 Color c = Color::FromArgb(R, G, B);
-								 dst->SetPixel(i, j, c);
-								 //dst->SetPixel(i, j, src->GetPixel((int)index_x + 0.5, (int)index_y + 0.5));
-							 }
-						 }
-					 }
-					 break;
+			  Color c = Color::FromArgb(R, G, B);
+			  dst->SetPixel(i, j, c);				 
+		   			
+	        }
+		   }
+		}
+			     break;
 
 				 case Average:
 					 dst = gcnew Bitmap((int)src->Width/ZoomRate + 0.5, (int)src->Height/ZoomRate + 0.5);
@@ -3153,7 +3153,7 @@ public:void ZoomFunction(Bitmap ^src, Bitmap ^%dst, double ZoomRate, int code)  
 			 {
 				 MessageBox::Show("No Image yet or Rate cannot be smaller than zero!");
 			 }
-		 }
+}
 private: System::Void toolStripButton3_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bitmap ^ img_processed;
 	double Rate = Convert::ToDouble(ZoomRate->Text);
@@ -3303,100 +3303,26 @@ private:void CreatMask(Bitmap^ src,Bitmap ^%dst)
 }
 private:void line(Bitmap ^%src,Point P1,Point P2)
 {
-	if (P1.X != P2.X) //為直斜線
+	if (P1.X != P2.X)
 	{
-		float X = P2.X - P1.X;
-		float Y = P2.Y - P1.Y;
-		float temp = (Y / X) * 1000;
-		float a = temp*0.001; //斜率
-		float Z = temp*0.001;
-
-		float b = 1.0*(P1.Y - a*P1.X);//截距 因為y = ax+b 所以b = y - ax
-		if (a > 0)
-		{
-			if (P1.X > P2.X)  //右下往左上
-			{
-				for (int i = P2.X; i < P1.X; i++)
-				{
-					for (int j = i*a + b + 0.5; j < (int)((i + 1)*a + b + 0.5); j++)
-					{
-						src->SetPixel(i, j, Color::FromArgb(255, 255,255));
-						if (P1.X == P2.X) break;
-					}
-					if (P1.X == P2.X) break;
-				}
-
-			}
-			else if (P1.X < P2.X)  //左上往右下
-			{
-				for (int i = P1.X; i < P2.X; i++)
-				{
-					for (int j = i*a + b + 0.5; j < (int)((i + 1)*a + b + 0.5); j++)
-					{
-						src->SetPixel(i, j, Color::FromArgb(255,255,255));
-					}
-				}
-			}
-		}
-		if (a < 0)
-		{
-			if (P1.X > P2.X)  //右上往左下
-			{
-				for (int i = P2.X; i < P1.X; i++)
-				{
-
-					for (int j = i*a + b + 0.5; j >= (int)((i + 1)*a + b + 0.5); j--)
-					{
-						src->SetPixel(i, j, Color::FromArgb(255,255,255));
-						//if (P1.X == P2.X) 
-						//Vertical_Line(P1, P2);
-					}
-				}
-			}
-			else if (P1.X < P2.X)  //左下往右上
-			{
-				for (int i = P1.X; i < P2.X; i++)
-				{
-
-					for (int j = i*a + b + 0.5; j >(int)((i + 1)*a + b + 0.5); j--)
-					{
-						int pixel = ((i + 1)*a + b + 0.5);
-						src->SetPixel(i, j, Color::FromArgb(255,255,255));
-						//if (P1.X == P2.X) 
-						//Vertical_Line(P1, P2);
-					}
-				}
-			}
-		}
+		double m = (double)(P1.Y - P2.Y) / (double)(P1.X - P2.X);
+		double b = P1.Y - m*P1.X;
+		if (P1.X < P2.X)
+			for (uint i = P1.X; i <= P2.X; i++)
+				src->SetPixel(i, (int)(m*i) + (int)b, Color::FromArgb(255, 255, 255));
+		if (P1.X > P2.X)
+			for (uint i = P2.X; i <= P1.X; i++)
+				src->SetPixel(i, (int)(m*i) + (int)b, Color::FromArgb(255, 255, 255));
 	}
-
-	if (P1.X == P2.X)  //垂直線
+	else
 	{
-		if (P1.Y < P2.Y)  //P2在下面，表示滑鼠向下移動
-		{
-			for (int j = P1.Y; j < P2.Y; j++)
-				src->SetPixel(P1.X, j, Color::FromArgb(255,255,255));//畫紅線
-		}
-		else if (P1.Y > P2.Y)  //P2在上面，表示滑鼠向上移動
-		{
-			for (int j = P2.Y; j < P1.Y; j++)
-				src->SetPixel(P1.X, j, Color::FromArgb(255,255,255));
-		}
+		if (P1.Y > P2.Y)
+			for (uint i = P2.Y; i <= P1.Y; i++)
+				src->SetPixel(P1.X, i, Color::FromArgb(255, 255, 255));
+		if (P1.Y < P2.Y)
+			for (uint i = P1.Y; i <= P2.Y; i++)
+				src->SetPixel(P1.X, i, Color::FromArgb(255,255,255));
 	}
-	if (P1.Y == P2.Y)  //水平線
-	{
-		if (P1.X > P2.X) //P2在左邊，表示滑鼠向左移動
-		{
-			for (int i = P2.X; i <= P1.X; i++)
-				src->SetPixel(i, P1.Y, Color::FromArgb(255,255,255));
-		}
-		else if (P1.X < P2.X) //P2在右邊，表示滑鼠向右移動
-		{
-			for (int i = P1.X; i <= P2.X; i++)
-				src->SetPixel(i, P1.Y, Color::FromArgb(255,255,255));
-		}
-	}
-
 }
 private: System::Void toolStripButton6_Click(System::Object^  sender, System::EventArgs^  e) {
 	Bouncingball ^bouncing_ball = gcnew Bouncingball;
@@ -4581,8 +4507,10 @@ private: System::Void Btn_absDiff_Click(System::Object^  sender, System::EventAr
 	for(uint i=0;i<Img_Source->Width;i++)
 		for (uint j = 0; j < Img_Source->Height; j++)
 		{
-			int value = abs(Img_Source->GetPixel(i, j).R - Img_Source2->GetPixel(i, j).R);
-			Img_Processed->SetPixel(i,j,Color::FromArgb(value, value, value));
+			int R = abs(Img_Source->GetPixel(i, j).R - Img_Source2->GetPixel(i, j).R);
+			int G = abs(Img_Source->GetPixel(i, j).G - Img_Source2->GetPixel(i, j).G);
+			int B = abs(Img_Source->GetPixel(i, j).B - Img_Source2->GetPixel(i, j).B);
+			Img_Processed->SetPixel(i,j,Color::FromArgb(R, G, B));
 		}
 	pictureBox_Result->Image = Img_Processed;
 }

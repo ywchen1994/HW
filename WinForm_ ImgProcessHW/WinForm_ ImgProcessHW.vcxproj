@@ -139,6 +139,7 @@
     <ClCompile Include="Bouncingball.cpp" />
     <ClCompile Include="Huffman.cpp" />
     <ClCompile Include="ImageProcessUI.cpp" />
+    <ClCompile Include="InteraFrameUI.cpp" />
     <ClCompile Include="LoadingUI.cpp" />
     <ClCompile Include="RGBHistigram.cpp" />
     <ClCompile Include="SelectUI.cpp" />

@@ -5,6 +5,7 @@
 #include<cliext\vector>
 #include<fstream>
 #include<string>
+#include"ImageProcessUI.h"
 typedef unsigned int uint;
 namespace WinForm_ImgProcessHW {
 
@@ -75,6 +76,8 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
 	private: System::ComponentModel::IContainer^  components;
 			 int MaskSize = 48;
+		     ImageProcessUI ^Img_Process = gcnew ImageProcessUI();
+			 cliext::vector<Bitmap^> Video_ZoomEncode;
 	private:
 		/// <summary>
 		/// 設計工具所需的變數。
@@ -130,6 +133,23 @@ namespace WinForm_ImgProcessHW {
 	private: System::Windows::Forms::TextBox^  textBox2;
 	private: System::Windows::Forms::Label^  label10;
 	private: System::Windows::Forms::Button^  Btn_Th_Pause;
+	private: System::Windows::Forms::RadioButton^  rBtn_Decimation;
+	private: System::Windows::Forms::RadioButton^  rBtn_Average;
+
+
+
+
+
+
+	private: System::Windows::Forms::RadioButton^  rBtn_Interpolation;
+
+	private: System::Windows::Forms::RadioButton^  rBtn_Duplication;
+	private: System::Windows::Forms::GroupBox^  groupBox1;
+	private: System::Windows::Forms::CheckBox^  cBox_DecodeEanble;
+	private: System::Windows::Forms::GroupBox^  groupBox2;
+	private: System::Windows::Forms::CheckBox^  chBox_Encode;
+	private: System::Windows::Forms::ToolStripMenuItem^  interFrameToolStripMenuItem;
+
 			 int MatchCode;
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -140,12 +160,13 @@ namespace WinForm_ImgProcessHW {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(VideoProcessUI::typeid));
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^  legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^  series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->interFrameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button5 = (gcnew System::Windows::Forms::Button());
@@ -179,6 +200,14 @@ namespace WinForm_ImgProcessHW {
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->Btn_Th_Pause = (gcnew System::Windows::Forms::Button());
+			this->rBtn_Decimation = (gcnew System::Windows::Forms::RadioButton());
+			this->rBtn_Average = (gcnew System::Windows::Forms::RadioButton());
+			this->rBtn_Interpolation = (gcnew System::Windows::Forms::RadioButton());
+			this->rBtn_Duplication = (gcnew System::Windows::Forms::RadioButton());
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->cBox_DecodeEanble = (gcnew System::Windows::Forms::CheckBox());
+			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+			this->chBox_Encode = (gcnew System::Windows::Forms::CheckBox());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_Reference))->BeginInit();
@@ -187,15 +216,20 @@ namespace WinForm_ImgProcessHW {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_PSNR))->BeginInit();
+			this->groupBox1->SuspendLayout();
+			this->groupBox2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
 			// 
 			this->menuStrip1->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->fileToolStripMenuItem,
+					this->interFrameToolStripMenuItem
+			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(1104, 24);
+			this->menuStrip1->Size = System::Drawing::Size(1097, 24);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -213,6 +247,13 @@ namespace WinForm_ImgProcessHW {
 			this->openToolStripMenuItem->Size = System::Drawing::Size(106, 22);
 			this->openToolStripMenuItem->Text = L"Open";
 			this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &VideoProcessUI::openToolStripMenuItem_Click);
+			// 
+			// interFrameToolStripMenuItem
+			// 
+			this->interFrameToolStripMenuItem->Name = L"interFrameToolStripMenuItem";
+			this->interFrameToolStripMenuItem->Size = System::Drawing::Size(79, 20);
+			this->interFrameToolStripMenuItem->Text = L"InterFrame";
+			this->interFrameToolStripMenuItem->Click += gcnew System::EventHandler(this, &VideoProcessUI::interFrameToolStripMenuItem_Click);
 			// 
 			// label2
 			// 
@@ -507,21 +548,20 @@ namespace WinForm_ImgProcessHW {
 			// 
 			// chart_PSNR
 			// 
-			chartArea2->AxisX->Interval = 1;
-			chartArea2->AxisX->Minimum = 0;
-			chartArea2->AxisY->Maximum = 150;
-			chartArea2->AxisY->Minimum = 0;
-			chartArea2->Name = L"ChartArea1";
-			this->chart_PSNR->ChartAreas->Add(chartArea2);
-			legend2->Name = L"Legend1";
-			this->chart_PSNR->Legends->Add(legend2);
+			chartArea1->AxisX->Interval = 1;
+			chartArea1->AxisX->Minimum = 0;
+			chartArea1->AxisY->Minimum = 0;
+			chartArea1->Name = L"ChartArea1";
+			this->chart_PSNR->ChartAreas->Add(chartArea1);
+			legend1->Name = L"Legend1";
+			this->chart_PSNR->Legends->Add(legend1);
 			this->chart_PSNR->Location = System::Drawing::Point(597, 510);
 			this->chart_PSNR->Name = L"chart_PSNR";
-			series2->ChartArea = L"ChartArea1";
-			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
-			series2->Legend = L"Legend1";
-			series2->Name = L"PSNR_S";
-			this->chart_PSNR->Series->Add(series2);
+			series1->ChartArea = L"ChartArea1";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
+			series1->Legend = L"Legend1";
+			series1->Name = L"PSNR_S";
+			this->chart_PSNR->Series->Add(series1);
 			this->chart_PSNR->Size = System::Drawing::Size(364, 226);
 			this->chart_PSNR->TabIndex = 39;
 			this->chart_PSNR->Text = L"chart1";
@@ -566,11 +606,101 @@ namespace WinForm_ImgProcessHW {
 			this->Btn_Th_Pause->UseVisualStyleBackColor = true;
 			this->Btn_Th_Pause->Click += gcnew System::EventHandler(this, &VideoProcessUI::Btn_Th_Pause_Click);
 			// 
+			// rBtn_Decimation
+			// 
+			this->rBtn_Decimation->AutoSize = true;
+			this->rBtn_Decimation->Location = System::Drawing::Point(6, 45);
+			this->rBtn_Decimation->Name = L"rBtn_Decimation";
+			this->rBtn_Decimation->Size = System::Drawing::Size(71, 16);
+			this->rBtn_Decimation->TabIndex = 44;
+			this->rBtn_Decimation->TabStop = true;
+			this->rBtn_Decimation->Text = L"刪去縮小";
+			this->rBtn_Decimation->UseVisualStyleBackColor = true;
+			// 
+			// rBtn_Average
+			// 
+			this->rBtn_Average->AutoSize = true;
+			this->rBtn_Average->Location = System::Drawing::Point(6, 67);
+			this->rBtn_Average->Name = L"rBtn_Average";
+			this->rBtn_Average->Size = System::Drawing::Size(71, 16);
+			this->rBtn_Average->TabIndex = 44;
+			this->rBtn_Average->TabStop = true;
+			this->rBtn_Average->Text = L"平均縮小";
+			this->rBtn_Average->UseVisualStyleBackColor = true;
+			// 
+			// rBtn_Interpolation
+			// 
+			this->rBtn_Interpolation->AutoSize = true;
+			this->rBtn_Interpolation->Location = System::Drawing::Point(8, 67);
+			this->rBtn_Interpolation->Name = L"rBtn_Interpolation";
+			this->rBtn_Interpolation->Size = System::Drawing::Size(71, 16);
+			this->rBtn_Interpolation->TabIndex = 44;
+			this->rBtn_Interpolation->TabStop = true;
+			this->rBtn_Interpolation->Text = L"內插放大";
+			this->rBtn_Interpolation->UseVisualStyleBackColor = true;
+			// 
+			// rBtn_Duplication
+			// 
+			this->rBtn_Duplication->AutoSize = true;
+			this->rBtn_Duplication->Location = System::Drawing::Point(8, 45);
+			this->rBtn_Duplication->Name = L"rBtn_Duplication";
+			this->rBtn_Duplication->Size = System::Drawing::Size(71, 16);
+			this->rBtn_Duplication->TabIndex = 44;
+			this->rBtn_Duplication->TabStop = true;
+			this->rBtn_Duplication->Text = L"複製放大";
+			this->rBtn_Duplication->UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this->groupBox1->Controls->Add(this->cBox_DecodeEanble);
+			this->groupBox1->Controls->Add(this->rBtn_Duplication);
+			this->groupBox1->Controls->Add(this->rBtn_Interpolation);
+			this->groupBox1->Location = System::Drawing::Point(873, 228);
+			this->groupBox1->Name = L"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(88, 89);
+			this->groupBox1->TabIndex = 45;
+			this->groupBox1->TabStop = false;
+			this->groupBox1->Text = L"解碼方式";
+			// 
+			// cBox_DecodeEanble
+			// 
+			this->cBox_DecodeEanble->AutoSize = true;
+			this->cBox_DecodeEanble->Location = System::Drawing::Point(6, 21);
+			this->cBox_DecodeEanble->Name = L"cBox_DecodeEanble";
+			this->cBox_DecodeEanble->Size = System::Drawing::Size(56, 16);
+			this->cBox_DecodeEanble->TabIndex = 46;
+			this->cBox_DecodeEanble->Text = L"Enable";
+			this->cBox_DecodeEanble->UseVisualStyleBackColor = true;
+			// 
+			// groupBox2
+			// 
+			this->groupBox2->Controls->Add(this->chBox_Encode);
+			this->groupBox2->Controls->Add(this->rBtn_Decimation);
+			this->groupBox2->Controls->Add(this->rBtn_Average);
+			this->groupBox2->Location = System::Drawing::Point(981, 228);
+			this->groupBox2->Name = L"groupBox2";
+			this->groupBox2->Size = System::Drawing::Size(89, 89);
+			this->groupBox2->TabIndex = 46;
+			this->groupBox2->TabStop = false;
+			this->groupBox2->Text = L"編碼方式";
+			// 
+			// chBox_Encode
+			// 
+			this->chBox_Encode->AutoSize = true;
+			this->chBox_Encode->Location = System::Drawing::Point(6, 21);
+			this->chBox_Encode->Name = L"chBox_Encode";
+			this->chBox_Encode->Size = System::Drawing::Size(56, 16);
+			this->chBox_Encode->TabIndex = 46;
+			this->chBox_Encode->Text = L"Enable";
+			this->chBox_Encode->UseVisualStyleBackColor = true;
+			// 
 			// VideoProcessUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1104, 840);
+			this->ClientSize = System::Drawing::Size(1097, 840);
+			this->Controls->Add(this->groupBox2);
+			this->Controls->Add(this->groupBox1);
 			this->Controls->Add(this->Btn_Th_Pause);
 			this->Controls->Add(this->label10);
 			this->Controls->Add(this->textBox2);
@@ -616,6 +746,10 @@ namespace WinForm_ImgProcessHW {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_target))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox_MotionVector))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart_PSNR))->EndInit();
+			this->groupBox1->ResumeLayout(false);
+			this->groupBox1->PerformLayout();
+			this->groupBox2->ResumeLayout(false);
+			this->groupBox2->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -635,6 +769,7 @@ private: System::Void openToolStripMenuItem_Click(System::Object^  sender, Syste
 		}
 		trackBar1->Maximum = Video_Bitmap.size();
 		label2->Text="/"+Video_Bitmap.size().ToString();
+		encode_btn->Enabled = true;
 	}
 private: System::Void Btn_Play_Click(System::Object^  sender, System::EventArgs^  e) {
 		timer1->Enabled = true;//timer1啟動
@@ -1450,30 +1585,54 @@ private:double C_PSNR(Bitmap ^Source, Bitmap ^TestImage)
 			SumofMSE +=pow(Source->GetPixel(i, j).R-TestImage->GetPixel(i, j).R,2);
 		}
 	SumofMSE =  SumofMSE/(Source->Height* Source->Width);
-	SNR_Value = Math::Log10(255*255 / SumofMSE);
+	SNR_Value = Math::Log10(255*255 / (SumofMSE+1));
 	return 10 * SNR_Value;
 }
 private: System::Void encode_btn_Click(System::Object^  sender, System::EventArgs^  e) {
-	System::String ^str=comboBox1->Text->Substring(0,1);
-	MatchCode =  Convert::ToInt16(str);
-	PDCthreshold = Convert::ToInt16(textBox1->Text);
-	str=comboBox2->Text->Substring(0, 1);
-	SearchCode = Convert::ToInt16(str);
-	SaveFileDialog ^ SaveUI = gcnew SaveFileDialog;
-	SaveUI->OverwritePrompt = true;
-	SaveUI->FileName = nullptr;
-	SaveUI->Filter = "txt files (*.txt)|*.txt";
-	MaskSize = Convert::ToInt32(textBox2->Text);
-	fstream fp;
-	if (SaveUI->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	if (!chBox_Encode->Checked)
 	{
-		FileName = SaveUI->FileName;
-		fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(SaveUI->FileName), std::ios::out);
-		fp << MaskSize <<" "<<Video_Bitmap.size()<<endl;
+		System::String ^str = comboBox1->Text->Substring(0, 1);
+		MatchCode = Convert::ToInt16(str);
+		PDCthreshold = Convert::ToInt16(textBox1->Text);
+		str = comboBox2->Text->Substring(0, 1);
+		SearchCode = Convert::ToInt16(str);
+		SaveFileDialog ^ SaveUI = gcnew SaveFileDialog;
+		SaveUI->OverwritePrompt = true;
+		SaveUI->FileName = nullptr;
+		SaveUI->Filter = "txt files (*.txt)|*.txt";
+		MaskSize = Convert::ToInt32(textBox2->Text);
+		fstream fp;
+		if (SaveUI->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			FileName = SaveUI->FileName;
+			fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(SaveUI->FileName), std::ios::out);
+			fp << MaskSize << " " << Video_Bitmap.size() << endl;
+		}
+		fp.close();
+		thread = gcnew Thread(gcnew ThreadStart(this, &VideoProcessUI::Encoding));
+		thread->Start();
 	}
-	fp.close();
-    thread = gcnew Thread(gcnew ThreadStart(this,&VideoProcessUI::Encoding));
-	thread->Start();
+	if (chBox_Encode->Checked)
+	{
+		if (rBtn_Average->Checked)
+		{
+			for (uint i = 0; i < Video_Bitmap.size(); i++)
+			{ 
+				Bitmap ^Img_Encode;
+				Img_Process->ZoomFunction(Video_Bitmap[i], Img_Encode,2,Average);
+				Video_ZoomEncode.push_back(Img_Encode);
+			}
+		}
+		if (rBtn_Decimation->Checked)
+		{
+			for (uint i = 0; i < Video_Bitmap.size(); i++)
+			{
+				Bitmap ^Img_Encode;
+				Img_Process->ZoomFunction(Video_Bitmap[i], Img_Encode, 2, Zoom);
+				Video_ZoomEncode.push_back(Img_Encode);
+			}
+		}
+	}
 }
 private:void DrawLine(Bitmap ^%src, Point P1, Point P2)
 {
@@ -1499,90 +1658,116 @@ private:void DrawLine(Bitmap ^%src, Point P1, Point P2)
 	}
 }
 private: System::Void Btn_Decode_Click(System::Object^  sender, System::EventArgs^  e) {
-	OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
-	openFileDialog1->Multiselect = true;
-	openFileDialog1->FileName = nullptr;
-	cli::array<String^>^ openFileName;
-	
-	if (Video_Bitmap_Decode.size() != 0)Video_Bitmap_Decode.clear();
-	Bitmap ^temp_FirstFrame;
-	if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-		openFileName = openFileDialog1->FileNames;
-	}
-	if (openFileName != nullptr)
+	if (!cBox_DecodeEanble->Checked)
 	{
-		fstream fp;
-		if (openFileName[1]->IndexOf("tiff") > 0)
-			temp_FirstFrame = gcnew Bitmap(openFileName[1]);
-		if (openFileName[0]->IndexOf("tiff") > 0)
-			temp_FirstFrame = gcnew Bitmap(openFileName[0]);
+		OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
+		openFileDialog1->Multiselect = true;
+		openFileDialog1->FileName = nullptr;
+		cli::array<String^>^ openFileName;
 
-		if (openFileName[1]->IndexOf("txt") > 0)
-			fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[1]), std::ios::in);
-		if (openFileName[0]->IndexOf("txt") > 0)
-			fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[0]), std::ios::in);
-
-		Bitmap ^First = temp_FirstFrame->Clone(Rectangle(0, 0, temp_FirstFrame->Width, temp_FirstFrame->Height), temp_FirstFrame->PixelFormat);
-		Video_Bitmap_Decode.push_back(gcnew Bitmap(First));
-
-		char line[100];
-		fp.getline(line, sizeof(line));
-
-		int secondFrameIndex_X = 0, secondFrameIndex_Y = 0;
-		cli::array<Char>^sep = gcnew cli::array<Char>{' '};
-		System::String^ str = gcnew String(line);
-		cli::array<String^>^result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
-		int blockSize = Convert::ToInt32(result[0]);
-		int FrameNo = Convert::ToInt32(result[1]);
-		label2->Text = "/" + FrameNo.ToString();
-		Bitmap ^Image = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
-		Bitmap ^Image_Arrow = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
-		SetZero(Image_Arrow);
-		while (Video_Bitmap_Decode.size() < FrameNo)
+		if (Video_Bitmap_Decode.size() != 0)Video_Bitmap_Decode.clear();
+		Bitmap ^temp_FirstFrame;
+		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			openFileName = openFileDialog1->FileNames;
+		}
+		if (openFileName != nullptr)
 		{
+			fstream fp;
+			if (openFileName[1]->IndexOf("tiff") > 0)
+				temp_FirstFrame = gcnew Bitmap(openFileName[1]);
+			if (openFileName[0]->IndexOf("tiff") > 0)
+				temp_FirstFrame = gcnew Bitmap(openFileName[0]);
 
+			if (openFileName[1]->IndexOf("txt") > 0)
+				fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[1]), std::ios::in);
+			if (openFileName[0]->IndexOf("txt") > 0)
+				fp.open((char*)(void*)Marshal::StringToHGlobalAnsi(openFileName[0]), std::ios::in);
+
+			Bitmap ^First = temp_FirstFrame->Clone(Rectangle(0, 0, temp_FirstFrame->Width, temp_FirstFrame->Height), temp_FirstFrame->PixelFormat);
+			Video_Bitmap_Decode.push_back(gcnew Bitmap(First));
+
+			char line[100];
 			fp.getline(line, sizeof(line));
-			str = gcnew String(line);
-			result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
-			int MotionVector_X = Convert::ToInt32(result[0]);
-			int MotionVector_Y = Convert::ToInt32(result[1]);
-			DrawArrow(Image_Arrow, Point(secondFrameIndex_X, secondFrameIndex_Y), Point(secondFrameIndex_X + MotionVector_X, secondFrameIndex_Y + MotionVector_Y));
-			for (int j = 0; j < blockSize; j++)
-				for (int i = 0; i < blockSize; i++)
+
+			int secondFrameIndex_X = 0, secondFrameIndex_Y = 0;
+			cli::array<Char>^sep = gcnew cli::array<Char>{' '};
+			System::String^ str = gcnew String(line);
+			cli::array<String^>^result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+			int blockSize = Convert::ToInt32(result[0]);
+			int FrameNo = Convert::ToInt32(result[1]);
+			label2->Text = "/" + FrameNo.ToString();
+			Bitmap ^Image = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
+			Bitmap ^Image_Arrow = gcnew Bitmap(Video_Bitmap_Decode[0]->Width, Video_Bitmap_Decode[0]->Height);
+			SetZero(Image_Arrow);
+			while (Video_Bitmap_Decode.size() < FrameNo)
+			{
+
+				fp.getline(line, sizeof(line));
+				str = gcnew String(line);
+				result = str->Split(sep, StringSplitOptions::RemoveEmptyEntries);
+				int MotionVector_X = Convert::ToInt32(result[0]);
+				int MotionVector_Y = Convert::ToInt32(result[1]);
+				DrawArrow(Image_Arrow, Point(secondFrameIndex_X, secondFrameIndex_Y), Point(secondFrameIndex_X + MotionVector_X, secondFrameIndex_Y + MotionVector_Y));
+				for (int j = 0; j < blockSize; j++)
+					for (int i = 0; i < blockSize; i++)
+					{
+						Color c = First->GetPixel(secondFrameIndex_X + MotionVector_X + i, secondFrameIndex_Y + MotionVector_Y + j);
+						Image->SetPixel(i + secondFrameIndex_X, j + secondFrameIndex_Y, c);
+					}
+				secondFrameIndex_X += blockSize;
+				if (secondFrameIndex_X == Video_Bitmap_Decode[0]->Width)
 				{
-					Color c = First->GetPixel(secondFrameIndex_X + MotionVector_X + i, secondFrameIndex_Y + MotionVector_Y + j);
-					Image->SetPixel(i + secondFrameIndex_X, j + secondFrameIndex_Y, c);
+					secondFrameIndex_X = 0;
+					secondFrameIndex_Y += blockSize;
 				}
-			secondFrameIndex_X += blockSize;
-			if (secondFrameIndex_X == Video_Bitmap_Decode[0]->Width)
-			{
-				secondFrameIndex_X = 0;
-				secondFrameIndex_Y += blockSize;
+				if (secondFrameIndex_Y == Video_Bitmap_Decode[0]->Height)
+				{
+					secondFrameIndex_X = 0;
+					secondFrameIndex_Y = 0;
+					Video_Bitmap_Decode.push_back(gcnew Bitmap(Image));
+					SetZero(Image_Arrow);
+				}
 			}
-			if (secondFrameIndex_Y == Video_Bitmap_Decode[0]->Height)
+
+			/*for (uint i = 0; i < Video_Bitmap_Decode.size(); i++)
 			{
-				secondFrameIndex_X = 0;
-				secondFrameIndex_Y = 0;
-				Video_Bitmap_Decode.push_back(gcnew Bitmap(Image));
-				SetZero(Image_Arrow);
+				double value = C_PSNR(Video_Bitmap[i], Video_Bitmap_Decode[i]);
+				chart_PSNR->Series["PSNR_S"]->Points->AddXY(i, (int)value);
+			}*/
+			fp.close();
+			
+			pictureBox_MotionVector->Size.Width = Video_Bitmap[1]->Width;
+			pictureBox_MotionVector->Size.Height = Video_Bitmap[1]->Height;
+		}
+	}
+	if (cBox_DecodeEanble->Checked)
+	{
+		if (rBtn_Duplication->Checked && Video_ZoomEncode.size()>0)
+		{
+			for (uint i = 0; i < Video_ZoomEncode.size(); i++)
+			{   
+				Bitmap^ Img  ;
+				Img_Process->ZoomFunction(Video_ZoomEncode[i],Img, 2, Zoom);
+				Video_Bitmap_Decode.push_back(Img);
+			}
+			
+		}
+		if (rBtn_Interpolation->Checked && Video_ZoomEncode.size()>0)
+		{
+			for (uint i = 0; i < Video_ZoomEncode.size(); i++)
+			{
+				Bitmap^ Img;
+				Img_Process->ZoomFunction(Video_ZoomEncode[i], Img, 2, Interpolation);
+				Video_Bitmap_Decode.push_back(Img);
 			}
 		}
-
-		/*for (uint i = 0; i < Video_Bitmap_Decode.size(); i++)
-		{
-			double value = C_PSNR(Video_Bitmap[i], Video_Bitmap_Decode[i]);
-			chart_PSNR->Series["PSNR_S"]->Points->AddXY(i, (int)value);
-		}*/
-		fp.close();
-		BtnDecode_Play->Visible = true;
-		pictureBox_MotionVector->Size.Width = Video_Bitmap[1]->Width;
-		pictureBox_MotionVector->Size.Height = Video_Bitmap[1]->Height;
 	}
+	BtnDecode_Play->Visible = true;
 }
 private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	System::String ^str = comboBox1->Text->Substring(0, 1);
 	MatchCode = Convert::ToInt16(str);
-	encode_btn->Enabled = true;
+	
 	if (MatchCode==2)
 	{
 		textBox1->Visible=true;
@@ -1603,11 +1788,51 @@ private: System::Void BtnDecode_Play_Click(System::Object^  sender, System::Even
 		pictureBox_Reference->Image = Video_Bitmap[i];
 		pictureBox_Reference->Refresh();
 		_sleep(50);
+		double PSNR_Value = C_PSNR(Video_Bitmap[i], Video_Bitmap_Decode[i]);
+		chart_PSNR->Series["PSNR_S"]->Points->AddXY(i+1, PSNR_Value);
+		chart_PSNR->Refresh();
 	}
 }
 
 private: System::Void Btn_Th_Pause_Click(System::Object^  sender, System::EventArgs^  e) {
 	thread->Suspend();
+}
+
+private: System::Void interFrameToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+
+	for (uint k = 0; k < Video_Bitmap.size(); k++)
+	{
+		if (k % 2 == 0)
+		{
+			Rectangle cloneRect = Rectangle(0, 0, Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
+			System::Drawing::Imaging::PixelFormat format = Video_Bitmap[0]->PixelFormat;
+			Bitmap ^Img = gcnew Bitmap(Video_Bitmap[k]->Width, Video_Bitmap[k]->Height);
+			Img = Video_Bitmap[Video_Bitmap.size() - 2]->Clone(cloneRect, format);
+			Video_Bitmap_Decode.push_back(Img);
+		}
+		else if(k%2==1 &&  k+1<Video_Bitmap.size())
+		{
+			Bitmap ^Img = gcnew Bitmap(Video_Bitmap[k]->Width, Video_Bitmap[k]->Height);
+			for(uint i=0;i<Video_Bitmap[k]->Width;i++)
+				for (uint j = 0; j < Video_Bitmap[k]->Height; j++)
+				{
+					int R=Video_Bitmap[k - 1]->GetPixel(i, j).R + Video_Bitmap[k + 1]->GetPixel(i, j).R;
+					int G = Video_Bitmap[k - 1]->GetPixel(i, j).G + Video_Bitmap[k + 1]->GetPixel(i, j).G;
+					int B = Video_Bitmap[k - 1]->GetPixel(i, j).B + Video_Bitmap[k + 1]->GetPixel(i, j).B;
+					Img->SetPixel(i, j, Color::FromArgb(R/2, G/2, B/2));
+				}
+			Video_Bitmap_Decode.push_back(Img);
+		}
+	}
+	if (Video_Bitmap.size()%2==0)
+	{
+		Rectangle cloneRect = Rectangle(0, 0, Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
+		System::Drawing::Imaging::PixelFormat format = Video_Bitmap[0]->PixelFormat;
+		Bitmap ^Img = gcnew Bitmap(Video_Bitmap[0]->Width, Video_Bitmap[0]->Height);
+		Img = Video_Bitmap[Video_Bitmap.size()-1]->Clone(cloneRect, format);
+		Video_Bitmap_Decode.push_back(Img);
+	}
+	BtnDecode_Play->Visible = true;
 }
 };
 }
